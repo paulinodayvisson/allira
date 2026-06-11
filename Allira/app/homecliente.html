@@ -1,0 +1,1573 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Állira • Área da Cliente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#1B2A6B;--azul-mid:#243580;--rosa:#C9748A;--rosa-light:#e8a0b0;--rosa-pale:#f0c8d4;--rosa-bg:rgba(201,116,138,.07);--creme:#F5F0EB;--dark:#0D1225;--dark-card:#111827;--white:#FFFFFF;--border:rgba(201,116,138,.18);--border-dim:rgba(201,116,138,.09);--text-dim:rgba(245,240,235,.45);--text-mid:rgba(245,240,235,.7);--ok:#4ade80;--nok:#f87171;--warn:#fbbf24;--input-bg:rgba(27,42,107,.12);--input-focus:rgba(201,116,138,.2);--gold:#D4AF37;--gold-light:#F0D060;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent;}
+body{background:var(--dark);color:var(--creme);font-family:'Montserrat',sans-serif;font-weight:300;min-height:100dvh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;opacity:.3;}
+::-webkit-scrollbar{width:2px;}::-webkit-scrollbar-track{background:var(--dark);}::-webkit-scrollbar-thumb{background:var(--rosa);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes shimmer{0%{background-position:-200% center;}100%{background-position:200% center;}}
+@keyframes stampIn{0%{transform:scale(2) rotate(-15deg);opacity:0;}60%{transform:scale(.9) rotate(3deg);opacity:1;}100%{transform:scale(1) rotate(0);opacity:1;}}
+@keyframes confetti{0%{transform:translateY(-10px) rotate(0deg);opacity:1;}100%{transform:translateY(80px) rotate(720deg);opacity:0;}}
+@keyframes glow{0%,100%{box-shadow:0 0 12px rgba(212,175,55,.3);}50%{box-shadow:0 0 28px rgba(212,175,55,.7);}}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes pulseDot{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.4);opacity:.6;}}
+header{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 20px;background:rgba(13,18,37,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border-dim);display:flex;align-items:center;justify-content:space-between;}
+.logo{text-decoration:none;display:flex;align-items:center;height:38px;}
+.logo-img{height:38px;width:auto;object-fit:contain;filter:brightness(1.1) drop-shadow(0 1px 6px rgba(201,116,138,.3));display:block;}
+.logo-fallback{display:none;font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;letter-spacing:.15em;color:var(--creme);}
+.logo-fallback span{color:var(--rosa);}
+.logo-img[data-failed="true"]~.logo-fallback{display:block;}
+.header-tag{font-size:.52rem;letter-spacing:.35em;text-transform:uppercase;color:var(--text-dim);}
+main{padding-top:72px;min-height:100dvh;position:relative;z-index:1;}
+.screen{display:none;}
+/* TELA 1 */
+#screen-lookup{display:flex;flex-direction:column;align-items:center;padding:40px 20px 80px;animation:fadeUp .5s ease;}
+.splash-hero{text-align:center;margin-bottom:44px;padding-top:16px;}
+.splash-icon{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,var(--azul),var(--rosa));display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 12px 40px rgba(201,116,138,.35);animation:glow 3s ease-in-out infinite;}
+.splash-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,7vw,2.8rem);font-weight:400;line-height:1.1;color:var(--creme);margin-bottom:10px;}
+.splash-title em{font-style:italic;color:var(--rosa);}
+.splash-sub{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);line-height:1.9;}
+.lookup-card{width:100%;max-width:420px;background:rgba(27,42,107,.1);border:1px solid var(--border);border-radius:20px;padding:26px 20px 24px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.lookup-label{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--rosa);margin-bottom:12px;}
+.cpf-input-wrap{display:flex;flex-direction:column;gap:10px;}
+.cpf-input{width:100%;background:var(--input-bg);border:1px solid var(--border-dim);border-radius:12px;padding:15px 18px;font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:400;color:var(--creme);outline:none;transition:all .3s;letter-spacing:.12em;-webkit-appearance:none;}
+.cpf-input::placeholder{color:var(--text-dim);letter-spacing:.05em;}
+.cpf-input:focus{border-color:var(--rosa);background:var(--input-focus);box-shadow:0 0 0 3px rgba(201,116,138,.12);}
+.btn-primary{width:100%;background:linear-gradient(135deg,var(--azul),var(--rosa));border:none;border-radius:12px;padding:15px 20px;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--white);cursor:pointer;transition:all .3s;box-shadow:0 4px 20px rgba(201,116,138,.3);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(201,116,138,.4);}
+.btn-primary:active{transform:translateY(0);}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.lookup-hint{font-size:.6rem;color:var(--text-dim);margin-top:12px;text-align:center;line-height:1.6;}
+.lookup-error{margin-top:10px;padding:10px 14px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);border-radius:8px;font-size:.7rem;color:var(--nok);display:none;text-align:center;}
+.lookup-error.show{display:block;animation:fadeIn .3s ease;}
+.sheets-status{display:flex;align-items:center;gap:6px;font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);margin-top:8px;}
+.sheets-dot{width:6px;height:6px;border-radius:50%;background:var(--text-dim);flex-shrink:0;}
+.sheets-dot.online{background:var(--ok);box-shadow:0 0 6px rgba(74,222,128,.4);}
+.sheets-dot.offline{background:var(--warn);}
+.sheets-dot.error{background:var(--nok);}
+.loader{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:50px 20px;}
+.loader.show{display:flex;}
+.loader-ring{width:38px;height:38px;border-radius:50%;border:2px solid var(--border-dim);border-top-color:var(--rosa);animation:spin .8s linear infinite;}
+.loader-text{font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-dim);}
+/* TELA 2 HUB */
+#screen-hub{padding:24px 18px 100px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;background:none;border:none;font-family:'Montserrat',sans-serif;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;margin-bottom:22px;padding:4px 0;transition:color .2s;}
+.back-btn:hover{color:var(--rosa);}
+.back-btn svg{width:14px;height:14px;stroke:currentColor;flex-shrink:0;}
+.hub-greeting{margin-bottom:26px;animation:fadeUp .5s ease .05s both;}
+.hub-eyebrow{font-size:.56rem;letter-spacing:.38em;text-transform:uppercase;color:var(--rosa);margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.hub-eyebrow::before{content:'';width:20px;height:1px;background:var(--rosa);}
+.hub-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,6vw,2.4rem);font-weight:400;line-height:1.1;color:var(--creme);margin-bottom:10px;}
+.hub-name em{font-style:italic;color:var(--rosa);}
+.hub-tier{font-size:.62rem;color:var(--text-dim);letter-spacing:.06em;}
+.btn-analise{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--rosa),var(--rosa-light));border:none;border-radius:22px;padding:10px 18px;font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--white);cursor:pointer;box-shadow:0 4px 18px rgba(201,116,138,.4);transition:all .25s;margin-top:4px;}
+.btn-analise:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(201,116,138,.5);}
+.btn-analise:active{transform:translateY(0);}
+.next-card{background:linear-gradient(135deg,rgba(27,42,107,.35),rgba(201,116,138,.12));border:1px solid var(--border);border-radius:18px;padding:18px 18px 16px;margin-bottom:14px;position:relative;overflow:hidden;animation:fadeUp .5s ease .1s both;}
+.next-card::before{content:'';position:absolute;top:-40%;right:-20%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(201,116,138,.07),transparent 70%);pointer-events:none;}
+.next-eyebrow{font-size:.52rem;letter-spacing:.32em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.dot-live{width:6px;height:6px;border-radius:50%;background:var(--ok);flex-shrink:0;animation:pulseDot 1.8s ease infinite;}
+.next-content{display:flex;align-items:center;gap:14px;}
+.next-icon{width:48px;height:48px;border-radius:13px;flex-shrink:0;background:rgba(201,116,138,.15);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
+.next-info{flex:1;min-width:0;}
+.next-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;color:var(--creme);margin-bottom:4px;}
+.next-date{font-size:.62rem;color:var(--rosa-light);letter-spacing:.06em;}
+.last-card{background:rgba(17,24,39,.5);border:1px solid var(--border-dim);border-radius:16px;padding:15px 16px;margin-bottom:22px;display:flex;align-items:center;gap:12px;animation:fadeUp .5s ease .15s both;}
+.last-icon{width:40px;height:40px;border-radius:10px;flex-shrink:0;background:rgba(201,116,138,.1);border:1px solid var(--border-dim);display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.last-info{flex:1;min-width:0;}
+.last-label{font-size:.5rem;letter-spacing:.28em;text-transform:uppercase;color:var(--text-dim);margin-bottom:3px;}
+.last-name{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:500;color:var(--creme);}
+.last-date{font-size:.58rem;color:var(--text-dim);margin-top:2px;}
+.last-care-btn{margin-left:auto;flex-shrink:0;background:rgba(201,116,138,.12);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--rosa-light);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.last-care-btn:hover{background:rgba(201,116,138,.22);transform:translateY(-1px);}
+.sec-label{font-size:.54rem;letter-spacing:.35em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border-dim);}
+.shortcuts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;animation:fadeUp .5s ease .2s both;}
+.sb{background:rgba(17,24,39,.55);border:1px solid var(--border-dim);border-radius:15px;padding:16px 14px 14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.sb::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--azul),var(--rosa));opacity:0;transition:opacity .25s;}
+.sb:hover{border-color:var(--border);transform:translateY(-2px);}
+.sb:hover::after{opacity:1;}
+.sb:active{transform:translateY(0);}
+.sb.full{grid-column:1/-1;flex-direction:row;align-items:center;padding:14px 16px;}
+.sb-icon{width:34px;height:34px;border-radius:9px;background:rgba(201,116,138,.1);border:1px solid var(--border-dim);display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.sb.full .sb-icon{width:38px;height:38px;flex-shrink:0;}
+.sb-name{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:500;color:var(--creme);line-height:1.2;}
+.sb.full .sb-name{font-size:1rem;}
+.sb-cta{font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rosa);margin-top:auto;}
+.sb.full .sb-cta{margin-left:auto;margin-top:0;}
+.nav-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;animation:fadeUp .5s ease .25s both;}
+.nav-card{background:rgba(27,42,107,.1);border:1px solid var(--border-dim);border-radius:16px;padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .25s;}
+.nav-card:hover{border-color:var(--border);transform:translateX(3px);}
+.nc-icon{width:40px;height:40px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.nc-icon.a{background:rgba(27,42,107,.3);border:1px solid rgba(27,42,107,.4);}
+.nc-icon.r{background:rgba(201,116,138,.12);border:1px solid var(--border);}
+.nc-icon.g{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);}
+.nc-text{flex:1;min-width:0;}
+.nc-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;color:var(--creme);margin-bottom:2px;}
+.nc-desc{font-size:.58rem;color:var(--text-dim);letter-spacing:.04em;line-height:1.5;}
+.nc-arrow{color:var(--text-dim);font-size:.9rem;flex-shrink:0;}
+.contact-row{display:flex;gap:10px;animation:fadeUp .5s ease .3s both;margin-bottom:14px;}
+.btn-wpp{flex:1;background:#111;border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:13px 14px;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;transition:all .25s;text-decoration:none;}
+.btn-wpp:hover{background:#1a1a1a;transform:translateY(-1px);}
+.btn-wpp-txt{font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--white);}
+.btn-insta{flex:1;background:linear-gradient(135deg,rgba(193,53,132,.15),rgba(131,58,180,.1));border:1px solid rgba(193,53,132,.2);border-radius:13px;padding:13px 14px;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;transition:all .25s;text-decoration:none;}
+.btn-insta:hover{background:linear-gradient(135deg,rgba(193,53,132,.25),rgba(131,58,180,.18));transform:translateY(-1px);}
+.btn-insta-txt{font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--creme);}
+/* TELA 3 FIDELIDADE */
+#screen-card{padding:20px 18px 100px;}
+.client-bar{background:rgba(27,42,107,.12);border:1px solid var(--border-dim);border-radius:16px;padding:14px 16px;margin-bottom:22px;display:flex;align-items:center;gap:12px;flex-wrap:nowrap;overflow:hidden;}
+.client-avatar{width:42px;height:42px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,var(--azul),var(--rosa));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;color:var(--white);}
+.client-info{flex:1;min-width:0;}
+.client-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--creme);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.client-cpf{font-size:.58rem;letter-spacing:.18em;color:var(--text-dim);margin-top:2px;}
+.client-badge{font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;padding:4px 9px;border-radius:20px;flex-shrink:0;background:linear-gradient(135deg,rgba(212,175,55,.15),rgba(212,175,55,.05));border:1px solid rgba(212,175,55,.3);color:var(--gold);white-space:nowrap;}
+.section-eyebrow{font-size:.56rem;letter-spacing:.38em;text-transform:uppercase;color:var(--rosa);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--rosa);}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:400;color:var(--creme);margin-bottom:6px;line-height:1.2;}
+.section-desc{font-size:.66rem;color:var(--text-dim);line-height:1.75;margin-bottom:22px;}
+.points-hero{background:linear-gradient(135deg,rgba(27,42,107,.4),rgba(201,116,138,.15));border:1px solid var(--border);border-radius:20px;padding:26px 20px;text-align:center;margin-bottom:26px;position:relative;overflow:hidden;}
+.points-hero::before{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(201,116,138,.08),transparent 70%);pointer-events:none;}
+.points-eyebrow{font-size:.52rem;letter-spacing:.4em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;}
+.points-total{font-family:'Cormorant Garamond',serif;font-size:clamp(3.2rem,14vw,5rem);font-weight:400;background:linear-gradient(135deg,var(--gold),var(--gold-light),var(--gold));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s linear infinite;line-height:1;}
+.points-label{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-mid);margin-top:6px;}
+.points-row{display:flex;justify-content:center;gap:0;margin-top:18px;padding-top:14px;border-top:1px solid var(--border-dim);}
+.points-stat{text-align:center;flex:1;}
+.points-stat+.points-stat{border-left:1px solid var(--border-dim);}
+.points-stat-val{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:500;color:var(--creme);}
+.points-stat-lbl{font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);margin-top:2px;padding:0 4px;line-height:1.4;}
+.proc-section-title{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;margin-top:26px;display:flex;align-items:center;gap:10px;}
+.proc-section-title::after{content:'';flex:1;height:1px;background:var(--border-dim);}
+.proc-card{background:rgba(17,24,39,.6);border:1px solid var(--border-dim);border-radius:16px;padding:16px;margin-bottom:10px;transition:all .3s;position:relative;overflow:hidden;}
+.proc-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--azul),var(--rosa));border-radius:3px 0 0 3px;}
+.proc-card.completed{background:rgba(27,42,107,.2);border-color:rgba(212,175,55,.2);}
+.proc-card.completed::before{background:linear-gradient(to bottom,var(--gold),var(--gold-light));}
+.proc-card-top{display:flex;align-items:center;gap:12px;}
+.proc-icon{width:38px;height:38px;border-radius:10px;flex-shrink:0;background:rgba(201,116,138,.1);border:1px solid var(--border-dim);display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+.proc-card.completed .proc-icon{background:rgba(212,175,55,.15);border-color:rgba(212,175,55,.3);}
+.proc-info{flex:1;min-width:0;}
+.proc-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;color:var(--creme);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.proc-needed{font-size:.58rem;color:var(--text-dim);letter-spacing:.04em;}
+.proc-needed strong{color:var(--rosa-light);}
+.proc-pts-badge{font-size:.65rem;font-weight:500;padding:4px 9px;border-radius:20px;flex-shrink:0;background:rgba(201,116,138,.12);border:1px solid var(--border);color:var(--rosa-light);white-space:nowrap;}
+.proc-card.completed .proc-pts-badge{background:rgba(212,175,55,.15);border-color:rgba(212,175,55,.3);color:var(--gold);}
+.proc-progress-wrap{margin-top:12px;}
+.proc-progress-labels{display:flex;justify-content:space-between;font-size:.56rem;color:var(--text-dim);margin-bottom:5px;}
+.proc-progress-bar{height:5px;border-radius:3px;background:rgba(201,116,138,.1);overflow:hidden;}
+.proc-progress-fill{height:100%;border-radius:3px;background:linear-gradient(to right,var(--azul),var(--rosa));transition:width 1.1s cubic-bezier(.4,0,.2,1);position:relative;}
+.proc-progress-fill::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:var(--rosa);box-shadow:0 0 8px rgba(201,116,138,.6);}
+.proc-card.completed .proc-progress-fill{background:linear-gradient(to right,var(--gold),var(--gold-light));}
+.proc-card.completed .proc-progress-fill::after{background:var(--gold);box-shadow:0 0 8px rgba(212,175,55,.6);}
+.proc-gained{display:none;margin-top:10px;padding:9px 13px;background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(212,175,55,.06));border:1px solid rgba(212,175,55,.3);border-radius:10px;text-align:center;animation:stampIn .5s cubic-bezier(.34,1.56,.64,1);}
+.proc-card.completed .proc-gained{display:block;}
+.proc-gained-text{font-size:.66rem;letter-spacing:.08em;color:var(--gold);}
+.proc-gained-icon{font-size:1.1rem;margin-bottom:3px;}
+.proc-gained-wpp{display:inline-flex;align-items:center;justify-content:center;gap:7px;margin-top:9px;width:100%;background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:9px;padding:10px 16px;font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#fff;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 4px 14px rgba(37,211,102,.3);}
+.proc-gained-wpp:hover{transform:translateY(-1px);box-shadow:0 7px 20px rgba(37,211,102,.45);}
+.proc-gained-wpp svg{width:14px;height:14px;flex-shrink:0;}
+.history-section{margin-top:28px;}
+.history-empty{text-align:center;padding:28px 18px;font-size:.68rem;color:var(--text-dim);border:1px dashed var(--border-dim);border-radius:12px;}
+.history-item{display:flex;align-items:center;gap:12px;padding:11px 15px;background:rgba(17,24,39,.4);border:1px solid var(--border-dim);border-radius:12px;margin-bottom:8px;animation:fadeUp .3s ease;}
+.history-dot{width:7px;height:7px;border-radius:50%;background:var(--rosa);flex-shrink:0;}
+.history-info{flex:1;min-width:0;}
+.history-proc{font-size:.73rem;font-weight:400;color:var(--creme);}
+.history-date{font-size:.58rem;color:var(--text-dim);margin-top:2px;}
+.history-pts{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:500;color:var(--rosa-light);white-space:nowrap;}
+/* TELA 4 PORTFOLIO */
+#screen-portfolio{padding:20px 18px 100px;}
+.port-hero{text-align:center;margin-bottom:24px;animation:fadeUp .5s ease both;}
+.port-eyebrow{font-size:.56rem;letter-spacing:.38em;text-transform:uppercase;color:var(--rosa);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px;}
+.port-eyebrow::before,.port-eyebrow::after{content:'';width:20px;height:1px;background:var(--rosa);}
+.port-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,6vw,2.6rem);font-weight:400;color:var(--creme);margin-bottom:6px;line-height:1.1;}
+.port-title em{font-style:italic;color:var(--rosa);}
+.port-sub{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);}
+.port-filter{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:20px;scrollbar-width:none;animation:fadeUp .5s ease .1s both;}
+.port-filter::-webkit-scrollbar{display:none;}
+.chip{flex-shrink:0;background:rgba(17,24,39,.6);border:1px solid var(--border-dim);border-radius:20px;padding:7px 16px;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.chip.on{background:rgba(201,116,138,.15);border-color:var(--border);color:var(--creme);}
+.chip:hover:not(.on){border-color:var(--border);color:var(--text-mid);}
+.port-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;animation:fadeUp .5s ease .15s both;}
+.port-item{border-radius:14px;overflow:hidden;background:rgba(17,24,39,.5);border:1px solid var(--border-dim);aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;cursor:pointer;transition:all .25s;}
+.port-item:hover{border-color:var(--border);transform:scale(1.02);}
+.port-item.tall{grid-row:span 2;aspect-ratio:auto;}
+.port-ph{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);text-align:center;padding:20px;line-height:1.8;}
+.port-tag{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(13,18,37,.82);backdrop-filter:blur(8px);border-radius:8px;padding:7px 10px;}
+.port-tag-name{font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:500;color:var(--creme);}
+.port-tag-type{font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rosa-light);margin-top:1px;}
+.port-ig-btn{width:100%;margin-top:22px;background:linear-gradient(135deg,rgba(193,53,132,.2),rgba(131,58,180,.15));border:1px solid rgba(193,53,132,.25);border-radius:14px;padding:15px 20px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .25s;text-decoration:none;animation:fadeUp .5s ease .2s both;}
+.port-ig-btn:hover{transform:translateY(-1px);}
+.port-ig-txt{font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--creme);}
+/* TELA 5 CUIDADOS */
+#screen-cuidados{padding:20px 18px 100px;}
+.cuid-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,6vw,2.4rem);font-weight:400;color:var(--creme);margin-bottom:6px;line-height:1.1;animation:fadeUp .5s ease both;}
+.cuid-title em{font-style:italic;color:var(--rosa);}
+.cuid-sub{font-size:.62rem;color:var(--text-dim);letter-spacing:.06em;margin-bottom:26px;line-height:1.7;animation:fadeUp .5s ease .05s both;}
+.cuid-section{margin-bottom:28px;animation:fadeUp .5s ease .1s both;}
+.cuid-hdr{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.cuid-hdr-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:rgba(201,116,138,.12);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.95rem;}
+.cuid-hdr-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--creme);}
+.cuid-cards{display:flex;flex-direction:column;gap:8px;}
+.cuid-card{background:rgba(17,24,39,.45);border:1px solid var(--border-dim);border-radius:13px;padding:13px 15px;display:flex;align-items:flex-start;gap:11px;}
+.cuid-num{width:22px;height:22px;border-radius:6px;flex-shrink:0;background:rgba(201,116,138,.1);border:1px solid var(--border-dim);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:500;color:var(--rosa);margin-top:1px;}
+.cuid-txt{flex:1;font-size:.68rem;color:var(--text-mid);line-height:1.65;}
+.cuid-txt strong{color:var(--creme);font-weight:500;}
+/* BOTÃO GANHAR PONTO EXTRA */
+.btn-ponto-extra{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(201,116,138,.15),rgba(201,116,138,.08));border:1px solid rgba(201,116,138,.35);border-radius:22px;padding:7px 13px;font-family:'Montserrat',sans-serif;font-size:.56rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--rosa-light);cursor:pointer;transition:all .25s;white-space:nowrap;flex-shrink:0;}
+.btn-ponto-extra:hover{background:rgba(201,116,138,.25);border-color:var(--rosa);color:var(--creme);transform:translateY(-1px);}
+.btn-ponto-extra:active{transform:translateY(0);}
+.btn-ponto-extra svg{flex-shrink:0;}
+/* MODAL STORIES */
+#stories-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(13,18,37,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);align-items:flex-end;justify-content:center;padding:0;transition:opacity .3s;}
+#stories-modal.show{display:flex;animation:fadeIn .25s ease;}
+.stories-sheet{background:linear-gradient(160deg,rgba(27,42,107,.7),rgba(13,18,37,.98));border:1px solid var(--border);border-bottom:none;border-radius:24px 24px 0 0;padding:28px 22px 40px;width:100%;max-width:560px;animation:slideUp .35s cubic-bezier(.34,1.2,.64,1);position:relative;overflow:hidden;}
+.stories-sheet::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:40px;height:4px;border-radius:2px;background:rgba(201,116,138,.3);margin-top:10px;}
+.stories-handle{width:40px;height:4px;border-radius:2px;background:rgba(201,116,138,.25);margin:0 auto 22px;}
+.stories-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--creme);margin-bottom:4px;line-height:1.2;}
+.stories-title em{font-style:italic;color:var(--rosa);}
+.stories-eyebrow{font-size:.52rem;letter-spacing:.35em;text-transform:uppercase;color:var(--rosa);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.stories-eyebrow::before{content:'';width:18px;height:1px;background:var(--rosa);}
+.stories-proc-tag{display:inline-block;background:rgba(201,116,138,.12);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.58rem;color:var(--rosa-light);letter-spacing:.08em;margin-bottom:18px;}
+.stories-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.stories-step{display:flex;align-items:flex-start;gap:12px;background:rgba(17,24,39,.5);border:1px solid var(--border-dim);border-radius:13px;padding:13px 14px;}
+.stories-step-num{width:24px;height:24px;border-radius:7px;flex-shrink:0;background:rgba(201,116,138,.14);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;color:var(--rosa);margin-top:1px;}
+.stories-step-txt{font-size:.68rem;color:var(--text-mid);line-height:1.65;}
+.stories-step-txt strong{color:var(--creme);font-weight:500;}
+.stories-frase-box{background:linear-gradient(135deg,rgba(27,42,107,.3),rgba(201,116,138,.1));border:1px solid rgba(201,116,138,.25);border-radius:14px;padding:14px 16px;margin-bottom:20px;position:relative;}
+.stories-frase-label{font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-dim);margin-bottom:7px;}
+.stories-frase-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:var(--creme);line-height:1.6;}
+.stories-frase-copy{position:absolute;top:12px;right:12px;background:rgba(201,116,138,.12);border:1px solid var(--border-dim);border-radius:7px;padding:5px 8px;font-size:.52rem;color:var(--rosa-light);cursor:pointer;transition:all .2s;letter-spacing:.06em;}
+.stories-frase-copy:hover{background:rgba(201,116,138,.22);color:var(--creme);}
+.stories-prazo{display:flex;align-items:center;gap:8px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:10px 13px;margin-bottom:20px;font-size:.63rem;color:rgba(251,191,36,.85);line-height:1.5;}
+.stories-prazo svg{flex-shrink:0;}
+.stories-actions{display:flex;flex-direction:column;gap:9px;}
+.btn-stories-ig{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:linear-gradient(135deg,rgba(193,53,132,.25),rgba(131,58,180,.18));border:1px solid rgba(193,53,132,.3);border-radius:13px;padding:14px 20px;font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--creme);cursor:pointer;text-decoration:none;transition:all .25s;}
+.btn-stories-ig:hover{background:linear-gradient(135deg,rgba(193,53,132,.38),rgba(131,58,180,.28));transform:translateY(-1px);}
+.btn-stories-close{background:rgba(17,24,39,.6);border:1px solid var(--border-dim);border-radius:13px;padding:13px 20px;font-family:'Montserrat',sans-serif;font-size:.63rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;transition:all .2s;width:100%;}
+.btn-stories-close:hover{border-color:var(--border);color:var(--text-mid);}
+/* WIN MODAL */
+#win-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(13,18,37,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:24px;}
+#win-modal.show{display:flex;animation:fadeIn .3s ease;}
+.win-box{background:linear-gradient(135deg,rgba(27,42,107,.6),rgba(201,116,138,.2));border:1px solid rgba(212,175,55,.3);border-radius:24px;padding:36px 24px;text-align:center;max-width:340px;width:100%;position:relative;overflow:hidden;animation:scaleIn .4s cubic-bezier(.34,1.56,.64,1);}
+.win-confetti-wrap{position:absolute;top:0;left:0;right:0;height:80px;overflow:hidden;pointer-events:none;}
+.win-confetti-particle{position:absolute;width:6px;height:6px;border-radius:1px;animation:confetti .8s ease-in forwards;}
+.win-icon{font-size:3.2rem;margin-bottom:14px;animation:stampIn .6s cubic-bezier(.34,1.56,.64,1);display:block;}
+.win-title{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:500;color:var(--gold);margin-bottom:6px;}
+.win-proc{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:var(--creme);margin-bottom:14px;}
+.win-msg{font-size:.68rem;color:var(--text-mid);line-height:1.75;margin-bottom:22px;}
+.win-btn{background:linear-gradient(135deg,var(--gold),var(--gold-light));border:none;border-radius:12px;padding:13px 28px;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--dark);cursor:pointer;transition:all .3s;box-shadow:0 8px 28px rgba(212,175,55,.4);width:100%;}
+.win-btn:hover{transform:translateY(-1px);box-shadow:0 12px 36px rgba(212,175,55,.5);}
+.win-wpp-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;width:100%;background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:12px;padding:13px 28px;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#fff;cursor:pointer;text-decoration:none;transition:all .3s;box-shadow:0 8px 28px rgba(37,211,102,.3);}
+.win-wpp-btn:hover{transform:translateY(-1px);box-shadow:0 12px 36px rgba(37,211,102,.45);}
+.win-wpp-btn svg{width:16px;height:16px;flex-shrink:0;}
+@media(min-width:480px){.lookup-card{padding:36px 32px 30px;}#screen-hub,#screen-card,#screen-portfolio,#screen-cuidados{padding:24px 28px 100px;}}
+@media(min-width:640px){main,header{max-width:560px;margin-left:auto;margin-right:auto;left:0;right:0;}header{left:50%;transform:translateX(-50%);width:100%;max-width:560px;}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="#">
+    <img class="logo-img" src="https://lh3.googleusercontent.com/d/1SvnRr-pOpyM61UQGvCOXbPIMpinGQ55O" alt="Állira" onerror="this.setAttribute('data-failed','true');this.style.display='none';document.querySelector('.logo-fallback').style.display='block'">
+    <span class="logo-fallback">Áll<span>i</span>ra</span>
+  </a>
+  <div class="header-tag" id="header-tag">Área da Cliente</div>
+  <button id="btn-sair" onclick="fazerLogout()" style="display:none;background:none;border:1px solid rgba(201,116,138,.3);border-radius:8px;padding:5px 11px;font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,235,.5);cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--creme)';this.style.borderColor='var(--border)';" onmouseout="this.style.color='rgba(245,240,235,.5)';this.style.borderColor='rgba(201,116,138,.3)';">Sair</button>
+</header>
+<main>
+
+<!-- TELA 1: CPF -->
+<div id="screen-lookup" style="display:flex;flex-direction:column;align-items:center;padding:40px 20px 80px;animation:fadeUp .5s ease;">
+  <div class="splash-hero">
+    <h1 class="splash-title">Bem-vinda à<br><em>Állira</em></h1>
+    <p class="splash-sub">Sua área exclusiva<br>de cliente</p>
+  </div>
+  <div class="lookup-card">
+    <div class="lookup-label">Informe seu CPF para entrar</div>
+    <div class="cpf-input-wrap">
+      <input class="cpf-input" id="cpf-input" type="tel" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" autocomplete="off">
+      <button class="btn-primary" id="btn-buscar" onclick="buscarCliente()">Acessar minha área</button>
+      <button class="btn-primary" onclick="window.location.href='anamnese.html'" style="background:linear-gradient(135deg,var(--rosa),var(--rosa-light));margin-top:6px;">Preencher minha anamnese</button>
+    </div>
+    <div class="lookup-error" id="lookup-error"></div>
+    <p class="lookup-hint">Digite seu CPF para acessar pontos, agendamentos e portfólio</p>
+  </div>
+  <div class="loader" id="loader"><div class="loader-ring"></div><div class="loader-text">Buscando...</div></div>
+</div>
+
+<!-- TELA 2: HUB -->
+<div id="screen-hub" class="screen">
+  <button class="back-btn" onclick="voltarLookup()">
+    <svg viewBox="0 0 16 16" fill="none" stroke-width="1.8"><path d="M10 3L5 8l5 5"/></svg>Sair
+  </button>
+  <div class="hub-greeting">
+    <div class="hub-eyebrow">Olá</div>
+    <div class="hub-name">Bem-vinda,<br><em id="hub-nome">—</em></div>
+    <button class="btn-analise" onclick="irParaAnalise()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg>
+      Análise do meu olhar
+    </button>
+    <div class="hub-tier" id="hub-tier" style="margin-top:10px;">Membro · 0 pts acumulados</div>
+  </div>
+  <div class="next-card">
+    <div class="next-eyebrow"><span class="dot-live"></span>Próximo procedimento</div>
+    <div class="next-content">
+      <div class="next-icon" id="next-icon"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg></div>
+      <div class="next-info">
+        <div class="next-name" id="next-name">Nenhum agendamento</div>
+        <div class="next-date" id="next-date">—</div>
+      </div>
+      <a id="next-wpp-link" href="https://wa.me/553172488204?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20procedimento." target="_blank" rel="noopener"
+        style="display:inline-flex;align-items:center;gap:5px;background:#25D366;color:#fff;text-decoration:none;padding:7px 12px;border-radius:18px;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;box-shadow:0 2px 8px rgba(37,211,102,.3);flex-shrink:0;transition:background .2s,transform .15s;" onmouseover="this.style.background='#1ebe5d';this.style.transform='scale(1.05)';" onmouseout="this.style.background='#25D366';this.style.transform='scale(1)';">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Agendar
+      </a>
+    </div>
+  </div>
+  <div class="last-card" id="last-card" style="display:none;">
+    <div class="last-icon" id="last-icon"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg></div>
+    <div class="last-info">
+      <div class="last-label">Último procedimento</div>
+      <div class="last-name" id="last-name">—</div>
+      <div class="last-date" id="last-date">—</div>
+    </div>
+    <button class="last-care-btn" id="last-care-btn">Ver cuidados</button>
+  </div>
+  <div class="sec-label" style="margin-top:6px;">Agendar procedimento</div>
+  <div class="shortcuts-grid" id="shortcuts-grid"></div>
+  <div class="sec-label">Minha conta</div>
+  <div class="nav-cards">
+    <div class="nav-card" onclick="irParaFidelidade()">
+  <div class="nc-icon g">
+    <svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='1' y='4' width='22' height='16' rx='2'/><line x1='1' y1='10' x2='23' y2='10'/></svg>
+  </div>
+  <div class="nc-text">
+    <div class="nc-title">Cartão de Fidelidade</div>
+    <div class="nc-desc">Pontos acumulados, histórico e prêmios</div>
+  </div>
+  <div class="nc-arrow">›</div>
+</div>
+    <div class="nav-card" onclick="window.location.href='portfolio.html'">
+  <div class="nc-icon r">
+    <svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='7' height='7' rx='1'/><rect x='14' y='3' width='7' height='7' rx='1'/><rect x='3' y='14' width='7' height='7' rx='1'/><rect x='14' y='14' width='7' height='7' rx='1'/></svg>
+  </div>
+  <div class="nc-text">
+    <div class="nc-title">Portfólio</div>
+    <div class="nc-desc">Trabalhos realizados e inspirações</div>
+  </div>
+  <div class="nc-arrow">›</div>
+</div>
+    <div class="nav-card" onclick="window.location.href='cuidados.html'">
+  <div class="nc-icon a">
+    <svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z'/></svg>
+  </div>
+  <div class="nc-text">
+    <div class="nc-title">Cuidados pós-procedimento</div>
+    <div class="nc-desc">Como cuidar dos seus resultados em casa</div>
+  </div>
+  <div class="nc-arrow">›</div>
+</div>
+  </div>
+  <div class="sec-label">Fale com a Állira</div>
+  <div class="contact-row">
+    <a class="btn-wpp" href="https://wa.me/553172488204?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20procedimento." target="_blank" rel="noopener">
+      <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='#ffffff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z'/></svg><span class="btn-wpp-txt">WhatsApp</span>
+    </a>
+    <a class="btn-insta" href="https://instagram.com/allira.co" target="_blank" rel="noopener">
+      <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='#ffffff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='20' height='20' rx='5'/><circle cx='12' cy='12' r='4'/><circle cx='17.5' cy='6.5' r='1' fill='#ffffff' stroke='none'/></svg><span class="btn-insta-txt">Instagram</span>
+    </a>
+  </div>
+</div>
+
+<!-- TELA 3: FIDELIDADE -->
+<div id="screen-card" class="screen">
+  <button class="back-btn" onclick="voltarHub()">
+    <svg viewBox="0 0 16 16" fill="none" stroke-width="1.8"><path d="M10 3L5 8l5 5"/></svg>Voltar
+  </button>
+  <div class="client-bar">
+    <div class="client-avatar" id="client-avatar">?</div>
+    <div class="client-info">
+      <div class="client-name" id="client-name">—</div>
+      <div class="client-cpf" id="client-cpf-display">—</div>
+    </div>
+    <div class="client-badge" id="client-tier">⭐ Membro</div>
+  </div>
+  <div class="section-eyebrow">Seus pontos</div>
+  <h2 class="section-title">Programa de <em style="font-style:italic;color:var(--rosa);">Fidelidade</em></h2>
+  <p class="section-desc">A cada procedimento realizado você acumula pontos. Complete a meta de cada serviço e ganhe um procedimento gratuito!</p>
+  <div class="points-hero">
+    <div class="points-eyebrow">Total acumulado</div>
+    <div class="points-total" id="total-pts">0</div>
+    <div class="points-label">pontos</div>
+    <div class="points-row">
+      <div class="points-stat"><div class="points-stat-val" id="total-visits">0</div><div class="points-stat-lbl">Visitas</div></div>
+      <div class="points-stat"><div class="points-stat-val" id="total-gained">0</div><div class="points-stat-lbl">Prêmios</div></div>
+      <div class="points-stat"><div class="points-stat-val" id="points-next">—</div><div class="points-stat-lbl">Pts p/ próximo</div></div>
+    </div>
+  </div>
+  <div class="proc-section-title">Procedimentos</div>
+  <div id="proc-list"></div>
+  <div class="history-section">
+    <div class="proc-section-title">Histórico</div>
+    <div id="history-list"></div>
+  </div>
+</div>
+
+<!-- MODAL GANHAR PONTO EXTRA — STORIES -->
+<div id="stories-modal" onclick="fecharStoriesModal(event)">
+  <div class="stories-sheet" id="stories-sheet">
+    <div class="stories-handle"></div>
+    <div class="stories-eyebrow">Programa de fidelidade</div>
+    <div class="stories-title">Ganhe <em>+1 ponto</em><br>extra hoje</div>
+    <div class="stories-proc-tag" id="stories-proc-tag">— procedimento —</div>
+    <div class="stories-steps">
+      <div class="stories-step">
+        <div class="stories-step-num">1</div>
+        <div class="stories-step-txt">Tire uma <strong>selfie ou foto do procedimento</strong> que você acabou de fazer 📸</div>
+      </div>
+      <div class="stories-step">
+        <div class="stories-step-num">2</div>
+        <div class="stories-step-txt">Poste nos <strong>stories do Instagram</strong> com a frase abaixo e <strong>marque @allira.co</strong></div>
+      </div>
+      <div class="stories-step">
+        <div class="stories-step-num">3</div>
+        <div class="stories-step-txt">Após a marcação, você recebe automaticamente <strong>+1 ponto</strong> neste procedimento 🌸</div>
+      </div>
+    </div>
+    <div class="stories-frase-box">
+      <div class="stories-frase-label">Sugestão de legenda</div>
+      <div class="stories-frase-text" id="stories-frase">"Hoje foi dia de cuidar do meu olhar. ✨ @allira.co"</div>
+      <button class="stories-frase-copy" id="btn-copiar-frase" onclick="copiarFrase()">Copiar</button>
+    </div>
+    <div class="stories-prazo">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Poste em até <strong style="margin:0 3px;">24 horas</strong> após o seu atendimento de hoje para garantir o ponto extra.
+    </div>
+    <div class="stories-actions">
+      <a id="btn-abrir-ig" href="https://instagram.com/allira.co" target="_blank" rel="noopener" class="btn-stories-ig">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+        Abrir Instagram para postar
+      </a>
+      <button class="btn-stories-close" onclick="fecharStoriesModal()">Já entendi, fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TELA 4: PORTFÓLIO -->
+<div id="screen-portfolio" class="screen">
+  <button class="back-btn" onclick="voltarHub()">
+    <svg viewBox="0 0 16 16" fill="none" stroke-width="1.8"><path d="M10 3L5 8l5 5"/></svg>Voltar
+  </button>
+  <div class="port-hero">
+    <div class="port-eyebrow">Trabalhos</div>
+    <h2 class="port-title">Nosso <em>Portfólio</em></h2>
+    <p class="port-sub">Resultados reais das nossas clientes</p>
+  </div>
+  <div class="port-filter">
+    <button class="chip on" onclick="filtrarPort('todos',this)">Todos</button>
+    <button class="chip" onclick="filtrarPort('cilios',this)">Cílios</button>
+    <button class="chip" onclick="filtrarPort('sobrancelha',this)">Sobrancelha</button>
+    <button class="chip" onclick="filtrarPort('henna',this)">Henna</button>
+    <button class="chip" onclick="filtrarPort('lash',this)">Lash Lifting</button>
+  </div>
+  <div class="port-grid">
+    <div class="port-item" data-cat="lash">
+      <div class="port-ph"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/></svg><br>Lash Lifting</div>
+      <div class="port-tag"><div class="port-tag-name">Lash Lifting</div><div class="port-tag-type">Cílios</div></div>
+    </div>
+    <div class="port-item tall" data-cat="cilios">
+      <div class="port-ph"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/><path d='M9 5l-1-3M12 4V1M15 5l1-3'/></svg><br>Extensão<br>de Cílios</div>
+      <div class="port-tag"><div class="port-tag-name">Extensão</div><div class="port-tag-type">Volume Russo</div></div>
+    </div>
+    <div class="port-item" data-cat="sobrancelha">
+      <div class="port-ph"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7'/><path d='M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z'/></svg><br>Design de<br>Sobrancelha</div>
+      <div class="port-tag"><div class="port-tag-name">Design</div><div class="port-tag-type">Sobrancelha</div></div>
+    </div>
+    <div class="port-item" data-cat="henna">
+      <div class="port-ph"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2C12 2 5 10 5 15a7 7 0 0014 0C19 10 12 2 12 2z'/></svg><br>Henna</div>
+      <div class="port-tag"><div class="port-tag-name">Henna</div><div class="port-tag-type">Sobrancelha</div></div>
+    </div>
+    <div class="port-item" data-cat="sobrancelha">
+      <div class="port-ph"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 14 Q7 7 12 7 Q17 7 21 14'/><path d='M5 16 Q9 10 12 10 Q15 10 19 16' opacity='0.5'/></svg><br>Brow<br>Lamination</div>
+      <div class="port-tag"><div class="port-tag-name">Brow Lamination</div><div class="port-tag-type">Sobrancelha</div></div>
+    </div>
+    <div class="port-item" data-cat="cilios">
+      <div class="port-ph"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/></svg><br>Classic<br>Lashes</div>
+      <div class="port-tag"><div class="port-tag-name">Extensão Classic</div><div class="port-tag-type">Cílios</div></div>
+    </div>
+  </div>
+  <a class="port-ig-btn" href="https://instagram.com/allira.co" target="_blank" rel="noopener">
+    <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='#ffffff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='20' height='20' rx='5'/><circle cx='12' cy='12' r='4'/><circle cx='17.5' cy='6.5' r='1' fill='#ffffff' stroke='none'/></svg><span class="port-ig-txt">Ver mais no Instagram</span>
+  </a>
+</div>
+
+<!-- TELA 5: CUIDADOS -->
+<div id="screen-cuidados" class="screen">
+  <button class="back-btn" onclick="voltarHub()">
+    <svg viewBox="0 0 16 16" fill="none" stroke-width="1.8"><path d="M10 3L5 8l5 5"/></svg>Voltar
+  </button>
+  <div class="section-eyebrow">Pós-procedimento</div>
+  <h2 class="cuid-title">Cuidados em <em>Casa</em></h2>
+  <p class="cuid-sub">Siga as orientações para prolongar o resultado e cuidar da sua saúde ocular e facial.</p>
+
+  <div class="cuid-section" id="cuidado-lash">
+    <div class="cuid-hdr"><div class="cuid-hdr-icon"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/></svg></div><div class="cuid-hdr-name">Lash Lifting</div></div>
+    <div class="cuid-cards">
+      <div class="cuid-card"><div class="cuid-num">1</div><div class="cuid-txt"><strong>48h sem molhar:</strong> evite água, vapor, piscina ou sauna nas primeiras 48 horas.</div></div>
+      <div class="cuid-card"><div class="cuid-num">2</div><div class="cuid-txt"><strong>Não esfregar os olhos</strong> para não quebrar a curvatura dos cílios.</div></div>
+      <div class="cuid-card"><div class="cuid-num">3</div><div class="cuid-txt"><strong>Evite rímel</strong> nas primeiras 24h. Após isso, use somente rímel não à prova d'água.</div></div>
+      <div class="cuid-card"><div class="cuid-num">4</div><div class="cuid-txt"><strong>Durma de barriga para cima</strong> nos primeiros 2 dias para preservar a curvatura.</div></div>
+      <div class="cuid-card"><div class="cuid-num">5</div><div class="cuid-txt"><strong>Hidrate os cílios</strong> com óleo de rícino a partir do 3º dia.</div></div>
+    </div>
+  </div>
+
+  <div class="cuid-section" id="cuidado-extensao">
+    <div class="cuid-hdr"><div class="cuid-hdr-icon"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/><path d='M9 5l-1-3M12 4V1M15 5l1-3'/></svg></div><div class="cuid-hdr-name">Extensão de Cílios</div></div>
+    <div class="cuid-cards">
+      <div class="cuid-card"><div class="cuid-num">1</div><div class="cuid-txt"><strong>24h sem molhar:</strong> evite contato com água, vapor e suor intenso.</div></div>
+      <div class="cuid-card"><div class="cuid-num">2</div><div class="cuid-txt"><strong>Não use produtos oleosos</strong> na região dos olhos — o óleo dissolve a cola das extensões.</div></div>
+      <div class="cuid-card"><div class="cuid-num">3</div><div class="cuid-txt"><strong>Penteie suavemente</strong> com escovinha para cílios pela manhã, do centro para as pontas.</div></div>
+      <div class="cuid-card"><div class="cuid-num">4</div><div class="cuid-txt"><strong>Evite arrancar ou puxar.</strong> Se alguma incomodar, agende uma remoção profissional.</div></div>
+      <div class="cuid-card"><div class="cuid-num">5</div><div class="cuid-txt"><strong>Retoque a cada 3–4 semanas</strong> para manter o volume e uniformidade.</div></div>
+    </div>
+  </div>
+
+  <div class="cuid-section" id="cuidado-brow">
+    <div class="cuid-hdr"><div class="cuid-hdr-icon"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 14 Q7 7 12 7 Q17 7 21 14'/><path d='M5 16 Q9 10 12 10 Q15 10 19 16' opacity='0.5'/></svg></div><div class="cuid-hdr-name">Brow Lamination</div></div>
+    <div class="cuid-cards">
+      <div class="cuid-card"><div class="cuid-num">1</div><div class="cuid-txt"><strong>48h sem molhar:</strong> proteja as sobrancelhas ao lavar o rosto.</div></div>
+      <div class="cuid-card"><div class="cuid-num">2</div><div class="cuid-txt"><strong>Não esfregue a região</strong> com toalha — tampe suavemente ao secar.</div></div>
+      <div class="cuid-card"><div class="cuid-num">3</div><div class="cuid-txt"><strong>Hidrate diariamente</strong> com óleo de argan ou produto indicado pela profissional.</div></div>
+      <div class="cuid-card"><div class="cuid-num">4</div><div class="cuid-txt"><strong>Pentear no sentido correto</strong> (para cima e para os lados) para manter a forma.</div></div>
+    </div>
+  </div>
+
+  <div class="cuid-section" id="cuidado-design">
+    <div class="cuid-hdr"><div class="cuid-hdr-icon"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7'/><path d='M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z'/></svg></div><div class="cuid-hdr-name">Design de Sobrancelha</div></div>
+    <div class="cuid-cards">
+      <div class="cuid-card"><div class="cuid-num">1</div><div class="cuid-txt"><strong>Não arranque pelos</strong> fora do formato desenhado para manter o design.</div></div>
+      <div class="cuid-card"><div class="cuid-num">2</div><div class="cuid-txt"><strong>Evite sol direto</strong> na região nas primeiras 24h se a pele ficar sensível.</div></div>
+      <div class="cuid-card"><div class="cuid-num">3</div><div class="cuid-txt"><strong>Hidrate</strong> com óleo de rícino antes de dormir para estimular o crescimento saudável.</div></div>
+    </div>
+  </div>
+
+  <div class="cuid-section" id="cuidado-henna">
+    <div class="cuid-hdr"><div class="cuid-hdr-icon"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2C12 2 5 10 5 15a7 7 0 0014 0C19 10 12 2 12 2z'/></svg></div><div class="cuid-hdr-name">Henna</div></div>
+    <div class="cuid-cards">
+      <div class="cuid-card"><div class="cuid-num">1</div><div class="cuid-txt"><strong>24h sem molhar a região.</strong> Evite lavar o rosto diretamente sobre as sobrancelhas.</div></div>
+      <div class="cuid-card"><div class="cuid-num">2</div><div class="cuid-txt"><strong>Evite esfoliação</strong> na área nas primeiras 72h para não remover o pigmento.</div></div>
+      <div class="cuid-card"><div class="cuid-num">3</div><div class="cuid-txt"><strong>Não use ácidos</strong> (vitamina C, glicólico) sobre as sobrancelhas.</div></div>
+      <div class="cuid-card"><div class="cuid-num">4</div><div class="cuid-txt"><strong>Protetor solar</strong> ajuda a preservar a cor por mais tempo.</div></div>
+    </div>
+  </div>
+
+  <div class="cuid-section" id="cuidado-depilacao">
+    <div class="cuid-hdr"><div class="cuid-hdr-icon"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='2.5'/><circle cx='12' cy='5.5' r='2'/><circle cx='12' cy='18.5' r='2'/><circle cx='5.5' cy='12' r='2'/><circle cx='18.5' cy='12' r='2'/></svg></div><div class="cuid-hdr-name">Depilação de Buço</div></div>
+    <div class="cuid-cards">
+      <div class="cuid-card"><div class="cuid-num">1</div><div class="cuid-txt"><strong>Evite sol</strong> na área nas primeiras 24h para não irritar a pele.</div></div>
+      <div class="cuid-card"><div class="cuid-num">2</div><div class="cuid-txt"><strong>Não aplique maquiagem</strong> sobre a região por pelo menos 12h.</div></div>
+      <div class="cuid-card"><div class="cuid-num">3</div><div class="cuid-txt"><strong>Hidrate</strong> a área com creme suave ou gel pós-depilação.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP CPF NÃO ENCONTRADO -->
+<div id="popup-anamnese" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(13,18,37,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:24px;">
+  <div style="background:linear-gradient(135deg,rgba(27,42,107,.5),rgba(201,116,138,.15));border:1px solid var(--border);border-radius:22px;padding:32px 24px;max-width:360px;width:100%;text-align:center;">
+    <div style="margin:0 auto 16px;display:flex;align-items:center;justify-content:center;"><svg width='44' height='44' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9H4a2 2 0 01-2-2V5h4'/><path d='M18 9h2a2 2 0 002-2V5h-4'/><path d='M6 5h12v7a6 6 0 01-12 0V5z'/><line x1='12' y1='18' x2='12' y2='21'/><line x1='8' y1='21' x2='16' y2='21'/></svg></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:500;color:var(--creme);margin-bottom:8px;">CPF não encontrado</div>
+    <p style="font-size:.68rem;color:var(--text-mid);line-height:1.8;margin-bottom:22px;">Parece que você ainda não tem cadastro. Que tal preencher sua ficha de anamnese agora?</p>
+    <button onclick="window.location.href='anamnese.html'" style="width:100%;background:linear-gradient(135deg,var(--azul),var(--rosa));border:none;border-radius:12px;padding:14px;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:#fff;cursor:pointer;margin-bottom:10px;">Preencher minha anamnese</button>
+    <button onclick="document.getElementById('popup-anamnese').style.display='none'" style="width:100%;background:none;border:1px solid var(--border-dim);border-radius:12px;padding:12px;font-family:'Montserrat',sans-serif;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;">Tentar novamente</button>
+  </div>
+</div>
+</main>
+
+<!-- WIN MODAL -->
+<div id="win-modal">
+  <div class="win-box">
+    <div class="win-confetti-wrap" id="confetti-wrap"></div>
+    <span class="win-icon"><svg width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='#D4AF37' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9H4a2 2 0 01-2-2V5h4'/><path d='M18 9h2a2 2 0 002-2V5h-4'/><path d='M6 5h12v7a6 6 0 01-12 0V5z'/><line x1='12' y1='18' x2='12' y2='21'/><line x1='8' y1='21' x2='16' y2='21'/></svg></span>
+    <div class="win-title">Parabéns!</div>
+    <div class="win-proc" id="win-proc-name">Procedimento</div>
+    <p class="win-msg">Você atingiu a meta de pontos e <strong>ganhou um procedimento gratuito!</strong><br>Toque no botão abaixo para avisar a Állira e agendar seu prêmio. 🎁</p>
+    <button class="win-btn" onclick="closeWinModal()">Maravilhoso! ✨</button>
+    <a class="win-wpp-btn" id="win-wpp-link" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Avisar a Állira pelo WhatsApp
+    </a>
+  </div>
+</div>
+
+<script>
+const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyVdcUAiI2IXAaEnBA_A3aBTmGd9QnxzO7_Tv-HAjO6ZjdD41n36yqB1dGHwKeP53Js/exec';
+const AGENDAMENTO_WPP='https://wa.me/553172488204?text=Ol%C3%A1!%20Gostaria%20de%20agendar:%20';
+const ALLIRA_WPP_NUM='553172488204';
+let clienteData=null;
+const icoEye=`<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/></svg>`;
+const icoExt=`<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/><path d='M9 5l-1-3M12 4V1M15 5l1-3'/></svg>`;
+const icoBrow=`<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 14 Q7 7 12 7 Q17 7 21 14'/><path d='M5 16 Q9 10 12 10 Q15 10 19 16' opacity='0.5'/></svg>`;
+const icoPencil=`<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7'/><path d='M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z'/></svg>`;
+const icoDrop=`<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2C12 2 5 10 5 15a7 7 0 0014 0C19 10 12 2 12 2z'/></svg>`;
+const icoFlower=`<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='2.5'/><circle cx='12' cy='5.5' r='2'/><circle cx='12' cy='18.5' r='2'/><circle cx='5.5' cy='12' r='2'/><circle cx='18.5' cy='12' r='2'/></svg>`;
+const icoCal=`<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>`;
+const icoStar=`<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>`;
+const icoGrid=`<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='7' height='7' rx='1'/><rect x='14' y='3' width='7' height='7' rx='1'/><rect x='3' y='14' width='7' height='7' rx='1'/><rect x='14' y='14' width='7' height='7' rx='1'/></svg>`;
+// Procedimentos exibidos no programa de fidelidade (Henna e Depilação de Buço excluídos intencionalmente)
+const PROCEDIMENTOS_FIDELIDADE_IDS = ['Lash Lifting','Extensão de Cílios','Brow Lamination','Design de Sobrancelha'];
+
+// Ícones por procedimento
+const ICONE_MAP = {
+  'Lash Lifting': icoEye,
+  'Extensão de Cílios': icoExt,
+  'Brow Lamination': icoBrow,
+  'Design de Sobrancelha': icoPencil,
+  'Henna': icoDrop,
+  'Depilação de Buço': icoFlower,
+};
+
+// Metas padrão (fallback caso a planilha não retorne)
+const META_DEFAULT = {
+  'Lash Lifting': 3,
+  'Extensão de Cílios': 20,
+  'Brow Lamination': 5,
+  'Design de Sobrancelha': 6,
+};
+
+// Array de procedimentos para fidelidade — preenchido dinamicamente pela planilha
+let PROCEDIMENTOS = PROCEDIMENTOS_FIDELIDADE_IDS.map(id => ({
+  id,
+  icon: ICONE_MAP[id] || icoPencil,
+  meta: META_DEFAULT[id] || 5,
+  ptsPorSessao: 1,
+  paraGanhar: META_DEFAULT[id] || 5,
+}));
+
+// Todos os procedimentos (incluindo os que não aparecem na fidelidade, para atalhos/hub)
+const TODOS_PROCEDIMENTOS = Object.keys(ICONE_MAP).map(id => ({
+  id,
+  icon: ICONE_MAP[id],
+}));
+
+const CUIDADO_MAP={'Lash Lifting':'cuidado-lash','Extensão de Cílios':'cuidado-extensao','Brow Lamination':'cuidado-brow','Design de Sobrancelha':'cuidado-design','Henna':'cuidado-henna','Depilação de Buço':'cuidado-depilacao'};
+let clienteAtual=null,premioPendente=null;
+
+// ── Carrega configuração de pontuação da planilha ─────────────────────
+async function carregarConfigFidelidade(){
+  if(APPS_SCRIPT_URL.includes('SEU_ID')) return;
+  try {
+    const url = APPS_SCRIPT_URL + '?action=getConfig';
+    const data = await scriptFetch(url);
+    // fidGetConfig retorna { ok: true, config: [ { proc, ptsPorSessao, meta, paraGanhar } ] }
+    const arr = (data && data.ok && Array.isArray(data.config)) ? data.config
+              : Array.isArray(data) ? data : null;
+    if(arr && arr.length){
+      const mapped = arr
+        .filter(p => PROCEDIMENTOS_FIDELIDADE_IDS.includes(p.proc || p.id))
+        .map(p => ({
+          id: p.proc || p.id,
+          icon: ICONE_MAP[p.proc || p.id] || icoPencil,
+          meta: Number(p.meta) || META_DEFAULT[p.proc || p.id] || 5,
+          ptsPorSessao: Number(p.ptsPorSessao) || 1,
+          paraGanhar: Number(p.paraGanhar) || Number(p.meta) || META_DEFAULT[p.proc || p.id] || 5,
+        }));
+      if(mapped.length) PROCEDIMENTOS = mapped;
+      // Fallback para procedimentos ausentes
+      PROCEDIMENTOS_FIDELIDADE_IDS.forEach(id => {
+        if(!PROCEDIMENTOS.find(p => p.id === id)){
+          PROCEDIMENTOS.push({id, icon: ICONE_MAP[id] || icoPencil, meta: META_DEFAULT[id]||5, ptsPorSessao:1, paraGanhar: META_DEFAULT[id]||5});
+        }
+      });
+    }
+  } catch(e) { /* mantém valores padrão */ }
+}
+
+function ocultarTudo(){
+  document.getElementById('screen-lookup').style.display='none';
+  document.querySelectorAll('.screen').forEach(s=>s.style.display='none');
+}
+function mostrarTela(id,tag){
+  ocultarTudo();
+  const el=document.getElementById(id);
+  el.style.display=id==='screen-lookup'?'flex':'block';
+  el.style.animation='slideUp .4s ease';
+  document.getElementById('header-tag').textContent=tag||'Área da Cliente';
+  window.scrollTo(0,0);
+  // Aninha só aparece fora do lookup
+  const fab=document.getElementById('ninha-fab');
+  if(fab) fab.style.display = id==='screen-lookup' ? 'none' : 'flex';
+}
+function fazerLogout(){
+  try { localStorage.removeItem('allira_cpf_salvo'); } catch(e){}
+  voltarLookup();
+}
+
+function voltarLookup(){
+  clienteAtual=null;
+  cpfInput.value='';
+  document.getElementById('lookup-error').classList.remove('show');
+  document.getElementById('btn-sair').style.display='none';
+  ocultarTudo();
+  const el=document.getElementById('screen-lookup');
+  el.style.display='flex';
+  el.style.animation='fadeUp .4s ease';
+  document.getElementById('header-tag').textContent='Área da Cliente';
+  window.scrollTo(0,0);
+  // Esconde a Aninha na tela de CPF
+  const fab=document.getElementById('ninha-fab');
+  if(fab) fab.style.display='none';
+  // Fecha o chat se estiver aberto
+  const chat=document.getElementById('ninha-chat');
+  if(chat) chat.classList.remove('open');
+  ninhaOpen=false;
+}
+function voltarHub(){mostrarTela('screen-hub','Área da Cliente');}
+function irParaFidelidade(){mostrarTela('screen-card','Fidelidade');}
+function irParaPortfolio(){mostrarTela('screen-portfolio','Portfólio');}
+function irParaAnalise(){
+  if(!clienteAtual || !clienteAtual.cpf){
+    alert('Análise ainda não disponível. Fale com a Állira para mais informações.');
+    return;
+  }
+  const cpfLimpo = clienteAtual.cpf.replace(/\D/g,'');
+  window.open('https://allira.art/analises/' + cpfLimpo, '_blank');
+}
+function irParaCuidados(proc){
+  mostrarTela('screen-cuidados','Cuidados');
+  if(proc&&CUIDADO_MAP[proc]){
+    setTimeout(()=>{const el=document.getElementById(CUIDADO_MAP[proc]);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},350);
+  }
+}
+
+const cpfInput=document.getElementById('cpf-input');
+cpfInput.addEventListener('input',function(){
+  let v=this.value.replace(/\D/g,'');
+  if(v.length>11)v=v.slice(0,11);
+  if(v.length>9)v=v.slice(0,3)+'.'+v.slice(3,6)+'.'+v.slice(6,9)+'-'+v.slice(9);
+  else if(v.length>6)v=v.slice(0,3)+'.'+v.slice(3,6)+'.'+v.slice(6);
+  else if(v.length>3)v=v.slice(0,3)+'.'+v.slice(3);
+  this.value=v;
+});
+cpfInput.addEventListener('keydown',e=>{if(e.key==='Enter')buscarCliente();});
+
+// ── Comunicação com Apps Script ───────────────────────────────────────
+// Estratégia em camadas:
+// 1) fetch normal (funciona em servidor, GitHub Pages, Google Drive como web app)
+// 2) JSONP via <script> (para arquivo local — contorna CORS)
+// 3) Dados demo offline
+
+function debugLog(msg) { /* silenciado */ }
+
+function jsonpCall(url) {
+  return new Promise(function(resolve, reject) {
+    const cbName = '_allira_' + Date.now() + '_' + Math.floor(Math.random()*99999);
+    let done = false;
+    const timer = setTimeout(function() {
+      if (done) return; done = true;
+      cleanup(); reject(new Error('JSONP timeout (15s)'));
+    }, 15000);
+    function cleanup() {
+      clearTimeout(timer);
+      try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
+      const s = document.getElementById('_s_' + cbName);
+      if (s && s.parentNode) s.parentNode.removeChild(s);
+    }
+    window[cbName] = function(data) {
+      if (done) return; done = true;
+      cleanup(); resolve(data);
+    };
+    const script = document.createElement('script');
+    script.id = '_s_' + cbName;
+    script.onerror = function(e) {
+      if (done) return; done = true;
+      cleanup(); reject(new Error('Script load error — verifique se o Apps Script foi publicado como "Qualquer pessoa"'));
+    };
+    const sep = url.includes('?') ? '&' : '?';
+    script.src = url + sep + 'callback=' + cbName;
+    debugLog('🔗 JSONP → ' + script.src.substring(0, 80) + '...');
+    document.head.appendChild(script);
+  });
+}
+
+async function scriptFetch(url) {
+  // Tenta fetch normal primeiro
+  try {
+    debugLog('📡 Tentando fetch normal...');
+    const r = await fetch(url);
+    const data = await r.json();
+    debugLog('✅ fetch OK');
+    return data;
+  } catch(e) {
+    debugLog('⚠️ fetch falhou: ' + e.message + ' — tentando JSONP...');
+  }
+  // Fallback: JSONP
+  return jsonpCall(url);
+}
+
+async function buscarCliente(){
+  const cpf=cpfInput.value.replace(/\D/g,'');
+  const errEl=document.getElementById('lookup-error');
+  errEl.classList.remove('show');
+  if(cpf.length!==11){errEl.textContent='Por favor, informe um CPF válido com 11 dígitos.';errEl.classList.add('show');return;}
+  document.getElementById('loader').classList.add('show');
+  document.getElementById('btn-buscar').disabled=true;
+  try{
+    const url = APPS_SCRIPT_URL+'?action=getCliente&cpf='+encodeURIComponent(cpf);
+    const data = await scriptFetch(url);
+    document.getElementById('loader').classList.remove('show');
+    document.getElementById('btn-buscar').disabled=false;
+    if(data.erro){
+      if(data.erro==='nao_encontrado'){document.getElementById('popup-anamnese').style.display='flex';return;}
+      errEl.textContent='Erro: '+data.erro;errEl.classList.add('show');return;
+    }
+    entrarComDados(data);
+  }catch(e){
+    document.getElementById('loader').classList.remove('show');
+    document.getElementById('btn-buscar').disabled=false;
+    const fb=getFallbackData(cpf);
+    if(fb){entrarComDados(fb);}
+    else{
+      document.getElementById('popup-anamnese').style.display='flex';
+    }
+  }
+}
+
+function entrarComDados(data){
+  clienteAtual=data;
+  // Salva CPF para auto-login futuro
+  try { localStorage.setItem('allira_cpf_salvo', (data.cpf||'').replace(/\D/g,'')); } catch(e){}
+  document.getElementById('btn-sair').style.display='block';
+  // Garante que a config de fidelidade está carregada antes de renderizar
+  carregarConfigFidelidade().then(()=>{
+    renderHub(data);
+    renderCard(data);
+    mostrarTela('screen-hub','Área da Cliente');
+  });
+}
+
+function renderHub(data){
+  const nome=(data.nome||'Cliente').split(' ')[0];
+  document.getElementById('hub-nome').textContent=nome;
+  const pp=data.pontosPorProc||{};
+  const total=data.totalPts!=null?Number(data.totalPts):Object.values(pp).reduce((a,b)=>a+Number(b),0);
+  let tier='⭐ Membro';
+  if(total>=30)tier='💎 Premium';else if(total>=15)tier='🌸 VIP';
+  document.getElementById('hub-tier').textContent=tier+' · '+total+' pts acumulados';
+  const prox=data.proximoProcedimento||null;
+  // Link de agendamento personalizado com nome da cliente
+  const nomeCliente = data.nome || 'Cliente';
+  const msgAgendar = encodeURIComponent('Olá! Sou ' + nomeCliente + ' e gostaria de agendar um procedimento.');
+  const wppAgendarHref = 'https://wa.me/553172488204?text=' + msgAgendar;
+  const linkEl = document.getElementById('next-wpp-link');
+  if(linkEl) linkEl.href = wppAgendarHref;
+  if(prox){
+    const p=PROCEDIMENTOS.find(x=>x.id===prox.proc)||{};
+    document.getElementById('next-icon').innerHTML=p.icon||icoCal;
+    document.getElementById('next-name').textContent=prox.proc||'Procedimento';
+    // Quando tem agendamento, mostra só a data (sem o link de agendar)
+    const nextDate = document.getElementById('next-date');
+    nextDate.innerHTML = prox.data ? prox.data : 'Data a confirmar';
+  }
+  const hist=data.historico||[];
+  if(hist.length>0){
+    const ult=hist[hist.length-1];
+    const p=PROCEDIMENTOS.find(x=>x.id===ult.proc)||{};
+    document.getElementById('last-icon').innerHTML=p.icon||icoStar;
+    document.getElementById('last-name').textContent=ult.proc;
+   document.getElementById('last-care-btn').onclick = () => {
+  window.location.href = 'cuidados.html';
+};
+    document.getElementById('last-card').style.display='flex';
+  }
+  const grid=document.getElementById('shortcuts-grid');
+  grid.innerHTML='';
+  TODOS_PROCEDIMENTOS.forEach(p=>{
+    const d=document.createElement('div');d.className='sb';
+    d.innerHTML=`<div class="sb-icon">${p.icon}</div><div class="sb-name">${p.id}</div><div class="sb-cta">Agendar →</div>`;
+    d.onclick=()=>window.open(AGENDAMENTO_WPP+encodeURIComponent(p.id),'_blank');
+    grid.appendChild(d);
+  });
+  const todos = document.createElement('div');
+todos.className = 'sb full';
+
+todos.innerHTML = `<div class="sb-icon">${icoGrid}</div><div class="sb-name">Todos os procedimentos</div><div class="sb-cta">Ver portfólio →</div>`;
+
+todos.onclick = () => window.location.href='portfolio.html';
+grid.appendChild(todos);
+}
+
+function renderCard(data){
+  document.getElementById('client-avatar').textContent=(data.nome||'?').charAt(0).toUpperCase();
+  document.getElementById('client-name').textContent=data.nome||'Cliente';
+  document.getElementById('client-cpf-display').textContent=formatCPF(data.cpf||'');
+  clienteData=data;
+  const pp=data.pontosPorProc||{};
+  const total=data.totalPts!=null?Number(data.totalPts):Object.values(pp).reduce((a,b)=>a+Number(b),0);
+  document.getElementById('total-pts').textContent=total;
+  document.getElementById('total-visits').textContent=data.visitas||(data.historico||[]).length||0;
+  document.getElementById('total-gained').textContent=data.premiosGanhos||0;
+  let tier='Membro';if(total>=30)tier='Premium';else if(total>=15)tier='VIP';
+  document.getElementById('client-tier').textContent=tier;
+  let minF=Infinity;
+  PROCEDIMENTOS.forEach(p=>{
+    const pts=Number(pp[p.id]||0);
+    const meta=p.meta;
+    const ptsSessao=p.ptsPorSessao||1;
+    // Pontos acumulados no ciclo atual (módulo da meta)
+    const ptsNoCiclo = pts % meta || (pts > 0 ? meta : 0);
+    const falta = pts > 0 ? (meta - ptsNoCiclo) * ptsSessao : p.paraGanhar;
+    if(falta > 0 && falta < Infinity) minF = Math.min(minF, falta);
+  });
+  document.getElementById('points-next').textContent=minF===Infinity?'—':minF;
+  const list=document.getElementById('proc-list');list.innerHTML='';
+  PROCEDIMENTOS.forEach(p=>{
+    const pts=Number(pp[p.id]||0),meta=p.meta,ptsSessao=p.ptsPorSessao||1;
+    const pct=Math.min(100,Math.round(pts/meta*100));
+    const done=pts>0&&pts%meta===0;
+    // Calcula quanto falta para completar o ciclo atual
+    const ptsNoCiclo = pts%meta || (pts>0?meta:0);
+    const faltaPts = done ? 0 : (meta - ptsNoCiclo);
+    const faltaSessoes = ptsSessao > 0 ? Math.ceil(faltaPts / ptsSessao) : faltaPts;
+    const faltaTexto = done
+      ? '🏆 Meta atingida!'
+      : `Faltam <strong>${faltaSessoes} ${faltaSessoes===1?'sessão':'sessões'}</strong> (${faltaPts} pt${faltaPts!==1?'s':''})`;
+    const c=document.createElement('div');c.className='proc-card'+(done?' completed':'');
+    // monta link WhatsApp para este procedimento
+    const nomeC = data.nome||'';
+    const cpfC  = formatCPF(data.cpf||'');
+    const msgWpp = encodeURIComponent(
+      `Olá, Állira! 🎉\n\n`+
+      `Ganhei um *${p.id}* gratuito pelo programa de fidelidade!\n\n`+
+      `👤 Nome: *${nomeC}*\n`+
+      `🪪 CPF: *${cpfC}*\n`+
+      `🏆 Prêmio: *${p.id}*\n\n`+
+      `Gostaria de agendar o meu procedimento gratuito. 🌸`
+    );
+    const wppHref=`https://wa.me/${ALLIRA_WPP_NUM}?text=${msgWpp}`;
+    const wppIcon=`<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+    c.innerHTML=`<div class="proc-card-top"><div class="proc-icon">${p.icon}</div><div class="proc-info"><div class="proc-name">${p.id}</div><div class="proc-needed">Meta: <strong>${meta} pts</strong> &nbsp;·&nbsp; +${ptsSessao} pt/sessão &nbsp;·&nbsp; Acumulado: <strong>${pts}</strong></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;"><div class="proc-pts-badge">${pts}/${meta}</div><button class="btn-ponto-extra" onclick="abrirStoriesModal('${p.id.replace(/'/g,"\\'")}')"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round'><line x1='12' y1='5' x2='12' y2='19'/><line x1='5' y1='12' x2='19' y2='12'/></svg>Ganhar mais pontos</button></div></div><div class="proc-progress-wrap"><div class="proc-progress-labels"><span>${faltaTexto}</span><span>${pct}%</span></div><div class="proc-progress-bar"><div class="proc-progress-fill" style="width:0%"></div></div></div>${done?`<div class="proc-gained"><div class="proc-gained-icon"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#C9748A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z'/></svg></div><div class="proc-gained-text">Você ganhou um <strong>${p.id}</strong> gratuito!</div><a class="proc-gained-wpp" href="${wppHref}" target="_blank" rel="noopener">${wppIcon} Avisar a Állira pelo WhatsApp</a></div>`:''}`;
+    list.appendChild(c);
+    setTimeout(()=>{c.querySelector('.proc-progress-fill').style.width=pct+'%';},200);
+  });
+  renderHistory(data.historico||[]);
+  if(premioPendente){setTimeout(()=>{showWinModal(premioPendente);premioPendente=null;},600);}
+}
+
+// Procedimentos que NÃO pontuam — excluídos do histórico
+const PROCS_SEM_PONTUACAO = ['Depilação de Buço', 'Renda', 'Henna'];
+
+function renderHistory(hist){
+  const filtrado = (hist||[]).filter(h => !PROCS_SEM_PONTUACAO.includes(h.proc));
+  const list=document.getElementById('history-list');
+  if(!filtrado.length){list.innerHTML='<div class="history-empty">Nenhum atendimento registrado ainda.</div>';return;}
+  list.innerHTML='';
+  [...filtrado].reverse().slice(0,20).forEach(h=>{
+    const item=document.createElement('div');item.className='history-item';
+    item.innerHTML=`<div class="history-dot"></div><div class="history-info"><div class="history-proc">${h.proc}</div></div><div class="history-pts">+${h.pts} pt${h.pts!==1?'s':''}</div>`;
+    list.appendChild(item);
+  });
+}
+
+function filtrarPort(cat,el){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.port-item').forEach(item=>{item.style.display=(cat==='todos'||item.dataset.cat===cat)?'flex':'none';});
+}
+
+function showWinModal(nome){
+  document.getElementById('win-proc-name').textContent=nome;
+  // monta mensagem WhatsApp para o modal
+  const nomeCliente = clienteData ? (clienteData.nome||'') : '';
+  const cpfCliente  = clienteData ? formatCPF(clienteData.cpf||'') : '';
+  const msgModal = encodeURIComponent(
+    `Olá, Állira! 🎉\n\n`+
+    `Ganhei um *${nome}* gratuito pelo programa de fidelidade!\n\n`+
+    `👤 Nome: *${nomeCliente}*\n`+
+    `🪪 CPF: *${cpfCliente}*\n`+
+    `🏆 Prêmio: *${nome}*\n\n`+
+    `Gostaria de agendar o meu procedimento gratuito. 🌸`
+  );
+  document.getElementById('win-wpp-link').href='https://wa.me/553172488204?text='+msgModal;
+  spawnConfetti();
+  document.getElementById('win-modal').classList.add('show');
+}
+function closeWinModal(){document.getElementById('win-modal').classList.remove('show');}
+function spawnConfetti(){
+  const wrap=document.getElementById('confetti-wrap');wrap.innerHTML='';
+  const cores=['#C9748A','#1B2A6B','#D4AF37','#F5F0EB','#e8a0b0'];
+  for(let i=0;i<22;i++){
+    const p=document.createElement('div');p.className='win-confetti-particle';
+    p.style.left=Math.random()*100+'%';p.style.top='-10px';
+    p.style.background=cores[Math.floor(Math.random()*cores.length)];
+    p.style.transform=`rotate(${Math.random()*360}deg)`;
+    p.style.animationDelay=Math.random()*.5+'s';p.style.animationDuration=(.6+Math.random()*.6)+'s';
+    wrap.appendChild(p);
+  }
+}
+
+// ── MODAL PONTO EXTRA — STORIES ─────────────────────────────────────────
+const FRASES_STORIES = [
+  'Hoje foi dia de cuidar do meu olhar. ✨ @allira.co',
+  'Cuidar do meu olhar é um ato de amor próprio. 🌸 @allira.co',
+  'Resultado impecável, como sempre. ✨ @allira.co',
+  'Meu olhar, minha arte. 🤍 @allira.co',
+];
+
+function abrirStoriesModal(nomeProc) {
+  const frase = FRASES_STORIES[Math.floor(Math.random() * FRASES_STORIES.length)];
+  document.getElementById('stories-proc-tag').textContent = nomeProc;
+  document.getElementById('stories-frase').textContent = '"' + frase + '"';
+  document.getElementById('btn-copiar-frase').textContent = 'Copiar';
+  const modal = document.getElementById('stories-modal');
+  modal.style.display = 'flex';
+  requestAnimationFrame(() => modal.classList.add('show'));
+}
+
+function fecharStoriesModal(e) {
+  if(e && e.target !== document.getElementById('stories-modal')) return;
+  const modal = document.getElementById('stories-modal');
+  modal.classList.remove('show');
+  setTimeout(() => { modal.style.display = 'none'; }, 250);
+}
+
+function copiarFrase() {
+  const txt = document.getElementById('stories-frase').textContent.replace(/^"|"$/g,'');
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(txt).then(() => {
+      const btn = document.getElementById('btn-copiar-frase');
+      btn.textContent = 'Copiado ✓';
+      setTimeout(() => { btn.textContent = 'Copiar'; }, 2000);
+    });
+  }
+}
+
+function setSheetStatus(state,txt){ /* removido do frontend */ }
+
+function formatCPF(cpf){const c=cpf.replace(/\D/g,'');if(c.length!==11)return cpf;return c.slice(0,3)+'.'+c.slice(3,6)+'.'+c.slice(6,9)+'-'+c.slice(9);}
+
+function getFallbackData(cpf){
+  const demo={
+    '12345678910':{nome:'Ana Gabrielle Santos',cpf:'12345678910',totalPts:0,visitas:1,premiosGanhos:0,proximoProcedimento:{proc:'Lash Lifting',data:'10/06/2026'},pontosPorProc:{'Lash Lifting':1,'Extensão de Cílios':0,'Brow Lamination':0,'Design de Sobrancelha':0,'Henna':0,'Depilação de Buço':0},historico:[{proc:'Lash Lifting',pts:1,data:'30/05/2026'}]},
+    '02177879671':{nome:'Dayvisson Paulino Basílio Oliveira',cpf:'02177879671',totalPts:0,visitas:1,premiosGanhos:0,proximoProcedimento:null,pontosPorProc:{'Lash Lifting':0,'Extensão de Cílios':0,'Brow Lamination':1,'Design de Sobrancelha':0,'Henna':1,'Depilação de Buço':0},historico:[{proc:'Brow Lamination',pts:1,data:'31/05/2026'}]},
+  };
+  return demo[cpf]||null;
+}
+
+(function(){
+  const p=new URLSearchParams(window.location.search),c=p.get('cpf');
+  if(c){
+    const clean=c.replace(/\D/g,'');
+    if(clean.length===11){cpfInput.value=formatCPF(clean);setTimeout(buscarCliente,500);}
+    return;
+  }
+  // Auto-login: se CPF já foi salvo anteriormente, entra direto
+  try {
+    const salvo = localStorage.getItem('allira_cpf_salvo');
+    if(salvo && salvo.length===11){
+      cpfInput.value=formatCPF(salvo);
+      setTimeout(buscarCliente,300);
+    }
+  } catch(e){}
+})();
+
+window.AlliraFidelidade={
+  async registrar(cpfRaw,procedimento,pts=1){
+    const cpf=cpfRaw.replace(/\D/g,'');
+    if(APPS_SCRIPT_URL.includes('SEU_ID'))return{ok:false,erro:'Apps Script não configurado'};
+    try{
+      const url=APPS_SCRIPT_URL+'?action=addPontos&cpf='+encodeURIComponent(cpf)+'&proc='+encodeURIComponent(procedimento)+'&pts='+pts;
+      return await scriptFetch(url);
+    }catch(e){return{ok:false,erro:String(e)};}
+  },
+  getProcedimentos(){return PROCEDIMENTOS;}
+};
+</script>
+
+<!-- ══════════════════════════════════════════════
+     NINHA — ASSISTENTE VIRTUAL ÁLLIRA
+══════════════════════════════════════════════ -->
+<style>
+/* ── FLOATING BUTTON ── */
+#ninha-fab{
+  position:fixed;bottom:20px;right:16px;z-index:9000;
+  display:none;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--rosa),var(--rosa-light));
+  border:none;
+  border-radius:40px;
+  padding:7px 13px 7px 7px;
+  cursor:pointer;
+  box-shadow:0 4px 20px rgba(201,116,138,.45);
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+}
+#ninha-fab:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(201,116,138,.6);
+}
+#ninha-fab:active{transform:translateY(0);}
+.ninha-fab-avatar{
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.4);
+  object-fit:cover;flex-shrink:0;
+}
+.ninha-fab-info{display:flex;flex-direction:column;gap:0px;line-height:1.2;}
+.ninha-fab-name{font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#fff;}
+.ninha-fab-cta{font-size:.48rem;letter-spacing:.06em;color:rgba(255,255,255,.8);}
+.ninha-fab-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--ok);
+  position:absolute;bottom:6px;left:27px;
+  border:1.5px solid var(--rosa);
+  animation:pulseDot 2s ease infinite;
+}
+
+/* ── CHAT WINDOW ── */
+#ninha-chat{
+  position:fixed;bottom:68px;right:16px;z-index:8999;
+  width:min(360px, calc(100vw - 28px));
+  height:min(560px, calc(100dvh - 120px));
+  background:var(--dark-card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  box-shadow:0 24px 64px rgba(13,18,37,.85),0 0 0 1px rgba(201,116,138,.08);
+  transform:scale(.85) translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  transform-origin:bottom right;
+}
+#ninha-chat.open{
+  transform:scale(1) translateY(0);
+  opacity:1;
+  pointer-events:all;
+}
+
+/* header do chat — estilo WhatsApp */
+.nc-header{
+  background:linear-gradient(135deg,rgba(27,42,107,.85),rgba(27,42,107,.6));
+  border-bottom:1px solid var(--border-dim);
+  padding:10px 14px 10px 12px;
+  display:flex;align-items:center;gap:10px;
+  flex-shrink:0;
+}
+.nc-header-avatar{
+  width:40px;height:40px;border-radius:50%;
+  border:2px solid rgba(201,116,138,.45);
+  object-fit:cover;flex-shrink:0;
+  background:linear-gradient(135deg,var(--rosa),var(--azul));
+}
+.nc-header-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;}
+.nc-header-prompt{
+  display:none;
+}
+.nc-header-name{
+  font-family:'Montserrat',sans-serif;
+  font-size:.82rem;font-weight:600;color:var(--creme);line-height:1.2;
+  margin-bottom:2px;letter-spacing:.01em;
+}
+.nc-header-status{
+  display:flex;align-items:center;gap:4px;
+  font-size:.58rem;letter-spacing:.02em;color:rgba(255,255,255,.6);
+}
+.nc-status-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--ok);
+  animation:pulseDot 2s ease infinite;flex-shrink:0;
+}
+.nc-close{
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(201,116,138,.1);border:1px solid var(--border-dim);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:all .2s;color:var(--text-dim);
+  font-size:1rem;line-height:1;
+}
+.nc-close:hover{background:rgba(201,116,138,.22);color:var(--creme);border-color:var(--border);}
+
+/* messages area */
+.nc-messages{
+  flex:1;overflow-y:auto;padding:16px 14px 10px;
+  display:flex;flex-direction:column;gap:10px;
+  scroll-behavior:smooth;
+}
+.nc-messages::-webkit-scrollbar{width:2px;}
+.nc-messages::-webkit-scrollbar-thumb{background:var(--border);}
+
+/* bubbles */
+.nc-bubble{
+  max-width:82%;display:flex;flex-direction:column;gap:3px;
+  animation:fadeUp .25s ease;
+}
+.nc-bubble.bot{align-self:flex-start;}
+.nc-bubble.user{align-self:flex-end;}
+.nc-bubble-text{
+  padding:10px 13px;border-radius:16px;
+  font-size:.72rem;line-height:1.75;letter-spacing:.02em;
+  word-break:break-word;overflow-wrap:anywhere;
+}
+.nc-bubble-text a{color:#d4a0b0;font-weight:600;text-decoration:underline;word-break:break-all;}
+.nc-bubble-text a.nc-wpp{display:inline-flex;align-items:center;gap:4px;background:#25D366;color:#fff;text-decoration:none;font-weight:600;padding:3px 10px;border-radius:20px;font-size:.65rem;margin-top:2px;}
+.nc-bubble-text strong{font-weight:700;}
+.nc-bubble.bot .nc-bubble-text{
+  background:rgba(27,42,107,.35);border:1px solid rgba(27,42,107,.5);
+  border-bottom-left-radius:5px;color:var(--creme);
+}
+.nc-bubble.user .nc-bubble-text{
+  background:linear-gradient(135deg,var(--azul),rgba(201,116,138,.6));
+  border:1px solid rgba(201,116,138,.25);
+  border-bottom-right-radius:5px;color:var(--white);
+}
+.nc-bubble-time{
+  font-size:.47rem;letter-spacing:.08em;color:var(--text-dim);
+  padding:0 4px;
+}
+.nc-bubble.user .nc-bubble-time{text-align:right;}
+
+/* typing dots */
+.nc-typing{
+  display:none;align-self:flex-start;max-width:82%;
+  animation:fadeUp .25s ease;
+}
+.nc-typing.show{display:flex;}
+.nc-typing-inner{
+  background:rgba(27,42,107,.35);border:1px solid rgba(27,42,107,.5);
+  border-bottom-left-radius:5px;border-radius:16px;
+  padding:12px 16px;display:flex;align-items:center;gap:4px;
+}
+.nc-typing-dot{
+  width:5px;height:5px;border-radius:50%;background:rgba(201,116,138,.7);
+  animation:ncTyping 1.2s ease infinite;
+}
+.nc-typing-dot:nth-child(2){animation-delay:.2s;}
+.nc-typing-dot:nth-child(3){animation-delay:.4s;}
+@keyframes ncTyping{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-5px);opacity:1;}}
+
+/* disclaimer */
+.nc-disclaimer{
+  flex-shrink:0;
+  padding:7px 14px 8px;
+  font-size:.48rem;letter-spacing:.04em;
+  color:var(--text-dim);text-align:center;line-height:1.55;
+  border-top:1px solid var(--border-dim);
+  background:rgba(13,18,37,.4);
+}
+.nc-disclaimer a{color:var(--rosa);text-decoration:none;}
+
+/* input area */
+.nc-input-area{
+  flex-shrink:0;
+  padding:10px 12px 12px;
+  border-top:1px solid var(--border-dim);
+  display:flex;align-items:flex-end;gap:8px;
+  background:rgba(13,18,37,.6);
+}
+.nc-input{
+  flex:1;background:rgba(27,42,107,.15);
+  border:1px solid var(--border-dim);border-radius:14px;
+  padding:10px 13px;
+  font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:300;
+  color:var(--creme);outline:none;resize:none;
+  line-height:1.45;max-height:90px;overflow-y:auto;
+  transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;
+}
+.nc-input::placeholder{color:var(--text-dim);font-size:.68rem;}
+.nc-input:focus{border-color:rgba(201,116,138,.4);box-shadow:0 0 0 3px rgba(201,116,138,.08);}
+.nc-send{
+  width:36px;height:36px;border-radius:11px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--azul),var(--rosa));
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s;
+  box-shadow:0 4px 14px rgba(201,116,138,.3);
+}
+.nc-send:hover{transform:translateY(-1px);box-shadow:0 7px 20px rgba(201,116,138,.45);}
+.nc-send:active{transform:translateY(0);}
+.nc-send:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.nc-send svg{width:15px;height:15px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+@media(min-width:640px){
+  #ninha-fab{right:calc(50% - 262px);}
+  #ninha-chat{right:calc(50% - 262px);}
+}
+</style>
+
+<!-- BOTÃO FLUTUANTE -->
+<div id="ninha-fab" onclick="ninhaToggle()">
+  <div style="position:relative;flex-shrink:0;">
+    <img class="ninha-fab-avatar" id="ninha-fab-img"
+      src="https://lh3.googleusercontent.com/d/1CRfSTPM33C9BopCuH--jdYDoblclWvfX"
+      alt="Ana"
+      onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1B2A6B,#C9748A)';">
+    <span class="ninha-fab-dot"></span>
+  </div>
+  <div class="ninha-fab-info">
+    <span class="ninha-fab-name">Ana</span>
+    <span class="ninha-fab-cta">Converse comigo ✨</span>
+  </div>
+</div>
+
+<!-- JANELA DE CHAT -->
+<div id="ninha-chat">
+  <!-- Header estilo WhatsApp -->
+  <div class="nc-header">
+    <button onclick="ninhaToggle()" aria-label="Fechar chat" style="background:none;border:none;color:rgba(255,255,255,.7);font-size:1.5rem;cursor:pointer;padding:0 6px 0 0;flex-shrink:0;display:flex;align-items:center;line-height:1;font-weight:300;">‹</button>
+    <img class="nc-header-avatar" id="ninha-chat-img"
+      src="https://lh3.googleusercontent.com/d/1CRfSTPM33C9BopCuH--jdYDoblclWvfX"
+      alt="Ana"
+      onerror="this.style.display='none';">
+    <div class="nc-header-info">
+      <div class="nc-header-name">Ana</div>
+      <div class="nc-header-status">
+        <span class="nc-status-dot"></span>
+        Online agora
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="nc-messages" id="ninha-msgs">
+    <!-- Mensagem de boas-vindas (renderizada pelo JS) -->
+  </div>
+
+  <!-- Typing indicator -->
+  <div class="nc-typing" id="ninha-typing">
+    <div class="nc-typing-inner">
+      <div class="nc-typing-dot"></div>
+      <div class="nc-typing-dot"></div>
+      <div class="nc-typing-dot"></div>
+    </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="nc-disclaimer">
+    A Ana pode cometer erros. Confirme informações importantes diretamente com nossa equipe. 🌸
+  </div>
+
+  <!-- Input -->
+  <div class="nc-input-area">
+    <textarea class="nc-input" id="ninha-input"
+      placeholder="Digite sua dúvida..."
+      rows="1"
+      onkeydown="ninhaKeyDown(event)"
+      oninput="ninhaAutoResize(this)"></textarea>
+    <button class="nc-send" id="ninha-send-btn" onclick="ninhaSend()" aria-label="Enviar">
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+// ── ANINHA CONFIG ────────────────────────────────────────────────────────────
+// ⚠️ ATENÇÃO: Esta chave NÃO é usada diretamente pelo browser.
+// A chamada ao Gemini é feita pelo Apps Script (proxy).
+// A chave correta fica no Apps Script (GEMINI_API_KEY), deve começar com "AIza..."
+// Gere em: https://aistudio.google.com → Get API Key
+const NINHA_API_KEY = 'AQ.Ab8RN6KE0_IxGr4t6_mYKbg3fLmnuNTuBv-wj_hLljmkZLzxpg'; // NÃO USADO — só o Apps Script usa a chave
+
+const NINHA_SYSTEM = `Você é a Ana, assistente virtual oficial da ALLIRA.
+
+Seu papel é orientar clientes, esclarecer dúvidas, auxiliar na escolha de procedimentos, explicar benefícios, cuidados, durabilidade e ajudar a cliente a tomar decisões informadas.
+
+Você NÃO realiza agendamentos, não negocia preços, não concede descontos e não altera informações da empresa.
+
+POSICIONAMENTO: A ALLIRA é especializada em realce do olhar. Acreditamos que beleza não significa transformação extrema, mas sim valorizar características naturais de forma elegante e personalizada. A ALLIRA oferece: sofisticação, delicadeza, confiança, personalização, naturalidade, bem-estar e experiência premium.
+
+TOM DE VOZ: Elegante, educativo, profissional, gentil, seguro, claro, objetivo e acolhedor. Nunca use linguagem agressiva de vendas, pressão para compra, exageros, promessas irreais ou gírias. Nunca crie senso de urgência artificial.
+
+LINKS OFICIAIS:
+- Site: https://allira.art
+- Instagram: https://instagram.com/allira.co
+- Portfólio: https://allira.art/portfolio
+- Feedbacks: https://allira.art/feedbacks
+- Localização: https://maps.app.goo.gl/A8nX9eUNxQb6QD6NA
+- WhatsApp (contato/agendamento): https://wa.me/553172488204
+
+SERVIÇOS:
+• Lash Lift — curva e realça cílios naturais desde a raiz. Durabilidade: 6 a 8 semanas. Indicado para quem prefere praticidade e resultado natural.
+• Brow Lamination — organiza e direciona fios da sobrancelha, visual alinhado e sofisticado. Durabilidade: 4 a 6 semanas.
+• Brow Lamination + Manutenção Nutritiva — manutenção recomendada 15 a 20 dias após a laminação para nutrir e preservar os fios.
+• Design de Sobrancelhas — personalizado para harmonizar com as características do rosto.
+• Design com Henna — pigmentação temporária da pele para preencher visualmente o design.
+• Design com Tintura — coloração dos fios para resultado mais definido e elegante.
+• Design + Henna/Tintura + Nutrição
+• Extensão de Cílios Fio a Fio — resultado natural, delicado e leve. Ideal para primeira extensão ou quem prefere discrição.
+• Extensão de Cílios Volume Brasileiro — mais definição e destaque, visual equilibrado, prático no dia a dia.
+• Extensão de Cílios Volume Inglês — aparência sofisticada, efeito elegante e marcante.
+• Extensão de Cílios Volume Europeu — maior densidade, resultado expressivo e impactante.
+
+REGRAS OBRIGATÓRIAS:
+- PREÇOS: Nunca invente valores ou estime preços. Se perguntarem: "Para informações atualizadas sobre valores, recomendo entrar em contato diretamente com a equipe da ALLIRA."
+- AGENDAMENTOS: Não realize agendamentos. Direcione: "Para verificar horários e realizar seu agendamento, entre em contato com a equipe da ALLIRA pelos canais oficiais."
+- PROMOÇÕES: Nunca crie promoções, descontos ou campanhas.
+- RESULTADOS: Nunca prometa resultados nem garanta durabilidade exata. Os resultados variam conforme características individuais.
+- INFORMAÇÕES DESCONHECIDAS: Nunca invente. Diga: "Para garantir uma orientação precisa, recomendo confirmar com a equipe da ALLIRA."
+- Antes de recomendar procedimentos, faça perguntas para entender o objetivo, rotina e preferências da cliente. Nunca assuma preferências.
+
+Aja como especialista em realce do olhar. Responda em português brasileiro, de forma natural, acolhedora e concisa. Use emojis com muita moderação.
+
+FORMATAÇÃO: Use **negrito** para destacar nomes de procedimentos e informações importantes. Separe blocos com linha em branco. Ao indicar contato ou agendamento, sempre inclua: https://wa.me/553172488204`;
+
+// ── ESTADO ──────────────────────────────────────────────────────────────────
+let ninhaOpen = false;
+let ninhaHistory = [];
+let ninhaWelcomed = false;
+
+// ── HELPERS ─────────────────────────────────────────────────────────────────
+function ninhaTime(){
+  return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function ninhaRender(raw){
+  // escapa HTML
+  var s = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // negrito
+  s = s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  // link whatsapp
+  s = s.replace(/(https?:\/\/wa\.me\/\S+)/g,'<a href="$1" target="_blank" rel="noopener" class="nc-wpp">&#128241; WhatsApp &Aacute;llira</a>');
+  // outros links
+  s = s.replace(/(https?:\/\/(?!wa\.me)\S+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');
+  // quebras de linha
+  s = s.split('\n').join('<br>');
+  return s;
+}
+
+function ninhaAddBubble(text, role){
+  const msgs = document.getElementById('ninha-msgs');
+  const wrap = document.createElement('div');
+  wrap.className = 'nc-bubble ' + role;
+
+  const bubble = document.createElement('div');
+  bubble.className = 'nc-bubble-text';
+  if(role === 'bot'){
+    bubble.innerHTML = ninhaRender(text);
+  } else {
+    bubble.textContent = text;
+  }
+
+  const time = document.createElement('div');
+  time.className = 'nc-bubble-time';
+  time.textContent = ninhaTime();
+
+  wrap.appendChild(bubble);
+  wrap.appendChild(time);
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function ninhaShowTyping(show){
+  document.getElementById('ninha-typing').classList.toggle('show', show);
+  const msgs = document.getElementById('ninha-msgs');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function ninhaAutoResize(el){
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 90) + 'px';
+}
+
+function ninhaKeyDown(e){
+  if(e.key === 'Enter' && !e.shiftKey){
+    e.preventDefault();
+    ninhaSend();
+  }
+}
+
+// ── TOGGLE ──────────────────────────────────────────────────────────────────
+function ninhaToggle(){
+  ninhaOpen = !ninhaOpen;
+  document.getElementById('ninha-chat').classList.toggle('open', ninhaOpen);
+  // Esconde o botão quando o chat está aberto
+  document.getElementById('ninha-fab').style.display = ninhaOpen ? 'none' : 'flex';
+  if(ninhaOpen && !ninhaWelcomed){
+    ninhaWelcomed = true;
+    setTimeout(() => {
+      ninhaShowTyping(true);
+      setTimeout(() => {
+        ninhaShowTyping(false);
+        ninhaAddBubble('Olá! Sou a Ana, sua assistente virtual da Állira. 🌸 Estou aqui para tirar suas dúvidas sobre procedimentos, cuidados e muito mais. Como posso te ajudar hoje?', 'bot');
+        ninhaHistory.push({role:'assistant', content:'Olá! Sou a Ana, sua assistente virtual da Állira. 🌸 Estou aqui para tirar suas dúvidas sobre procedimentos, cuidados e muito mais. Como posso te ajudar hoje?'});
+      }, 1200);
+    }, 400);
+    setTimeout(() => {
+      document.getElementById('ninha-input').focus();
+    }, 600);
+  }
+}
+
+// ── SEND ─────────────────────────────────────────────────────────────────────
+async function ninhaSend(){
+  const input = document.getElementById('ninha-input');
+  const btn = document.getElementById('ninha-send-btn');
+  const text = input.value.trim();
+  if(!text) return;
+
+  // render user bubble
+  ninhaAddBubble(text, 'user');
+  ninhaHistory.push({role:'user', content: text});
+  input.value = '';
+  input.style.height = 'auto';
+  btn.disabled = true;
+
+  // typing indicator
+  ninhaShowTyping(true);
+
+  try {
+    const contents = ninhaHistory
+      .filter(m => m.role !== 'system')
+      .slice(-8)
+      .map(m => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }]
+      }));
+    contents.push({ role: 'user', parts: [{ text: text }] });
+
+    const res = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': NINHA_API_KEY
+        },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: NINHA_SYSTEM }] },
+          contents: contents,
+          generationConfig: { maxOutputTokens: 400, temperature: 0.7 }
+        })
+      }
+    );
+    const data = await res.json();
+    ninhaShowTyping(false);
+
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
+    if(reply){
+      ninhaAddBubble(reply, 'bot');
+      ninhaHistory.push({role:'assistant', content: reply});
+    } else {
+      console.warn('[Aninha] Sem reply:', JSON.stringify(data));
+      ninhaAddBubble('Desculpe, não consegui processar sua mensagem agora. Tente novamente! 🙏', 'bot');
+    }
+  } catch(err) {
+    ninhaShowTyping(false);
+    ninhaAddBubble('Ops, tive um probleminha de conexão. Tente novamente em instantes. 🙏', 'bot');
+    console.error('Aninha erro:', err);
+  }
+
+  btn.disabled = false;
+  document.getElementById('ninha-msgs').scrollTop = 99999;
+  input.focus();
+}
+</script>
+<!-- ── FIM NINHA ── -->
+</body>
+</html>
