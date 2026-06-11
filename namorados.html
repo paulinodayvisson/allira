@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Állira · Especial Dia dos Namorados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark:    #0e0b0d;
+    --dark2:   #16101380;
+    --rose:    #c9748a;
+    --rose2:   #e8a0b0;
+    --gold:    #c9aa74;
+    --creme:   #f0e8df;
+    --border:  rgba(201,116,138,.18);
+    --border2: rgba(201,116,138,.32);
+    --glass:   rgba(14,11,13,.72);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dark);
+    color: var(--creme);
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg-layer {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(201,116,138,.22) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 40% at 90% 80%, rgba(201,116,138,.1) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 10% 90%, rgba(201,170,116,.08) 0%, transparent 60%);
+  }
+  .bg-petals {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .petal {
+    position: absolute;
+    font-size: 1rem;
+    opacity: 0;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+    5%   { opacity: .35; }
+    90%  { opacity: .2; }
+    100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+  }
+
+  /* ── WRAPPER ── */
+  .wrapper {
+    position: relative; z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 52px 0 36px;
+    animation: fadeUp .8s ease both;
+  }
+  .brand-logo-wrap {
+    display: flex; justify-content: center; align-items: center;
+    height: 80px; margin-bottom: 4px;
+  }
+  .brand-logo-img {
+    max-height: 80px; max-width: 220px;
+    width: auto; object-fit: contain;
+    filter: brightness(1.1) drop-shadow(0 4px 18px rgba(201,116,138,.35));
+  }
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: .3em;
+    color: var(--creme);
+    text-transform: uppercase;
+  }
+  .brand-name em { color: var(--rose); font-style: italic; letter-spacing: .2em; }
+  .brand-tagline {
+    font-size: .55rem;
+    font-weight: 400;
+    letter-spacing: .45em;
+    text-transform: uppercase;
+    color: rgba(240,232,223,.4);
+    margin-top: 6px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 12px 0 40px;
+    animation: fadeUp .9s .1s ease both;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border2);
+    border-radius: 40px;
+    padding: 6px 18px;
+    font-size: .58rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--rose2);
+    background: rgba(201,116,138,.07);
+    margin-bottom: 22px;
+  }
+  .hero-badge::before, .hero-badge::after { content: '♡'; color: var(--rose); }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.9rem;
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--creme);
+    letter-spacing: .04em;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--rose);
+    display: block;
+    font-size: 3.4rem;
+  }
+  .hero-sub {
+    font-size: .63rem;
+    font-weight: 300;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(240,232,223,.5);
+    margin-top: 18px;
+  }
+  .hero-divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rose), transparent);
+    margin: 22px auto 0;
+  }
+
+  /* ── COMBOS ── */
+  .combos { display: flex; flex-direction: column; gap: 18px; }
+
+  .combo-card {
+    background: linear-gradient(135deg, rgba(22,16,19,.85) 0%, rgba(14,11,13,.9) 100%);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 26px 22px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp .7s ease both;
+    transition: border-color .3s, transform .3s;
+  }
+  .combo-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-3px);
+  }
+  .combo-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 10%, var(--rose) 50%, transparent 90%);
+    opacity: .5;
+  }
+  .combo-card:nth-child(1) { animation-delay: .15s; }
+  .combo-card:nth-child(2) { animation-delay: .25s; }
+  .combo-card:nth-child(3) { animation-delay: .35s; }
+  .combo-card:nth-child(4) { animation-delay: .45s; }
+  .combo-card:nth-child(5) { animation-delay: .55s; }
+
+  .combo-number {
+    font-size: .5rem;
+    font-weight: 600;
+    letter-spacing: .4em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 8px;
+  }
+  .combo-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.55rem;
+    font-weight: 400;
+    color: var(--creme);
+    letter-spacing: .05em;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .combo-items {
+    list-style: none;
+    margin-bottom: 14px;
+  }
+  .combo-items li {
+    font-size: .67rem;
+    font-weight: 300;
+    letter-spacing: .1em;
+    color: rgba(240,232,223,.7);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(201,116,138,.08);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .combo-items li:last-child { border-bottom: none; }
+  .combo-items li::before { content: '—'; color: var(--rose); font-size: .5rem; flex-shrink: 0; }
+
+  .combo-gift {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(201,116,138,.1);
+    border: 1px solid rgba(201,116,138,.25);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 18px;
+    font-size: .62rem;
+    font-weight: 500;
+    letter-spacing: .1em;
+    color: var(--rose2);
+  }
+  .combo-gift::before { content: '🎁'; font-size: .85rem; }
+
+  .combo-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .combo-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: .02em;
+    line-height: 1;
+  }
+  .combo-price span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: .55rem;
+    font-weight: 400;
+    letter-spacing: .1em;
+    color: rgba(201,170,116,.6);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .btn-wpp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    border: none;
+    border-radius: 50px;
+    padding: 11px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: .58rem;
+    font-weight: 600;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .25s;
+    box-shadow: 0 6px 22px rgba(37,211,102,.25);
+    white-space: nowrap;
+  }
+  .btn-wpp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(37,211,102,.4);
+  }
+  .btn-wpp svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ── FOOTER INFO ── */
+  .footer-info {
+    margin-top: 44px;
+    text-align: center;
+    animation: fadeUp .7s .55s ease both;
+  }
+  .footer-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2), transparent);
+    margin-bottom: 28px;
+  }
+  .footer-valid {
+    font-size: .6rem;
+    font-weight: 400;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(240,232,223,.45);
+    margin-bottom: 8px;
+  }
+  .footer-cta {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--creme);
+    margin-bottom: 24px;
+    line-height: 1.5;
+    opacity: .8;
+  }
+  .footer-hearts {
+    font-size: 1rem;
+    letter-spacing: .6em;
+    color: var(--rose);
+    opacity: .6;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-petals" id="petals"></div>
+
+<div class="wrapper">
+
+  <header>
+    <div class="brand-logo-wrap">
+      <img class="brand-logo-img"
+           src="https://lh3.googleusercontent.com/d/1SvnRr-pOpyM61UQGvCOXbPIMpinGQ55O"
+           alt="Állira"
+           onerror="this.style.display='none';document.getElementById('brand-fallback').style.display='block'">
+      <div id="brand-fallback" style="display:none;">
+        <div class="brand-name">Á ll<em>i</em>ra</div>
+        <div class="brand-tagline">Studio de Beleza</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-badge">Especial Junho · 2026</div>
+    <h1 class="hero-title">
+      Dia dos<br>
+      <em>Namorados</em>
+    </h1>
+    <p class="hero-sub">Combos especiais para você brilhar</p>
+    <div class="hero-divider"></div>
+  </div>
+
+  <div class="combos">
+
+    <!-- Combo 1 -->
+    <div class="combo-card">
+      <div class="combo-number">✦ Combo 01</div>
+      <div class="combo-title">Olhar Completo</div>
+      <ul class="combo-items">
+        <li>Brow Lamination</li>
+        <li>Lash Lifting</li>
+      </ul>
+      <div class="combo-gift">Manutenção das sobrancelhas inclusa</div>
+      <div class="combo-footer">
+        <div class="combo-price">
+          <span>por apenas</span>
+          R$ 180
+        </div>
+        <a class="btn-wpp"
+           href="https://wa.me/5531724882042?text=Olá%2C%20Állira!%20%F0%9F%92%99%20Vim%20pela%20campanha%20Dia%20dos%20Namorados%20e%20gostaria%20de%20agendar%20o%20*Combo%201%20%E2%80%93%20Olhar%20Completo*%20(Brow%20Lamination%20%2B%20Lash%20Lifting)%20por%20R%24%20180%2C00."
+           target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Quero este combo
+        </a>
+      </div>
+    </div>
+
+    <!-- Combo 2 -->
+    <div class="combo-card">
+      <div class="combo-number">✦ Combo 02</div>
+      <div class="combo-title">Destaque seu Olhar</div>
+      <ul class="combo-items">
+        <li>Brow Lamination</li>
+        <li>Volume Brasileiro</li>
+      </ul>
+      <div class="combo-footer">
+        <div class="combo-price">
+          <span>por apenas</span>
+          R$ 200
+        </div>
+        <a class="btn-wpp"
+           href="https://wa.me/5531724882042?text=Olá%2C%20Állira!%20%F0%9F%92%99%20Vim%20pela%20campanha%20Dia%20dos%20Namorados%20e%20gostaria%20de%20agendar%20o%20*Combo%202%20%E2%80%93%20Destaque%20seu%20Olhar*%20(Brow%20Lamination%20%2B%20Volume%20Brasileiro)%20por%20R%24%20200%2C00."
+           target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Quero este combo
+        </a>
+      </div>
+    </div>
+
+    <!-- Combo 3 -->
+    <div class="combo-card">
+      <div class="combo-number">✦ Combo 03</div>
+      <div class="combo-title">Cuidados Essenciais</div>
+      <ul class="combo-items">
+        <li>Design de Sobrancelhas</li>
+        <li>Henna ou Tintura</li>
+        <li>Buço</li>
+      </ul>
+      <div class="combo-footer">
+        <div class="combo-price">
+          <span>por apenas</span>
+          R$ 60
+        </div>
+        <a class="btn-wpp"
+           href="https://wa.me/5531724882042?text=Olá%2C%20Állira!%20%F0%9F%92%99%20Vim%20pela%20campanha%20Dia%20dos%20Namorados%20e%20gostaria%20de%20agendar%20o%20*Combo%203%20%E2%80%93%20Cuidados%20Essenciais*%20(Design%20de%20Sobrancelhas%20%2B%20Henna%20ou%20Tintura%20%2B%20Bu%C3%A7o)%20por%20R%24%2060%2C00."
+           target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Quero este combo
+        </a>
+      </div>
+    </div>
+
+    <!-- Combo 4 -->
+    <div class="combo-card">
+      <div class="combo-number">✦ Combo 04</div>
+      <div class="combo-title">Beleza em Harmonia</div>
+      <ul class="combo-items">
+        <li>Lash Lifting</li>
+        <li>Design de Sobrancelhas</li>
+        <li>Buço</li>
+      </ul>
+      <div class="combo-footer">
+        <div class="combo-price">
+          <span>por apenas</span>
+          R$ 170
+        </div>
+        <a class="btn-wpp"
+           href="https://wa.me/5531724882042?text=Olá%2C%20Állira!%20%F0%9F%92%99%20Vim%20pela%20campanha%20Dia%20dos%20Namorados%20e%20gostaria%20de%20agendar%20o%20*Combo%204%20%E2%80%93%20Beleza%20em%20Harmonia*%20(Lash%20Lifting%20%2B%20Design%20de%20Sobrancelhas%20%2B%20Bu%C3%A7o)%20por%20R%24%20170%2C00."
+           target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Quero este combo
+        </a>
+      </div>
+    </div>
+
+  </div><!-- /combos -->
+
+  <!-- Combo 5 -->
+    <div class="combo-card" style="margin-top:18px;">
+      <div class="combo-number">✦ Combo 05</div>
+      <div class="combo-title">Nutrição</div>
+      <ul class="combo-items">
+        <li>Design Nutritivo</li>
+        <li>Henna</li>
+        <li>Buço</li>
+      </ul>
+      <div class="combo-footer">
+        <div class="combo-price">
+          <span>por apenas</span>
+          R$ 70
+        </div>
+        <a class="btn-wpp"
+           href="https://wa.me/5531724882042?text=Olá%2C%20Állira!%20%F0%9F%92%99%20Vim%20pela%20campanha%20Dia%20dos%20Namorados%20e%20gostaria%20de%20agendar%20o%20*Combo%205%20%E2%80%93%20Nutri%C3%A7%C3%A3o*%20(Design%20Nutritivo%20%2B%20Henna%20%2B%20Bu%C3%A7o)%20por%20R%24%2070%2C00."
+           target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Quero este combo
+        </a>
+      </div>
+    </div>
+
+  <div class="footer-info">
+    <div class="footer-divider"></div>
+    <p class="footer-valid">📅 Válido durante o mês de junho</p>
+    <p class="footer-cta">Agende seu horário e prepare-se<br>para o Dia dos Namorados.</p>
+    <div class="footer-hearts">♡ &nbsp; ♡ &nbsp; ♡</div>
+  </div>
+
+</div><!-- /wrapper -->
+
+<script>
+  // floating petals
+  const petalsEl = document.getElementById('petals');
+  const symbols = ['♡','✦','·','✿','♥'];
+  for(let i = 0; i < 18; i++){
+    const p = document.createElement('span');
+    p.className = 'petal';
+    p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (.5 + Math.random() * .8) + 'rem';
+    p.style.color = Math.random() > .5 ? 'var(--rose)' : 'rgba(201,170,116,.4)';
+    p.style.animationDuration = (12 + Math.random() * 14) + 's';
+    p.style.animationDelay = (Math.random() * 14) + 's';
+    petalsEl.appendChild(p);
+  }
+</script>
+</body>
+</html>

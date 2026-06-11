@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Állira • Resultado de Anamnese — Marina Lechtman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul:       #1B2A6B;
+  --azul-mid:   #243580;
+  --rosa:       #C9748A;
+  --rosa-light: #e8a0b0;
+  --rosa-pale:  #f0c8d4;
+  --creme:      #F5F0EB;
+  --dark:       #0D1225;
+  --white:      #FFFFFF;
+  --ok:         #4ade80;
+  --nok:        #f87171;
+  --warn:       rgba(251,191,36,1);
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--dark);
+  color:var(--creme);
+  font-family:'Montserrat',sans-serif;
+  font-weight:300;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;opacity:.35;
+}
+
+::-webkit-scrollbar{width:2px;}
+::-webkit-scrollbar-track{background:var(--dark);}
+::-webkit-scrollbar-thumb{background:var(--rosa);}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.04);}}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .85s ease,transform .85s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.1s;}.rd2{transition-delay:.2s;}.rd3{transition-delay:.3s;}.rd4{transition-delay:.4s;}.rd5{transition-delay:.5s;}
+
+.divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(201,116,138,.28),transparent);margin:0;}
+
+/* ════════ HERO / CAPA ════════ */
+#capa{
+  position:relative;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:60px 40px;text-align:center;overflow:hidden;
+}
+.capa-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%,rgba(201,116,138,.09) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 80% at 20% 90%,rgba(27,42,107,.6) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 50% at 80% 80%,rgba(27,42,107,.4) 0%,transparent 55%);
+}
+.capa-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(201,116,138,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,116,138,.025) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.capa-rings{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+.capa-ring{position:absolute;border-radius:50%;border:1px solid rgba(201,116,138,.06);top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse 7s ease-in-out infinite;}
+.capa-ring:nth-child(1){width:340px;height:340px;animation-delay:0s;}
+.capa-ring:nth-child(2){width:560px;height:560px;animation-delay:.8s;border-color:rgba(201,116,138,.04);}
+.capa-ring:nth-child(3){width:800px;height:800px;animation-delay:1.6s;border-color:rgba(201,116,138,.025);}
+.capa-ring:nth-child(4){width:1060px;height:1060px;animation-delay:2.4s;border-color:rgba(201,116,138,.015);}
+
+.capa-content{position:relative;z-index:2;max-width:700px;}
+.capa-eyebrow{
+  font-size:.6rem;letter-spacing:.45em;text-transform:uppercase;
+  color:var(--rosa);margin-bottom:40px;
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  opacity:0;animation:fadeUp .7s .2s forwards;
+}
+.capa-eyebrow::before,.capa-eyebrow::after{content:'';width:36px;height:1px;background:var(--rosa);}
+.capa-marca{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(4.5rem,12vw,9rem);font-weight:300;line-height:.85;
+  letter-spacing:-.02em;color:var(--creme);
+  opacity:0;animation:fadeUp .8s .35s forwards;
+}
+.capa-marca em{font-style:italic;color:var(--rosa);}
+.capa-divline{
+  width:120px;height:1px;margin:36px auto;
+  background:linear-gradient(to right,transparent,var(--rosa),transparent);
+  opacity:0;animation:fadeIn .5s .9s forwards;
+}
+.capa-label{
+  font-size:.62rem;letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(245,240,235,.38);margin-bottom:28px;
+  opacity:0;animation:fadeUp .7s 1s forwards;
+}
+.capa-nome{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,4vw,2.8rem);font-weight:400;
+  color:var(--creme);line-height:1.2;
+  opacity:0;animation:fadeUp .8s 1.1s forwards;
+}
+.capa-nome span{color:var(--rosa);font-style:italic;}
+.capa-meta{
+  margin-top:36px;display:flex;flex-direction:column;gap:10px;align-items:center;
+  opacity:0;animation:fadeUp .7s 1.3s forwards;
+}
+.capa-meta-item{
+  font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(245,240,235,.32);display:flex;align-items:center;gap:10px;
+}
+.capa-meta-item span{color:rgba(245,240,235,.6);}
+.capa-meta-dot{width:3px;height:3px;border-radius:50%;background:var(--rosa);}
+.capa-scroll{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  opacity:0;animation:fadeIn .8s 2s forwards;
+}
+.capa-scroll p{font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,240,235,.25);}
+.scroll-bar{width:1px;height:44px;background:linear-gradient(to bottom,rgba(201,116,138,.6),transparent);animation:pulse 2.2s infinite;}
+
+/* ════════ SHARED ════════ */
+section{position:relative;z-index:1;}
+.section-wrap{max-width:900px;margin:0 auto;padding:0 40px;}
+.section-wrap.wide{max-width:1100px;}
+.sec-eyebrow{
+  font-size:.58rem;letter-spacing:.42em;text-transform:uppercase;
+  color:var(--rosa);margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.sec-eyebrow::before{content:'';width:26px;height:1px;background:var(--rosa);}
+.sec-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,4vw,3.4rem);font-weight:400;line-height:1.1;
+  color:var(--creme);margin-bottom:28px;
+}
+.sec-title em{font-style:italic;color:var(--rosa);}
+.sec-body{font-size:.78rem;line-height:2;color:rgba(245,240,235,.5);margin-bottom:16px;}
+.sec-body strong{color:var(--rosa-light);font-weight:400;}
+
+/* ════════ INTRO ════════ */
+#intro{padding:120px 40px;}
+.intro-quote{
+  margin-top:44px;padding:32px 36px;
+  border-left:2px solid var(--rosa);
+  background:rgba(201,116,138,.05);
+}
+.intro-quote p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.1rem,2.2vw,1.5rem);font-style:italic;
+  color:var(--rosa-light);line-height:1.7;
+}
+
+/* ════════ PERFIL ════════ */
+#perfil{padding:80px 40px;background:linear-gradient(180deg,transparent,rgba(27,42,107,.12),transparent);}
+.perfil-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
+  margin-top:60px;background:rgba(201,116,138,.07);
+}
+.perfil-item{
+  background:var(--dark);padding:36px 28px;
+  transition:background .4s;position:relative;overflow:hidden;
+}
+.perfil-item::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,transparent,var(--rosa),transparent);
+  transform:scaleX(0);transition:transform .4s;
+}
+.perfil-item:hover::before{transform:scaleX(1);}
+.perfil-item:hover{background:rgba(27,42,107,.2);}
+.perfil-item-label{
+  font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--rosa);margin-bottom:12px;
+}
+.perfil-item-val{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.25rem;font-weight:400;color:var(--creme);line-height:1.4;
+}
+.perfil-item-sub{font-size:.7rem;color:rgba(245,240,235,.38);margin-top:6px;line-height:1.6;}
+
+/* ════════ MAPPINGS ════════ */
+#mappings{padding:100px 40px;background:linear-gradient(180deg,transparent,rgba(27,42,107,.12),transparent);}
+.mapping-cards{
+  margin-top:60px;display:grid;grid-template-columns:repeat(2,1fr);gap:2px;
+  background:rgba(201,116,138,.07);
+}
+.mapping-card{
+  background:var(--dark);padding:40px 36px;
+  position:relative;overflow:hidden;transition:background .4s;
+}
+.mapping-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,transparent,var(--rosa),transparent);
+  transform:scaleX(0);transition:transform .4s;
+}
+.mapping-card:hover::after{transform:scaleX(1);}
+.mapping-card:hover{background:rgba(27,42,107,.22);}
+.mc-label{
+  font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--rosa);margin-bottom:16px;display:flex;align-items:center;gap:10px;
+}
+.mc-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:3px 10px;border:1px solid currentColor;border-radius:2px;
+  font-size:.55rem;letter-spacing:.2em;
+}
+.mc-badge.sim{color:var(--ok);border-color:rgba(74,222,128,.3);}
+.mc-badge.nao{color:var(--nok);border-color:rgba(248,113,113,.3);}
+.mc-badge.mod{color:var(--warn);border-color:rgba(251,191,36,.3);}
+.mc-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem;font-weight:400;color:var(--creme);margin-bottom:8px;
+}
+.mc-name em{font-style:italic;color:var(--rosa);}
+.mc-tagline{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.95rem;color:var(--rosa-pale);margin-bottom:20px;
+}
+.mc-text{font-size:.74rem;line-height:1.9;color:rgba(245,240,235,.46);}
+
+/* ════════ PROCEDIMENTOS ════════ */
+#procedimentos{padding:100px 40px;}
+.proc-group{margin-bottom:60px;}
+.proc-group-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.6rem);font-weight:400;
+  color:var(--creme);margin-bottom:8px;
+}
+.proc-group-title em{font-style:italic;color:var(--rosa);}
+.proc-group-sub{
+  font-size:.72rem;color:rgba(245,240,235,.38);
+  letter-spacing:.12em;margin-bottom:36px;
+}
+.proc-cards{display:flex;flex-direction:column;gap:2px;}
+.proc-card{
+  display:grid;grid-template-columns:auto 1fr;
+  background:rgba(27,42,107,.08);border:1px solid rgba(201,116,138,.07);
+  transition:all .4s;position:relative;overflow:hidden;
+}
+.proc-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--rosa);transform:scaleY(0);transform-origin:bottom;transition:transform .4s;
+}
+.proc-card:hover::before{transform:scaleY(1);}
+.proc-card:hover{background:rgba(201,116,138,.05);}
+.proc-status-col{
+  width:56px;display:flex;align-items:stretch;justify-content:center;
+  border-right:1px solid rgba(201,116,138,.07);padding:24px 0;
+}
+.proc-status-icon{display:flex;align-items:center;justify-content:center;width:28px;align-self:center;}
+.proc-status-icon svg{width:20px;height:20px;}
+.proc-body{padding:24px 28px;}
+.proc-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.15rem;font-weight:400;color:var(--creme);margin-bottom:8px;
+}
+.proc-status-text{
+  font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:12px;
+}
+.proc-status-text.ok{color:var(--ok);}
+.proc-status-text.nok{color:var(--nok);}
+.proc-status-text.parcial{color:var(--warn);}
+.proc-detail{font-size:.76rem;line-height:1.85;color:rgba(245,240,235,.48);}
+.proc-detail strong{font-weight:400;color:rgba(245,240,235,.72);}
+.proc-detail em{color:var(--rosa-light);font-style:normal;}
+.proc-tip{
+  margin-top:12px;padding:14px 18px;
+  background:rgba(201,116,138,.06);border-left:2px solid var(--rosa);
+  font-size:.73rem;color:var(--rosa-pale);line-height:1.7;
+}
+
+/* ════════ ORIENTAÇÕES ════════ */
+#orientacoes{padding:100px 40px;}
+.ori-grid{
+  margin-top:60px;display:grid;grid-template-columns:repeat(2,1fr);gap:20px;
+}
+.ori-card{
+  background:rgba(27,42,107,.1);border:1px solid rgba(201,116,138,.08);
+  padding:36px 32px;position:relative;overflow:hidden;transition:all .4s;
+}
+.ori-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--rosa);transform:scaleY(0);transform-origin:top;transition:transform .5s;
+}
+.ori-card:hover::before{transform:scaleY(1);}
+.ori-card:hover{background:rgba(27,42,107,.22);}
+.ori-num{
+  font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:300;
+  color:rgba(201,116,138,.07);line-height:1;margin-bottom:20px;transition:color .4s;
+}
+.ori-card:hover .ori-num{color:rgba(201,116,138,.13);}
+.ori-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.25rem;
+  font-weight:400;color:var(--creme);margin-bottom:12px;
+}
+.ori-text{font-size:.74rem;line-height:1.9;color:rgba(245,240,235,.45);}
+
+/* ════════ HISTÓRICO ════════ */
+#historico{
+  padding:80px 40px;
+  background:linear-gradient(180deg,transparent,rgba(27,42,107,.1),transparent);
+}
+.hist-cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:48px;}
+.hist-block-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.3rem;
+  font-weight:400;color:var(--creme);margin-bottom:20px;
+  padding-bottom:16px;border-bottom:1px solid rgba(201,116,138,.15);
+}
+.hist-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.74rem;
+}
+.hist-row:last-child{border-bottom:none;}
+.hist-key{color:rgba(245,240,235,.38);letter-spacing:.08em;}
+.hist-val{color:var(--creme);text-align:right;max-width:58%;}
+.hist-val.ok{color:var(--ok);}
+.hist-val.warn{color:var(--warn);}
+
+/* ════════ PONTOS DE ATENÇÃO ════════ */
+#atencao{padding:80px 40px;}
+.atencao-list{margin-top:48px;}
+.atencao-item{
+  display:flex;align-items:flex-start;gap:24px;
+  padding:28px 0;border-bottom:1px solid rgba(201,116,138,.08);
+}
+.atencao-item:last-child{border-bottom:none;}
+.atencao-marker{
+  width:6px;height:6px;border-radius:50%;background:var(--rosa);
+  flex-shrink:0;margin-top:8px;
+}
+.atencao-body{font-size:.8rem;line-height:1.85;color:rgba(245,240,235,.6);}
+.atencao-body strong{
+  display:block;font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;font-weight:400;color:var(--creme);margin-bottom:4px;
+}
+
+/* ════════ ENCERRAMENTO ════════ */
+#encerramento{
+  padding:140px 40px;text-align:center;
+  position:relative;overflow:hidden;
+}
+#encerramento::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 70% at 50% 50%,rgba(201,116,138,.07) 0%,transparent 70%);
+}
+.enc-ornament{margin:0 auto 36px;width:52px;height:52px;}
+.enc-eyebrow{
+  font-size:.58rem;letter-spacing:.42em;text-transform:uppercase;
+  color:var(--rosa);display:flex;align-items:center;justify-content:center;gap:14px;
+  margin-bottom:36px;position:relative;z-index:1;
+}
+.enc-eyebrow::before,.enc-eyebrow::after{content:'';width:36px;height:1px;background:var(--rosa);}
+.enc-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,4vw,3.2rem);font-weight:300;font-style:italic;
+  color:var(--creme);line-height:1.45;margin-bottom:14px;position:relative;z-index:1;
+}
+.enc-title em{color:var(--rosa);font-style:normal;}
+.enc-sub{
+  font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(245,240,235,.28);margin-bottom:52px;position:relative;z-index:1;
+}
+.btn-agendar{
+  display:inline-block;position:relative;overflow:hidden;z-index:1;
+  background:linear-gradient(135deg,var(--rosa),var(--rosa-light));
+  color:var(--white);padding:17px 52px;
+  font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;
+  text-decoration:none;transition:all .4s;
+}
+.btn-agendar::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--azul),var(--azul-mid));
+  opacity:0;transition:opacity .4s;
+}
+.btn-agendar:hover::before{opacity:1;}
+.btn-agendar span{position:relative;z-index:1;}
+
+/* ── FOOTER ── */
+footer{
+  padding:48px 40px;border-top:1px solid rgba(201,116,138,.1);
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:1;
+}
+.footer-logo{
+  font-family:'Cormorant Garamond',serif;font-size:1.4rem;
+  font-weight:500;letter-spacing:.15em;color:rgba(245,240,235,.35);
+}
+.footer-logo span{color:var(--rosa);}
+.footer-meta{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,235,.18);}
+.footer-contact{display:flex;gap:20px;}
+.footer-contact a{
+  font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(245,240,235,.28);text-decoration:none;transition:color .3s;
+}
+.footer-contact a:hover{color:var(--rosa);}
+
+/* ── SVG ICONS inline ── */
+.icon-ok  circle{stroke:#4ade80;} .icon-ok  path{stroke:#4ade80;}
+.icon-nok circle{stroke:#f87171;} .icon-nok path{stroke:#f87171;}
+.icon-mod circle{stroke:rgba(251,191,36,.8);} .icon-mod path{stroke:rgba(251,191,36,.8);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .perfil-grid{grid-template-columns:1fr 1fr;}
+  .mapping-cards{grid-template-columns:1fr;}
+  .ori-grid{grid-template-columns:1fr;}
+  .hist-cols{grid-template-columns:1fr;}
+  .section-wrap,.section-wrap.wide{padding:0 24px;}
+  #intro,#perfil,#procedimentos,#mappings,#orientacoes,#historico,#atencao{padding:80px 24px;}
+  #encerramento{padding:100px 24px;}
+  footer{padding:36px 24px;flex-direction:column;gap:20px;text-align:center;}
+  .footer-contact{justify-content:center;}
+  #capa{padding:60px 24px;}
+}
+@media(max-width:480px){
+  .perfil-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════ CAPA ══════ -->
+<section id="capa">
+  <div class="capa-bg"></div>
+  <div class="capa-grid"></div>
+  <div class="capa-rings">
+    <div class="capa-ring"></div>
+    <div class="capa-ring"></div>
+    <div class="capa-ring"></div>
+    <div class="capa-ring"></div>
+  </div>
+  <div class="capa-content">
+    <div class="capa-eyebrow">Állira — Arquitetura do Olhar</div>
+    <h1 class="capa-marca">Ana<em>mnese</em></h1>
+    <div class="capa-divline"></div>
+    <p class="capa-label">Resultado personalizado para</p>
+    <h2 class="capa-nome">Marina <span>Lechtman</span></h2>
+    <div class="capa-meta">
+      <div class="capa-meta-item">
+        Último atendimento <div class="capa-meta-dot"></div>
+        <span>28 de maio de 2026</span>
+      </div>
+      <div class="capa-meta-item">
+        Profissional <div class="capa-meta-dot"></div>
+        <span>Ana Gabrielle</span>
+      </div>
+      <div class="capa-meta-item">
+        Procedimento realizado <div class="capa-meta-dot"></div>
+        <span>Brow Lamination</span>
+      </div>
+    </div>
+  </div>
+  <div class="capa-scroll">
+    <p>Deslizar</p>
+    <div class="scroll-bar"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════ MENSAGEM PESSOAL ══════ -->
+<section id="intro">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Uma mensagem para você</div>
+      <h2 class="sec-title">Marina,<br>seu olhar carrega uma <em>expressão única.</em></h2>
+    </div>
+    <p class="sec-body reveal rd1">
+      Este documento foi preparado com cuidado e exclusividade para você, a partir das informações coletadas na sua anamnese. Ele reúne uma leitura completa das características do seu olhar — formato, estrutura, cílios, sobrancelhas — e traduz tudo isso em recomendações precisas para cada procedimento da Állira.
+    </p>
+    <p class="sec-body reveal rd2">
+      Aqui você encontra o que é <strong>indicado</strong>, o que deve ser <strong>evitado</strong> e o <strong>porquê</strong> de cada escolha estética — tudo pensado para valorizar o que já existe no seu olhar, com técnica, intenção e elegância.
+    </p>
+    <div class="intro-quote reveal rd3">
+      <p>"O olhar pequeno e profundo guarda uma <em>intensidade raramente percebida</em> — nossa função é revelá-la."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════ PERFIL DO OLHAR ══════ -->
+<section id="perfil">
+  <div class="section-wrap wide">
+    <div class="reveal">
+      <div class="sec-eyebrow">01 — Perfil do Olhar</div>
+      <h2 class="sec-title">As características<br>do seu <em>olhar</em></h2>
+    </div>
+    <p class="sec-body reveal rd1">Estas são as informações mapeadas na sua anamnese. Elas formam a base de toda a personalização do seu atendimento na Állira.</p>
+
+    <div class="perfil-grid">
+
+      <div class="perfil-item reveal">
+        <div class="perfil-item-label">Formato</div>
+        <div class="perfil-item-val">Amendoado</div>
+        <div class="perfil-item-sub">Versátil e harmonioso — permite a maioria dos mappings com excelente resultado estético.</div>
+      </div>
+
+      <div class="perfil-item reveal rd1">
+        <div class="perfil-item-label">Tamanho</div>
+        <div class="perfil-item-val">Pequeno</div>
+        <div class="perfil-item-sub">Olhos menores se beneficiam muito de mappings que criam abertura e profundidade — como Doll e Esquilo com curvatura D.</div>
+      </div>
+
+      <div class="perfil-item reveal rd2">
+        <div class="perfil-item-label">Inclinação</div>
+        <div class="perfil-item-val">Centralizado</div>
+        <div class="perfil-item-sub">Canto externo e interno no mesmo nível — indica mappings que criam elevação (Gatinho, Esquilo, Fox). Evitar mapping reto.</div>
+      </div>
+
+      <div class="perfil-item reveal rd1">
+        <div class="perfil-item-label">Distância entre olhos</div>
+        <div class="perfil-item-val">Média</div>
+        <div class="perfil-item-sub">Versátil — permite variações sem distorcer a harmonia facial.</div>
+      </div>
+
+      <div class="perfil-item reveal rd2">
+        <div class="perfil-item-label">Profundidade</div>
+        <div class="perfil-item-val">Fundos</div>
+        <div class="perfil-item-sub">Olhos mais encovados pedem curvaturas abertas (D ou L) e volumes 2D–4D para trazer o olhar para a frente. Evitar curvaturas baixas e fios muito curtos.</div>
+      </div>
+
+      <div class="perfil-item reveal rd3">
+        <div class="perfil-item-label">Objetivo principal</div>
+        <div class="perfil-item-val">Natural</div>
+        <div class="perfil-item-sub">Resultado natural e harmonioso guia todas as escolhas estéticas do seu atendimento.</div>
+      </div>
+
+      <div class="perfil-item reveal">
+        <div class="perfil-item-label">Cílios naturais</div>
+        <div class="perfil-item-val">Curvados · Médios</div>
+        <div class="perfil-item-sub">Curvados naturalmente, densidade e espessura médias, comprimento médio, espaçamento uniforme, crescimento alinhado.</div>
+      </div>
+
+      <div class="perfil-item reveal rd1">
+        <div class="perfil-item-label">Sobrancelhas</div>
+        <div class="perfil-item-val">Lev. Arqueadas · Médias</div>
+        <div class="perfil-item-sub">Altura média, levemente arqueada, espessura fina, densidade média, pequenas falhas, simétricas, arco médio, comprimento proporcional.</div>
+      </div>
+
+      <div class="perfil-item reveal rd2">
+        <div class="perfil-item-label">Combinação especial</div>
+        <div class="perfil-item-val">Olho pequeno + fundo</div>
+        <div class="perfil-item-sub">Esta combinação específica tem indicações precisas — veja as análises detalhadas nas seções seguintes.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════ MAPPINGS ══════ -->
+<section id="mappings">
+  <div class="section-wrap wide">
+    <div class="reveal">
+      <div class="sec-eyebrow">02 — Extensão de Cílios · Mappings</div>
+      <h2 class="sec-title">Os mappings indicados<br>para o seu <em>olhar</em></h2>
+    </div>
+    <p class="sec-body reveal rd1">Com olho amendoado pequeno, inclinação centralizada e profundidade funda, o seu perfil tem indicações bem precisas. O objetivo é criar elevação, abertura e a ilusão de maior profundidade e tamanho — sem perder a naturalidade.</p>
+
+    <div class="mapping-cards">
+
+      <div class="mapping-card reveal">
+        <div class="mc-label">Mapping <span class="mc-badge sim">✓ Altamente indicado</span></div>
+        <div class="mc-name"><em>Esquilo</em></div>
+        <div class="mc-tagline">O pico que eleva, abre e harmoniza.</div>
+        <p class="mc-text">O Esquilo posiciona o pico de comprimento entre o centro e o canto externo, com leve queda na extremidade. Para o seu olho pequeno e centralizado, cria elevação visual moderna sem exagero — abre o olhar, adiciona expressividade e entrega resultado sofisticado e natural. É o mapping mais equilibrado para o seu perfil completo.</p>
+      </div>
+
+      <div class="mapping-card reveal rd1">
+        <div class="mc-label">Mapping <span class="mc-badge sim">✓ Indicado</span></div>
+        <div class="mc-name"><em>Gatinho</em></div>
+        <div class="mc-tagline">Elevação e elongamento — criam presença.</div>
+        <p class="mc-text">Com inclinação centralizada, o Gatinho — que concentra os fios mais longos no canto externo — cria exatamente o que seu olho precisa: elevação do canto e sensação de olho mais comprido e expressivo. Indicado para trazer leveza e sofisticação ao olhar pequeno. Curvatura D complementa perfeitamente.</p>
+      </div>
+
+      <div class="mapping-card reveal rd2">
+        <div class="mc-label">Mapping <span class="mc-badge sim">✓ Indicado</span></div>
+        <div class="mc-name"><em>Natural</em></div>
+        <div class="mc-tagline">Para dias de beleza mais discreta.</div>
+        <p class="mc-text">O Natural distribui os fios uniformemente, valorizando o olho sem transformar muito. Para o seu perfil, funciona bem como opção de manutenção ou quando o objetivo for o mínimo visível — mas para máximo impacto, Esquilo e Gatinho entregam resultados superiores.</p>
+      </div>
+
+      <div class="mapping-card reveal rd3">
+        <div class="mc-label">Mapping <span class="mc-badge nao">✗ Evitar</span></div>
+        <div class="mc-name"><em>Reto / Doll muito marcado</em></div>
+        <div class="mc-tagline">Vai contra a harmonia do seu olhar.</div>
+        <p class="mc-text">O mapping reto não cria elevação — e para um olho centralizado, isso significa nenhuma transformação estética positiva. O Doll muito marcado arredondaria excessivamente o olho amendoado, perdendo a elegância natural do seu formato. Evitar ambos para preservar a harmonia facial.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════ PROCEDIMENTOS ══════ -->
+<section id="procedimentos">
+  <div class="section-wrap wide">
+    <div class="reveal">
+      <div class="sec-eyebrow">03 — Análise Completa de Procedimentos</div>
+      <h2 class="sec-title">O que é indicado para<br><em>você</em> — e por quê</h2>
+    </div>
+    <p class="sec-body reveal rd1">Com base no seu perfil completo — olho amendoado pequeno, fundo, centralizado, com sobrancelhas finas de altura média — aqui está a análise de cada procedimento Állira.</p>
+
+    <!-- EXTENSÃO DE CÍLIOS -->
+    <div class="proc-group reveal">
+      <div class="proc-group-title"><em>Extensão</em> de Cílios</div>
+      <div class="proc-group-sub">Volume, curvatura, comprimento e técnica ideal</div>
+      <div class="proc-cards">
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-ok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Curvatura D — Prioritária</div>
+            <div class="proc-status-text ok">Altamente indicada</div>
+            <p class="proc-detail">Para olhos fundos, a curvatura D é a mais indicada — ela <em>abre o olhar para fora</em>, criando a ilusão de olho mais à frente e mais expressivo. Combinada com seus cílios já curvados naturalmente, a curvatura D potencializa sem exagerar.</p>
+            <div class="proc-tip">A curvatura C é a alternativa mais suave. Evitar curvatura B ou J — muito baixas para olhos fundos, reduzem ainda mais a abertura.</div>
+          </div>
+        </div>
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-ok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Volume 2D–4D com fios finos</div>
+            <div class="proc-status-text ok">Indicado</div>
+            <p class="proc-detail">Olhos pequenos e fundos se beneficiam de volume que <em>traz o olhar para frente</em>. Volumes 2D a 4D com fios ultrafinos (0,05–0,07mm) criam densidade sem peso excessivo — resultado expressivo, natural e duradouro.</p>
+          </div>
+        </div>
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-ok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Comprimentos médios a longos (10–13mm no pico)</div>
+            <div class="proc-status-text ok">Indicado</div>
+            <p class="proc-detail">Para olhos pequenos, comprimentos mais generosos no pico do mapping trazem a abertura e expressividade necessárias — sem ultrapassar os limites do natural. Fios muito curtos reduziriam o olhar ainda mais.</p>
+          </div>
+        </div>
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-nok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M15 9l-6 6M9 9l6 6" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Curvaturas baixas (B, J) e fios curtos</div>
+            <div class="proc-status-text nok">Evitar</div>
+            <p class="proc-detail">O próprio sistema de anamnese alerta: para olhos fundos, curvaturas baixas e fios curtos pioram a aparência — aprofundam ainda mais o olho e reduzem a abertura. Esta combinação deve ser evitada no seu caso.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LASH LIFTING -->
+    <div class="proc-group reveal">
+      <div class="proc-group-title"><em>Lash</em> Lifting</div>
+      <div class="proc-group-sub">Curvatura permanente nos cílios naturais</div>
+      <div class="proc-cards">
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-ok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Lash Lifting com molde médio a grande</div>
+            <div class="proc-status-text ok">Muito indicado</div>
+            <p class="proc-detail">Para olhos fundos e pequenos, o Lash Lifting é um procedimento transformador. <em>Molde médio a grande</em> cria uma curvatura aberta que traz os cílios para frente — abrindo o olhar, reduzindo a aparência de fundura e criando expressividade real sem nenhum procedimento invasivo.</p>
+            <div class="proc-tip">Ótima opção nos intervalos entre manutenções da extensão, ou como procedimento principal para um olhar mais desperto com mínimo esforço diário.</div>
+          </div>
+        </div>
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-nok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M15 9l-6 6M9 9l6 6" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Molde pequeno / curvatura baixa</div>
+            <div class="proc-status-text nok">Evitar</div>
+            <p class="proc-detail">Moldes pequenos criam curvaturas suaves que, para olhos fundos, não geram abertura suficiente — e em alguns casos podem fazer o olho parecer ainda mais recuado. Para o seu perfil, quanto mais aberta a curvatura, melhor o resultado.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DESIGN DE SOBRANCELHA -->
+    <div class="proc-group reveal">
+      <div class="proc-group-title">Design de <em>Sobrancelha</em></div>
+      <div class="proc-group-sub">Modelagem e forma para sobrancelhas finas de altura média</div>
+      <div class="proc-cards">
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-ok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Design equilibrado — manter altura média</div>
+            <div class="proc-status-text ok">Indicado</div>
+            <p class="proc-detail">Suas sobrancelhas têm altura média e formato levemente arqueado — uma base já harmoniosa. O design deve <em>equilibrar e refinar</em> o que existe: manter a altura, suavizar pequenas irregularidades e preencher visualmente as pequenas falhas. Sobrancelha levemente arqueada combina muito bem com olho amendoado.</p>
+            <div class="proc-tip">A espessura fina das suas sobrancelhas pode ser mantida ou levemente ampliada — sobrancelhas mais estruturadas enquadram e valorizam olhos pequenos, dando mais presença ao olhar como um todo.</div>
+          </div>
+        </div>
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-nok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M15 9l-6 6M9 9l6 6" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Sobrancelhas muito finas ou muito baixas</div>
+            <div class="proc-status-text nok">Evitar</div>
+            <p class="proc-detail">Sobrancelhas muito finas em olhos pequenos reduzem a moldura do olhar — que já é menor. E sobrancelhas muito baixas aproximam o olho do osso orbital, acentuando a fundura. Manter estrutura e altura é essencial para o equilíbrio facial.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BROW LAMINATION -->
+    <div class="proc-group reveal">
+      <div class="proc-group-title">Brow <em>Lamination</em></div>
+      <div class="proc-group-sub">Procedimento realizado hoje — análise e continuidade</div>
+      <div class="proc-cards">
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-ok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Brow Lamination — Escolha perfeita para o seu perfil</div>
+            <div class="proc-status-text ok">Altamente indicado — continue!</div>
+            <p class="proc-detail">Para sobrancelhas com espessura fina, densidade média e pequenas falhas, o Brow Lamination entrega exatamente o que você precisa: <em>organiza os fios, amplia visualmente a espessura</em> e preenche as falhas com o que já existe — sem adicionar nada artificial. Resultado: sobrancelha mais estruturada, encorpada e harmoniosa.</p>
+            <div class="proc-tip">Dica especial: para sobrancelhas finas, a direção dos fios levemente ascendente na cabeça e mais alinhada no corpo e rabo cria uma sensação de maior preenchimento e eleva sutilmente a expressão do olhar.</div>
+          </div>
+        </div>
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-mod" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M12 8v5M12 15.5v.5" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Intervalo entre sessões — atenção especial</div>
+            <div class="proc-status-text parcial">Observação importante</div>
+            <p class="proc-detail">Com sobrancelhas de espessura fina, respeitar o intervalo de 6 a 8 semanas é ainda mais importante — fios finos são mais sensíveis a procedimentos repetidos. <strong>Complementar com sérum nutritivo</strong> entre as sessões fortalece os fios e potencializa o resultado a cada reaplicação.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- HENNA -->
+    <div class="proc-group reveal">
+      <div class="proc-group-title"><em>Henna</em> e Pigmentação</div>
+      <div class="proc-group-sub">Coloração e definição — especialmente indicada no seu caso</div>
+      <div class="proc-cards">
+
+        <div class="proc-card">
+          <div class="proc-status-col">
+            <div class="proc-status-icon">
+              <svg class="icon-ok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="proc-body">
+            <div class="proc-name">Henna combinada ao Brow Lamination</div>
+            <div class="proc-status-text ok">Especialmente indicada</div>
+            <p class="proc-detail">Para sobrancelhas finas com pequenas falhas, a henna é um complemento <em>fundamental</em>. Ela intensifica a cor dos fios e pigmenta levemente a pele nas áreas com falhas — criando a ilusão de sobrancelhas mais preenchidas, uniformes e definidas. O resultado combinado (laminação + henna) é visualmente muito superior para o seu tipo de sobrancelha.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════ ORIENTAÇÕES ══════ -->
+<section id="orientacoes">
+  <div class="section-wrap wide">
+    <div class="reveal">
+      <div class="sec-eyebrow">04 — Orientações Personalizadas</div>
+      <h2 class="sec-title">Como cuidar e<br><em>potencializar</em> o seu resultado</h2>
+    </div>
+    <p class="sec-body reveal rd1">Orientações feitas especialmente para o seu perfil de olho e sobrancelha — para que cada procedimento dure mais e o resultado seja cada vez mais refinado.</p>
+
+    <div class="ori-grid">
+
+      <div class="ori-card reveal">
+        <div class="ori-num">01</div>
+        <div class="ori-title">Nutrindo sobrancelhas finas</div>
+        <div class="ori-text">Sobrancelhas com espessura fina respondem muito bem ao uso de sérum estimulante de crescimento (óleo de rícino, sérum com biotina ou peptídeos). Use diariamente entre as sessões de Brow Lamination — com o tempo, os fios ficam mais fortes e o resultado de cada sessão melhora visivelmente.</div>
+      </div>
+
+      <div class="ori-card reveal rd1">
+        <div class="ori-num">02</div>
+        <div class="ori-title">Curvatura aberta — preserve-a</div>
+        <div class="ori-text">Para olhos fundos, a curvatura dos cílios é especialmente importante. Evite curvadores mecânicos que achatam a curvatura. Com extensão ou Lash Lifting, a abertura já está garantida — apenas mantenha a higienização adequada e evite esfregar os olhos ao acordar para preservar a forma.</div>
+      </div>
+
+      <div class="ori-card reveal rd2">
+        <div class="ori-num">03</div>
+        <div class="ori-title">Higienização diária dos cílios</div>
+        <div class="ori-text">Com olhos fundos, a oleosidade tende a se concentrar mais na área dos cílios. A limpeza diária com solução específica livre de óleo é essencial tanto para a saúde dos fios quanto para a durabilidade da extensão — especialmente no verão ou em dias mais quentes.</div>
+      </div>
+
+      <div class="ori-card reveal rd3">
+        <div class="ori-num">04</div>
+        <div class="ori-title">Enquadramento das sobrancelhas</div>
+        <div class="ori-text">Para olhos pequenos, a sobrancelha bem enquadrada faz toda a diferença. Manter uma sobrancelha estruturada (não necessariamente mais grossa, mas bem definida e sem falhas aparentes) amplia a percepção do olho inteiro. A combinação Brow Lamination + henna é a fórmula mais eficaz para o seu perfil.</div>
+      </div>
+
+      <div class="ori-card reveal rd2">
+        <div class="ori-num">05</div>
+        <div class="ori-title">Produtos a evitar na área dos olhos</div>
+        <div class="ori-text">Evite produtos com óleo mineral, silicone ou base oleosa na região dos cílios e sobrancelhas — dissolvem adesivos, reduzem a durabilidade de henna e laminação. Prefira produtos base água para desmaquiagem e hidratação na área dos olhos.</div>
+      </div>
+
+      <div class="ori-card reveal rd3">
+        <div class="ori-num">06</div>
+        <div class="ori-title">Intervalo entre procedimentos</div>
+        <div class="ori-text">Brow Lamination: a cada 6–8 semanas. Extensão de cílios: manutenção a cada 3–4 semanas. Lash Lifting: a cada 6–8 semanas. Respeitar os intervalos é fundamental — procedimentos muito frequentes fragilizam fios já finos como os seus, comprometendo a saúde e o resultado a longo prazo.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════ HISTÓRICO ══════ -->
+<section id="historico">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">05 — Dados do Atendimento</div>
+      <h2 class="sec-title">Informações registradas<br>na sua <em>anamnese</em></h2>
+    </div>
+    <div class="hist-cols">
+      <div class="hist-block reveal">
+        <div class="hist-block-title">Perfil do Olhar</div>
+        <div class="hist-row"><span class="hist-key">Formato do olhar</span><span class="hist-val">Amendoado</span></div>
+        <div class="hist-row"><span class="hist-key">Tamanho dos olhos</span><span class="hist-val">Pequenos</span></div>
+        <div class="hist-row"><span class="hist-key">Inclinação</span><span class="hist-val">Centralizado</span></div>
+        <div class="hist-row"><span class="hist-key">Distância entre olhos</span><span class="hist-val">Média</span></div>
+        <div class="hist-row"><span class="hist-key">Profundidade</span><span class="hist-val">Fundos</span></div>
+        <div class="hist-row"><span class="hist-key">Objetivo principal</span><span class="hist-val">Natural</span></div>
+      </div>
+      <div class="hist-block reveal rd1">
+        <div class="hist-block-title">Cílios e Sobrancelhas</div>
+        <div class="hist-row"><span class="hist-key">Direção dos cílios</span><span class="hist-val">Curvados naturalmente</span></div>
+        <div class="hist-row"><span class="hist-key">Densidade / Espessura / Comprimento</span><span class="hist-val">Médios</span></div>
+        <div class="hist-row"><span class="hist-key">Espaçamento</span><span class="hist-val">Uniforme</span></div>
+        <div class="hist-row"><span class="hist-key">Crescimento</span><span class="hist-val">Alinhado</span></div>
+        <div class="hist-row"><span class="hist-key">Altura da sobrancelha</span><span class="hist-val">Média</span></div>
+        <div class="hist-row"><span class="hist-key">Formato natural</span><span class="hist-val">Lev. arqueada</span></div>
+        <div class="hist-row"><span class="hist-key">Espessura da sobrancelha</span><span class="hist-val warn">Fina</span></div>
+        <div class="hist-row"><span class="hist-key">Falhas</span><span class="hist-val warn">Pequenas falhas</span></div>
+        <div class="hist-row"><span class="hist-key">Simetria</span><span class="hist-val ok">Simétricas</span></div>
+      </div>
+    </div>
+    <div class="hist-cols" style="margin-top:2px;">
+      <div class="hist-block reveal">
+        <div class="hist-block-title">Atendimento</div>
+        <div class="hist-row"><span class="hist-key">Data</span><span class="hist-val">28/05/2026</span></div>
+        <div class="hist-row"><span class="hist-key">Procedimento</span><span class="hist-val">Brow Lamination</span></div>
+        <div class="hist-row"><span class="hist-key">Profissional</span><span class="hist-val">Ana Gabrielle</span></div>
+        <div class="hist-row"><span class="hist-key">Arco médio / comprimento</span><span class="hist-val">Médio / Proporcional</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════ PONTOS DE ATENÇÃO ══════ -->
+<section id="atencao">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">06 — Pontos de Atenção</div>
+      <h2 class="sec-title">O que <em>observar</em><br>no seu caso</h2>
+    </div>
+    <div class="atencao-list">
+      <div class="atencao-item reveal">
+        <span class="atencao-marker"></span>
+        <div class="atencao-body">
+          <strong>Olhos pequenos e fundos — combinação que exige atenção técnica</strong>
+          Esta combinação é das mais exigentes em termos de técnica. Cada decisão de curvatura, comprimento e mapping impacta diretamente o resultado visual. Por isso, na Állira, o mapeamento do seu olhar é feito antes de qualquer aplicação — garantindo que cada fio seja posicionado com intenção e precisão.
+        </div>
+      </div>
+      <div class="atencao-item reveal rd1">
+        <span class="atencao-marker"></span>
+        <div class="atencao-body">
+          <strong>Sobrancelhas finas — fragilidade que pede cuidado</strong>
+          Fios finos têm menor resistência a procedimentos químicos repetidos. Respeitar o intervalo mínimo de 6 semanas entre as sessões de Brow Lamination é obrigatório. O uso regular de sérum nutritivo entre as sessões é a principal forma de fortalecer os fios ao longo do tempo.
+        </div>
+      </div>
+      <div class="atencao-item reveal rd2">
+        <span class="atencao-marker"></span>
+        <div class="atencao-body">
+          <strong>Pequenas falhas — monitorar e nutrir</strong>
+          As falhas nas sobrancelhas podem melhorar com o tempo com Brow Lamination regular + sérum estimulante. Em cada sessão, a profissional avaliará a evolução e adaptará a técnica para maximizar o preenchimento visual das áreas com menor densidade. Paciência e consistência são a chave.
+        </div>
+      </div>
+      <div class="atencao-item reveal rd3">
+        <span class="atencao-marker"></span>
+        <div class="atencao-body">
+          <strong>Inclinação centralizada — oportunidade de elevação</strong>
+          Com canto externo e interno no mesmo nível, existe uma oportunidade estética real de criar elevação com os procedimentos certos (Gatinho, Esquilo, curvatura D no Lash Lifting). Cada atendimento é uma chance de construir este efeito progressivamente — sem intervenções drásticas.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════ ENCERRAMENTO ══════ -->
+<section id="encerramento">
+  <div class="reveal" style="position:relative;z-index:1;">
+    <div class="enc-ornament">
+      <svg width="52" height="52" viewBox="0 0 60 60" fill="none">
+        <path d="M30,14 Q33,21 30,27 Q27,21 30,14Z" fill="#e8a0b0" transform="rotate(0,30,27)"/>
+        <path d="M30,14 Q33,21 30,27 Q27,21 30,14Z" fill="#e8a0b0" transform="rotate(60,30,27)"/>
+        <path d="M30,14 Q33,21 30,27 Q27,21 30,14Z" fill="#e8a0b0" transform="rotate(120,30,27)"/>
+        <path d="M30,14 Q33,21 30,27 Q27,21 30,14Z" fill="#e8a0b0" transform="rotate(180,30,27)"/>
+        <path d="M30,14 Q33,21 30,27 Q27,21 30,14Z" fill="#e8a0b0" transform="rotate(240,30,27)"/>
+        <path d="M30,14 Q33,21 30,27 Q27,21 30,14Z" fill="#e8a0b0" transform="rotate(300,30,27)"/>
+        <circle cx="30" cy="28" r="5" fill="#C9748A"/>
+        <circle cx="30" cy="28" r="2.5" fill="#f0c8d4"/>
+      </svg>
+    </div>
+    <div class="enc-eyebrow">Állira — Para você, Marina</div>
+    <h2 class="enc-title">"Cada atendimento é um passo<br>em direção ao olhar mais <em>seu."</em></h2>
+    <p class="enc-sub">— Állira · Arquitetura do Olhar</p>
+    <a href="https://wa.me/553172488204?text=Olá!%20Recebi%20meu%20resultado%20de%20anamnese%20e%20gostaria%20de%20agendar%20meu%20próximo%20procedimento." class="btn-agendar" target="_blank" rel="noopener">
+      <span>Agendar meu próximo procedimento</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Áll<span>i</span>ra</div>
+  <div class="footer-meta">Resultado de Anamnese · Marina Lechtman · 2026</div>
+  <div class="footer-contact">
+    <a href="https://instagram.com/allira.co" target="_blank">@allira.co</a>
+    <a href="https://allira.art" target="_blank">allira.art</a>
+    <a href="https://wa.me/553172488204" target="_blank">WhatsApp</a>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
