@@ -95,17 +95,21 @@ function rItens(){
  if(!it){e.innerHTML='<p class="sub">Adicione um item abaixo.</p>';return}
  e.innerHTML=`<div class="g2" style="margin-bottom:12px"><div><span class="lbl">Nome</span><input value="${esc(it.n)}" oninput="D.itens[D.sel].n=this.value;save()" onchange="rItens()"></div>
  ${it.t=='s'?`<div><span class="lbl">Duração (minutos)</span><input type="number" inputmode="numeric" value="${it.min||''}" oninput="D.itens[D.sel].min=parseFloat(this.value)||0;calc()"></div>`:''}
- <div><span class="lbl">% repasse à dona do espaço</span><input type="number" inputmode="decimal" placeholder="${N('repPad')}" value="${it.rep??''}" oninput="D.itens[D.sel].rep=this.value===''?undefined:parseFloat(this.value)||0;calc()"></div></div>
+ </div>
+ <div style="background:rgba(201,116,138,.08);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px"><div class="g2">
+ <div><span class="lbl" style="color:var(--rosa)">% da dona do espaço sobre o valor cobrado</span><input type="number" inputmode="decimal" value="${it.rep??N('repPad')}" oninput="D.itens[D.sel].rep=parseFloat(this.value)||0;calc()"></div>
+ <div><span class="lbl">Preço que você cobra hoje (R$)</span><input type="number" inputmode="decimal" placeholder="opcional" value="${it.cobrado||''}" oninput="D.itens[D.sel].cobrado=parseFloat(this.value)||0;calc()"></div></div>
+ <span class="lbl" style="margin:8px 0 0">Cada item tem o seu %. Ex.: cobrou R$ 40 e repassa 50% → R$ 20 para a dona.</span></div>
  <span class="lbl">${it.t=='s'?'Custos variáveis (materiais, descartáveis, comissão...)':'Custos do produto (compra, frete, embalagem...)'}</span>
  ${it.mats.map((m,j)=>`<div class="row"><input value="${esc(m.n)}" oninput="D.itens[D.sel].mats[${j}].n=this.value;save()"><input class="num" type="number" inputmode="decimal" placeholder="R$" value="${m.c||''}" oninput="D.itens[D.sel].mats[${j}].c=parseFloat(this.value)||0;calc()"><button class="x" onclick="D.itens[D.sel].mats.splice(${j},1);rItens();calc()">×</button></div>`).join('')}
  <button class="add" onclick="D.itens[D.sel].mats.push({n:'Novo custo',c:0});rItens()">+ Adicionar custo variável</button>
  <button class="del" onclick="if(confirm('Remover este item?')){D.itens.splice(D.sel,1);D.sel=0;rItens();calc()}">Remover item</button>`}
 function addItem(){const n=document.getElementById('novoNome').value.trim();if(!n)return;D.itens.push({n,t:document.getElementById('novoTipo').value,min:0,mats:[mat('Material',0)]});D.sel=D.itens.length-1;document.getElementById('novoNome').value='';rItens();calc()}
 function itemCalc(it,ch){
- const mg=N('margem'),tx=N('taxa'),rp=it.rep??N('repPad'),div=1-(mg+tx+rp)/100;
+ const mg=N('margem'),tx=N('taxa'),rp=it.rep??N('repPad'),cob=it.cobrado||0,div=1-(mg+tx+rp)/100;
  const rateio=it.t=='s'?ch*((it.min||0)/60):0,vari=it.mats.reduce((a,m)=>a+m.c,0),custo=rateio+vari;
  const preco=div>0?custo/div:0;
- return{mg,tx,rp,div,rateio,vari,custo,preco,taxas:preco*tx/100,lucro:preco*mg/100,repR:preco*rp/100}}
+ return{mg,tx,rp,div,rateio,vari,custo,preco,taxas:preco*tx/100,lucro:preco*mg/100,repR:preco*rp/100,cob,cobRep:cob*rp/100,cobLucro:cob-cob*rp/100-cob*tx/100-custo}}
 function calc(){
  const fixo=D.fixos.reduce((a,f)=>a+f.v,0),hrs=N('dias')*N('horas'),ch=hrs?fixo/hrs:0;
  document.getElementById('totFixo').textContent=R(fixo);
@@ -122,6 +126,7 @@ function calc(){
  <div><span>Repasse à dona do espaço (${c.rp}%)</span><b>${R(c.repR)}</b></div>
  <div><span>Taxas e impostos (${c.tx}%)</span><b>${R(c.taxas)}</b></div>
  <div><span>Seu lucro líquido (${c.mg}%)</span><b class="ok">${R(c.lucro)}</b></div></div>
+ ${c.cob?`<div class="bd" style="margin-top:12px;border-top:1px solid var(--rosa);padding-top:8px"><div><span>Cobrando hoje</span><b>${R(c.cob)}</b></div><div><span>Para a dona (${c.rp}%)</span><b>${R(c.cobRep)}</b></div><div><span>Taxas (${c.tx}%)</span><b>${R(c.cob*c.tx/100)}</b></div><div><span>Seus custos</span><b>${R(c.custo)}</b></div><div><span>Sobra para você</span><b class="${c.cobLucro>=0?'ok':''}" style="${c.cobLucro<0?'color:var(--nok)':''}">${R(c.cobLucro)} (${(c.cobLucro/c.cob*100).toFixed(0)}%)</b></div></div>`:''}
  ${it.t=='s'&&!fixo?'<div class="warn" style="color:var(--gold)">Preencha seus gastos fixos para um cálculo completo.</div>':''}`;
  save()}
 /* ── Sincronização com a planilha ── */
@@ -130,7 +135,7 @@ const cfgNow=()=>({dias:N('dias'),horas:N('horas'),margem:N('margem'),taxa:N('ta
 function sync(){clearTimeout(tm);setSt('Alterações pendentes…');tm=setTimeout(push,1500)}
 async function push(){
  const ch=window._ch||0;
- const linhas=D.itens.map(it=>{const c=itemCalc(it,ch);return[it.n,it.t=='p'?'Produto':'Procedimento',it.t=='s'?(it.min||0):'',c.vari,c.rateio,c.custo,c.rp,c.mg,c.tx,c.preco,c.repR,c.taxas,c.lucro]});
+ const linhas=D.itens.map(it=>{const c=itemCalc(it,ch);return[it.n,it.t=='p'?'Produto':'Procedimento',it.t=='s'?(it.min||0):'',c.vari,c.rateio,c.custo,c.rp,c.mg,c.tx,c.preco,c.repR,c.taxas,c.lucro,c.cob||'',c.cob?c.cobRep:'',c.cob?c.cobLucro:'']});
  try{
   const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'salvarPrecificacao',data:{state:{fixos:D.fixos,sel:D.sel,itens:D.itens,cfg:cfgNow()},linhas,custoHora:ch}})});
   const j=await r.json();
