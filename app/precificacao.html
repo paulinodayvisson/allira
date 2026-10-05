@@ -66,6 +66,7 @@ select option{background:var(--dark)}
   <button class="add" onclick="addItem()">+ Adicionar procedimento / produto</button>
 </div>
 
+<datalist id="vars"></datalist>
 <div class="card res" id="res"></div>
 
 <script>
@@ -101,9 +102,15 @@ function rItens(){
  <div><span class="lbl" style="color:var(--rosa)">Margem de lucro desejada (%) deste item</span><input type="number" inputmode="decimal" value="${it.mg??N('margem')}" oninput="D.itens[D.sel].mg=parseFloat(this.value)||0;calc()"></div></div><div class="g2" style="margin-top:8px"><div><span class="lbl">Preço que você cobra hoje (R$)</span><input type="number" inputmode="decimal" placeholder="opcional" value="${it.cobrado||''}" oninput="D.itens[D.sel].cobrado=parseFloat(this.value)||0;calc()"></div></div>
  <span class="lbl" style="margin:8px 0 0">Margem e repasse são por item. Ex.: cobrou R$ 40 e repassa 50% → R$ 20 para a dona.</span></div>
  <span class="lbl">${it.t=='s'?'Custos variáveis (materiais, descartáveis, comissão...)':'Custos do produto (compra, frete, embalagem...)'}</span>
- ${it.mats.map((m,j)=>`<div class="row"><input value="${esc(m.n)}" oninput="D.itens[D.sel].mats[${j}].n=this.value;save()"><input class="num" type="number" inputmode="decimal" placeholder="R$" value="${m.c||''}" oninput="D.itens[D.sel].mats[${j}].c=parseFloat(this.value)||0;calc()"><button class="x" onclick="D.itens[D.sel].mats.splice(${j},1);rItens();calc()">×</button></div>`).join('')}
+ ${it.mats.map((m,j)=>`<div class="row"><input list="vars" autocomplete="off" value="${esc(m.n)}" oninput="matName(${j},this)" onchange="rVars()"><input class="num" type="number" inputmode="decimal" placeholder="R$" value="${m.c||''}" oninput="D.itens[D.sel].mats[${j}].c=parseFloat(this.value)||0;calc()"><button class="x" onclick="D.itens[D.sel].mats.splice(${j},1);rItens();calc()">×</button></div>`).join('')}
  <button class="add" onclick="D.itens[D.sel].mats.push({n:'Novo custo',c:0});rItens()">+ Adicionar custo variável</button>
- <button class="del" onclick="if(confirm('Remover este item?')){D.itens.splice(D.sel,1);D.sel=0;rItens();calc()}">Remover item</button>`}
+ <div style="display:flex;gap:18px"><button class="del" style="color:var(--rosa)" onclick="dupItem()">⧉ Duplicar item</button>
+ <button class="del" onclick="if(confirm('Remover este item?')){D.itens.splice(D.sel,1);D.sel=0;rItens();calc()}">Remover item</button></div>`;rVars()}
+function varMap(){const m={};D.itens.forEach(it=>it.mats.forEach(x=>{const k=x.n.trim().toLowerCase();if(k&&(!m[k]||(x.c&&!m[k].c)))m[k]={n:x.n.trim(),c:x.c}}));return m}
+function rVars(){document.getElementById('vars').innerHTML=Object.values(varMap()).map(v=>`<option value="${esc(v.n)}">${v.c?R(v.c):''}</option>`).join('')}
+function matName(j,inp){const m=D.itens[D.sel].mats[j];m.n=inp.value;const v=varMap()[inp.value.trim().toLowerCase()];
+ if(v&&v.c&&!m.c){m.c=v.c;inp.closest('.row').querySelector('.num').value=v.c;calc()}else save()}
+function dupItem(){const it=D.itens[D.sel];if(!it)return;const c=JSON.parse(JSON.stringify(it));c.n=it.n+' (cópia)';D.itens.splice(D.sel+1,0,c);D.sel++;rItens();calc()}
 function addItem(){const n=document.getElementById('novoNome').value.trim();if(!n)return;D.itens.push({n,mg:N('margem'),t:document.getElementById('novoTipo').value,min:0,mats:[mat('Material',0)]});D.sel=D.itens.length-1;document.getElementById('novoNome').value='';rItens();calc()}
 function itemCalc(it,ch){
  const mg=it.mg??N('margem'),tx=N('taxa'),rp=it.rep??N('repPad'),cob=it.cobrado||0,div=1-(mg+tx+rp)/100;
