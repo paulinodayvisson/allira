@@ -58,9 +58,10 @@ select option{background:var(--dark)}
     <div><span class="lbl">Horas atendendo / dia</span><input type="number" id="horas" value="6" oninput="calc()"></div>
     <div><span class="lbl">Margem média desejada (%)</span><input type="number" id="margem" value="30" oninput="aplicarMargem()"></div>
     <div><span class="lbl">Taxas e impostos (%) cartão/NF</span><input type="number" id="taxa" value="5" oninput="calc()"></div>
+    <div style="grid-column:1/-1"><span class="lbl" style="color:var(--rosa)">Minha hora desejada (R$/h) — é o MEU ganho, não um custo</span><input type="number" id="horaMeta" value="0" oninput="calc()"></div>
     <div style="grid-column:1/-1"><span class="lbl">Repasse padrão à dona do espaço (% do valor cobrado)</span><input type="number" id="repPad" value="0" oninput="calc()"></div>
   </div>
-  <div class="tot"><span>Custo fixo por hora</span><b id="custoHora">R$ 0,00</b></div>
+  <div class="tot"><span>Gastos fixos por hora (aluguel, energia etc.)</span><b id="custoHora">R$ 0,00</b></div>
 </div>
 
 <div class="card"><h2>3 · Procedimento ou produto</h2>
@@ -124,8 +125,9 @@ function addItem(){const n=document.getElementById('novoNome').value.trim();if(!
 function itemCalc(it,ch){
  const mg=it.mg??N('margem'),tx=N('taxa'),rp=it.rep??N('repPad'),cob=it.cobrado||0,div=1-(mg+tx+rp)/100;
  const rateio=it.t=='s'?ch*((it.min||0)/60):0,vari=it.mats.reduce((a,m)=>a+m.c,0),custo=rateio+vari;
- const preco=div>0?custo/div:0;
- return{mg,tx,rp,div,rateio,vari,custo,preco,taxas:preco*tx/100,lucro:preco*mg/100,repR:preco*rp/100,cob,cobRep:cob*rp/100,cobLucro:cob-cob*rp/100-cob*tx/100-custo}}
+ const hh=it.t=='s'?(it.min||0)/60:0,hm=N('horaMeta'),ex=1-(tx+rp)/100;
+ let preco=div>0?custo/div:0;if(hm>0&&hh>0&&ex>0)preco=Math.max(preco,(custo+hm*hh)/ex);
+ return{mg,tx,rp,div,rateio,vari,custo,preco,hh,taxas:preco*tx/100,lucro:preco-preco*tx/100-preco*rp/100-custo,gh:hh>0?(preco-preco*tx/100-preco*rp/100-custo)/hh:null,repR:preco*rp/100,cob,cobRep:cob*rp/100,cobLucro:cob-cob*rp/100-cob*tx/100-custo}}
 function aplicarMargem(){const v=N('margem');D.itens.forEach(i=>i.mg=v);rItens();calc()}
 function calc(){
  if(D.itens.length){const m=document.getElementById('margem');if(document.activeElement!==m)m.value=+(D.itens.reduce((a,i)=>a+(i.mg??0),0)/D.itens.length).toFixed(1)}
@@ -143,7 +145,7 @@ function calc(){
  <div><span>Custo total</span><b>${R(c.custo)}</b></div>
  <div><span>Repasse à dona do espaço (${c.rp}%)</span><b>${R(c.repR)}</b></div>
  <div><span>Taxas e impostos (${c.tx}%)</span><b>${R(c.taxas)}</b></div>
- <div><span>Seu lucro líquido (${c.mg}%)</span><b class="ok">${R(c.lucro)}</b></div></div>
+ <div><span>Seu ganho / lucro (${P(c.preco?c.lucro/c.preco*100:0)})</span><b class="ok">${R(c.lucro)}</b></div>${c.gh!=null?`<div><span>Seu ganho por hora (sua remuneração)</span><b class="ok">${R(c.gh)}/h</b></div>`:''}</div>
  ${c.cob?`<div class="bd" style="margin-top:12px;border-top:1px solid var(--rosa);padding-top:8px"><div><span>Cobrando hoje</span><b>${R(c.cob)}</b></div><div><span>Para a dona (${c.rp}%)</span><b>${R(c.cobRep)}</b></div><div><span>Taxas (${c.tx}%)</span><b>${R(c.cob*c.tx/100)}</b></div><div><span>Seus custos</span><b>${R(c.custo)}</b></div><div><span>Sobra para você</span><b class="${c.cobLucro>=0?'ok':''}" style="${c.cobLucro<0?'color:var(--nok)':''}">${R(c.cobLucro)} (${(c.cobLucro/c.cob*100).toFixed(0)}%)</b></div></div>`:''}
  ${it.t=='s'&&!fixo?'<div class="warn" style="color:var(--gold)">Preencha seus gastos fixos para um cálculo completo.</div>':''}`;
  save()}
@@ -166,7 +168,8 @@ function analisar(){
  if(fg.length)add('ok','Folga para promoções e fidelização',fg.map(({e,f})=>`<b>${esc(e.it.n)}</b>: margem real ${P(e.mr)}. Dá para abrir mão de até <b>${R(f)}</b> por atendimento (combos, cortesia ou desconto de retorno) e ainda bater a meta.`).join('<br>'));
  // lucro por hora
  const L=E.filter(e=>e.lh!=null).sort((a,b)=>b.lh-a.lh);
- if(L.length>=2){const t=L[0],b=L[L.length-1];add('info','Quanto cada hora da agenda rende',`Melhor: <b>${esc(t.it.n)}</b> com ${R(t.lh)}/hora de lucro. Pior: <b>${esc(b.it.n)}</b> com ${R(b.lh)}/hora${b.lh<0?' (prejuízo)':''}. Priorize horários nobres para os itens do topo e reveja preço ou tempo dos últimos.`)}
+ if(L.length>=2){const t=L[0],b=L[L.length-1];const hm=N('horaMeta'),mh=L.reduce((a,e)=>a+e.lh,0)/L.length;
+  add(hm>0&&mh<hm?'warn':'info','Quanto a sua hora rende (ganho da profissional)',`Sua hora é remuneração, não custo: o ganho por hora é o que sobra para você. Média: <b>${R(mh)}/h</b>${hm>0?` (meta ${R(hm)}/h${mh<hm?', abaixo da meta':''})`:''}. Melhor: <b>${esc(t.it.n)}</b> com ${R(t.lh)}/h. Pior: <b>${esc(b.it.n)}</b> com ${R(b.lh)}/h${b.lh<0?' (prejuízo)':''}. Priorize horários nobres para os itens do topo.${hm>0?`<br>Cada <b>+R$ 10</b> na sua hora desejada eleva o preço médio dos serviços em ≈ <b>${R(10*L.reduce((a,e)=>a+e.it.min/60,0)/L.length/(1-(N('taxa')+L.reduce((a,e)=>a+e.c.rp,0)/L.length)/100))}</b>.`:''}`)}
  // materiais
  const mm={},tb=sum(e=>e.base);E.forEach(e=>e.it.mats.forEach(m=>{const k=m.n.trim().toLowerCase();if(k&&m.c>0){mm[k]=mm[k]||{n:m.n.trim(),s:0,q:0};mm[k].s+=m.c;mm[k].q++}}));
  const tm=Object.values(mm).sort((a,b)=>b.s-a.s).slice(0,3);
@@ -190,7 +193,7 @@ const cfgNow=()=>({dias:N('dias'),horas:N('horas'),margem:N('margem'),taxa:N('ta
 function sync(){clearTimeout(tm);setSt('Alterações pendentes…');tm=setTimeout(push,1500)}
 async function push(){
  const ch=window._ch||0;
- const linhas=D.itens.map(it=>{const c=itemCalc(it,ch);return[it.n,it.t=='p'?'Produto':'Procedimento',it.t=='s'?(it.min||0):'',c.vari,c.rateio,c.custo,c.rp,c.mg,c.tx,c.preco,c.repR,c.taxas,c.lucro,c.cob||'',c.cob?c.cobRep:'',c.cob?c.cobLucro:'']});
+ const linhas=D.itens.map(it=>{const c=itemCalc(it,ch);return[it.n,it.t=='p'?'Produto':'Procedimento',it.t=='s'?(it.min||0):'',c.vari,c.rateio,c.custo,c.rp,c.mg,c.tx,c.preco,c.repR,c.taxas,c.lucro,c.cob||'',c.cob?c.cobRep:'',c.cob?c.cobLucro:'',c.gh==null?'':c.gh]});
  try{
   const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'salvarPrecificacao',data:{state:{fixos:D.fixos,sel:D.sel,itens:D.itens,cfg:cfgNow(),hist:D.hist||[]},linhas,custoHora:ch}})});
   const j=await r.json();
