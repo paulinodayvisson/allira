@@ -35,6 +35,10 @@ select option{background:var(--dark)}
 .bd b{font-weight:500;color:var(--creme)}
 .ok{color:var(--ok)!important}.warn{font-size:.68rem;color:var(--nok);margin-top:10px}
 .del{background:none;border:none;color:var(--nok);font:inherit;font-size:.65rem;cursor:pointer;margin-top:10px}
+.ins{border-left:3px solid var(--rosa);background:rgba(255,255,255,.03);border-radius:8px;padding:11px 12px;margin-bottom:9px;font-size:.74rem;line-height:1.55;color:var(--mid)}
+.ins b{color:var(--creme);font-weight:500}.ins h3{font-size:.78rem;font-weight:500;color:var(--creme);margin-bottom:4px}
+.ins.ok{border-color:var(--ok)}.ins.warn{border-color:var(--gold)}.ins.bad{border-color:var(--nok)}
+.btn{background:var(--rosa);border:none;color:#fff;border-radius:10px;padding:12px;width:100%;font:inherit;font-size:.75rem;letter-spacing:.1em;cursor:pointer}
 </style>
 </head>
 <body>
@@ -68,6 +72,11 @@ select option{background:var(--dark)}
 
 <datalist id="vars"></datalist>
 <div class="card res" id="res"></div>
+<div class="card"><h2>4 · Insights estratégicos</h2>
+  <p class="sub" style="margin-bottom:10px">Cruza margens, custos, repasse e preços de todos os itens e sugere decisões.</p>
+  <button class="btn" onclick="analisar()">🔍 Analisar meu negócio</button>
+  <div id="ins" style="margin-top:14px"></div>
+</div>
 
 <script>
 const KEY='allira_precificacao_v1';
@@ -87,7 +96,7 @@ try{const s=localStorage.getItem(KEY);if(s)D=JSON.parse(s)}catch(e){}
 const R=v=>(isFinite(v)?v:0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const N=id=>parseFloat(document.getElementById(id).value)||0;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function save(){try{localStorage.setItem(KEY,JSON.stringify({...D,cfg:cfgNow()}))}catch(e){}if(window._ready)sync()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({...D,cfg:cfgNow()}))}catch(e){}if(window._ready){snap();sync()}}
 function rFixos(){document.getElementById('fixos').innerHTML=D.fixos.map((f,i)=>`<div class="row"><input value="${esc(f.n)}" oninput="D.fixos[${i}].n=this.value;save()"><input class="num" type="number" inputmode="decimal" placeholder="R$" value="${f.v||''}" oninput="D.fixos[${i}].v=parseFloat(this.value)||0;calc()"><button class="x" onclick="D.fixos.splice(${i},1);rFixos();calc()">×</button></div>`).join('')}
 function addFixo(){D.fixos.push({n:'Novo gasto',v:0});rFixos()}
 function rItens(){
@@ -138,6 +147,43 @@ function calc(){
  ${c.cob?`<div class="bd" style="margin-top:12px;border-top:1px solid var(--rosa);padding-top:8px"><div><span>Cobrando hoje</span><b>${R(c.cob)}</b></div><div><span>Para a dona (${c.rp}%)</span><b>${R(c.cobRep)}</b></div><div><span>Taxas (${c.tx}%)</span><b>${R(c.cob*c.tx/100)}</b></div><div><span>Seus custos</span><b>${R(c.custo)}</b></div><div><span>Sobra para você</span><b class="${c.cobLucro>=0?'ok':''}" style="${c.cobLucro<0?'color:var(--nok)':''}">${R(c.cobLucro)} (${(c.cobLucro/c.cob*100).toFixed(0)}%)</b></div></div>`:''}
  ${it.t=='s'&&!fixo?'<div class="warn" style="color:var(--gold)">Preencha seus gastos fixos para um cálculo completo.</div>':''}`;
  save()}
+/* ── Insights ── */
+const P=v=>v.toFixed(1).replace('.',',')+'%';
+function enrich(){const ch=window._ch||0;return D.itens.map(it=>{const c=itemCalc(it,ch);if(c.custo<=0||c.div<=0)return null;const base=it.cobrado>0?it.cobrado:c.preco,rep=base*c.rp/100,tx=base*c.tx/100,luc=base-rep-tx-c.custo;return{it,c,base,rep,tx,luc,mr:luc/base*100,cob:it.cobrado>0,lh:it.t=='s'&&it.min>0?luc/(it.min/60):null}}).filter(Boolean)}
+function snap(){const E=enrich();if(!E.length)return;const n=E.length,s=a=>a.reduce((x,y)=>x+y,0)/n;D.hist=(D.hist||[]).filter(x=>x.d!=new Date().toISOString().slice(0,10));D.hist.push({d:new Date().toISOString().slice(0,10),custo:s(E.map(e=>e.c.custo)),luc:s(E.map(e=>e.luc)),mr:s(E.map(e=>e.mr)),fixo:D.fixos.reduce((a,f)=>a+f.v,0)});D.hist=D.hist.slice(-90)}
+function analisar(){
+ snap();const E=enrich(),out=[],add=(k,t,x)=>out.push(`<div class="ins ${k}"><h3>${t}</h3>${x}</div>`);
+ if(!E.length){document.getElementById('ins').innerHTML='<p class="sub">Preencha custos e duração dos itens para analisar.</p>';return}
+ const n=E.length,sum=f=>E.reduce((a,e)=>a+f(e),0),mrM=sum(e=>e.mr)/n,mgM=sum(e=>e.it.mg??N('margem'))/n;
+ const abaixo=E.filter(e=>e.mr<(e.it.mg??N('margem'))-1);
+ add(mrM>=mgM-1?'ok':'warn','Resumo geral',`Margem real média <b>${P(mrM)}</b> contra meta média de <b>${P(mgM)}</b>. ${abaixo.length?`<b>${abaixo.length} de ${n}</b> itens estão abaixo da meta.`:'Todos os itens estão dentro da meta.'} (Itens sem "preço que cobra hoje" usam o preço sugerido.)`);
+ // reajustes
+ const rj=abaixo.filter(e=>e.cob).map(e=>({e,t:e.c.preco,d:e.c.preco/e.base-1})).sort((a,b)=>b.d-a.d).slice(0,5);
+ if(rj.length)add('warn','Reajustes para recuperar margem',rj.map(({e,t,d})=>{const fim=Math.ceil(t/5)*5;let m=`<b>${esc(e.it.n)}</b>: cobra ${R(e.base)}, margem real ${P(e.mr)} (meta ${e.it.mg??N('margem')}%). Ideal ${R(t)} (+${P(d*100)}). `;
+  if(d<=.08)m+=`Aumento discreto: vá direto para <b>${R(fim)}</b>.`;else{const s1=Math.max(e.base+5,Math.round(e.base*1.07/5)*5);m+=`Aumento grande: faça em 2 etapas, <b>${R(s1)}</b> agora (+${P((s1/e.base-1)*100)}) e <b>${R(fim)}</b> em ~60 dias. Reajustes até ~8% costumam passar despercebidos.`}return m}).join('<br><br>'));
+ // folga
+ const fg=E.filter(e=>e.cob&&e.mr>(e.it.mg??N('margem'))+8).map(e=>({e,f:e.luc-e.base*(e.it.mg??N('margem'))/100})).sort((a,b)=>b.f-a.f).slice(0,3);
+ if(fg.length)add('ok','Folga para promoções e fidelização',fg.map(({e,f})=>`<b>${esc(e.it.n)}</b>: margem real ${P(e.mr)}. Dá para abrir mão de até <b>${R(f)}</b> por atendimento (combos, cortesia ou desconto de retorno) e ainda bater a meta.`).join('<br>'));
+ // lucro por hora
+ const L=E.filter(e=>e.lh!=null).sort((a,b)=>b.lh-a.lh);
+ if(L.length>=2){const t=L[0],b=L[L.length-1];add('info','Quanto cada hora da agenda rende',`Melhor: <b>${esc(t.it.n)}</b> com ${R(t.lh)}/hora de lucro. Pior: <b>${esc(b.it.n)}</b> com ${R(b.lh)}/hora${b.lh<0?' (prejuízo)':''}. Priorize horários nobres para os itens do topo e reveja preço ou tempo dos últimos.`)}
+ // materiais
+ const mm={},tb=sum(e=>e.base);E.forEach(e=>e.it.mats.forEach(m=>{const k=m.n.trim().toLowerCase();if(k&&m.c>0){mm[k]=mm[k]||{n:m.n.trim(),s:0,q:0};mm[k].s+=m.c;mm[k].q++}}));
+ const tm=Object.values(mm).sort((a,b)=>b.s-a.s).slice(0,3);
+ if(tm.length)add('info','Materiais que mais pesam no resultado',tm.map(m=>`<b>${esc(m.n)}</b> (em ${m.q} ${m.q>1?'itens':'item'}): negociar <b>10%</b> de desconto libera <b>+${P(m.s*.1/tb*100)}</b> de margem (≈ ${R(m.s*.1/n)} por atendimento). Se subir 10%, você perde o mesmo.`).join('<br>'));
+ // fixos e escala
+ const fixo=D.fixos.reduce((a,f)=>a+f.v,0),S=E.filter(e=>e.it.t=='s'&&e.it.min>0);
+ if(fixo>0&&S.length){const ch=window._ch,d=N('dias'),hr=N('horas'),ch2=fixo/(d*(hr+1)),ms=S.reduce((a,e)=>a+e.it.min/60,0)/S.length,ct=S.reduce((a,e)=>a+e.base-e.rep-e.tx-e.c.vari,0)/S.length,pe=fixo/Math.max(ct,.01),cap=d*hr/ms,sh=S.reduce((a,e)=>a+e.c.rateio/e.base,0)/S.length*100;
+  add('info','Escalabilidade e gastos fixos',`Gastos fixos rateados pesam <b>${P(sh)}</b> do preço médio dos serviços. Atender <b>+1h por dia</b> baixa o custo fixo/hora de ${R(ch)} para ${R(ch2)} (<b>-${P((1-ch2/ch)*100)}</b>). Ponto de equilíbrio: cerca de <b>${Math.ceil(pe)} atendimentos/mês</b> para cobrir os fixos, ${P(pe/cap*100)} da sua capacidade (~${Math.floor(cap)} atendimentos/mês).`)}
+ // repasse
+ const tr=sum(e=>e.rep),tl=sum(e=>e.luc);
+ if(tr>0)add(tr>tl?'warn':'info','Impacto do repasse à dona do espaço',`O repasse leva <b>${P(tr/tb*100)}</b> do faturamento unitário e o seu lucro fica com <b>${P(tl/tb*100)}</b>${tr>tl?' — a dona recebe mais do que você sobra':''}. Cada <b>5 pontos</b> de repasse negociados valem <b>+5 pts</b> de margem (≈ ${R(tb*.05/n)} por atendimento).`);
+ // tendência
+ const H=(D.hist||[]),hoje=H[H.length-1],ant=H.filter(x=>x.d!=hoje.d)[0];
+ if(ant){const dc=(hoje.custo/ant.custo-1)*100,dl=ant.luc>0?(hoje.luc/ant.luc-1)*100:null,r0=ant.custo/Math.max(ant.luc,.01),r1=hoje.custo/Math.max(hoje.luc,.01),dt=new Date(ant.d+'T12:00').toLocaleDateString('pt-BR');
+  add(dl!=null&&dl>=dc?'ok':'bad','Tendência desde '+dt,`Custo médio por atendimento: <b>${dc>=0?'+':''}${P(dc)}</b>. Lucro médio: <b>${dl==null?'n/d':(dl>=0?'+':'')+P(dl)}</b>. Relação custo/lucro foi de ${r0.toFixed(2)} para ${r1.toFixed(2)}. ${dl!=null&&dl>=dc?'O lucro cresce mais rápido que os custos: boa base para escalar.':'Os custos crescem mais rápido que o lucro: revise preços ou materiais.'}`)}
+ else add('info','Tendência','O histórico começa hoje. O sistema guarda um registro por dia; volte após alguns dias e alterações para ver a evolução de custos e lucro em %.');
+ document.getElementById('ins').innerHTML=out.join('');save()}
 /* ── Sincronização com a planilha ── */
 let tm;const setSt=t=>{document.getElementById('st').textContent=t};
 const cfgNow=()=>({dias:N('dias'),horas:N('horas'),margem:N('margem'),taxa:N('taxa'),repPad:N('repPad')});
@@ -146,14 +192,14 @@ async function push(){
  const ch=window._ch||0;
  const linhas=D.itens.map(it=>{const c=itemCalc(it,ch);return[it.n,it.t=='p'?'Produto':'Procedimento',it.t=='s'?(it.min||0):'',c.vari,c.rateio,c.custo,c.rp,c.mg,c.tx,c.preco,c.repR,c.taxas,c.lucro,c.cob||'',c.cob?c.cobRep:'',c.cob?c.cobLucro:'']});
  try{
-  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'salvarPrecificacao',data:{state:{fixos:D.fixos,sel:D.sel,itens:D.itens,cfg:cfgNow()},linhas,custoHora:ch}})});
+  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'salvarPrecificacao',data:{state:{fixos:D.fixos,sel:D.sel,itens:D.itens,cfg:cfgNow(),hist:D.hist||[]},linhas,custoHora:ch}})});
   const j=await r.json();
   setSt(j.ok?'✓ Salvo na planilha às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'Erro ao salvar na planilha: '+(j.error||''));
  }catch(e){setSt('Sem conexão com a planilha — salvo apenas neste aparelho.')}}
 async function carregar(){
  try{
   const j=await (await fetch(API+'?action=getPrecificacao')).json();
-  if(j.ok&&j.data){const s=j.data;D={fixos:s.fixos,sel:s.sel||0,itens:s.itens};for(const k in s.cfg)document.getElementById(k).value=s.cfg[k];D.itens.forEach(i=>{if(i.mg==null)i.mg=N('margem')});rFixos();rItens();calc();setSt('✓ Dados carregados da planilha');return}
+  if(j.ok&&j.data){const s=j.data;D={fixos:s.fixos,sel:s.sel||0,itens:s.itens,hist:s.hist||[]};for(const k in s.cfg)document.getElementById(k).value=s.cfg[k];D.itens.forEach(i=>{if(i.mg==null)i.mg=N('margem')});rFixos();rItens();calc();setSt('✓ Dados carregados da planilha');return}
   setSt('Planilha ainda sem dados — preencha e salve automaticamente.');
  }catch(e){setSt('Sem conexão com a planilha — usando dados deste aparelho.')}}
 try{const c=JSON.parse(localStorage.getItem(KEY)).cfg;for(const k in c)document.getElementById(k).value=c[k]}catch(e){}
