@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Állira • Clientes</title>
+<meta name="theme-color" content="#1B2A6B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul:#1B2A6B;--rosa:#C9748A;--rosa-light:#e8a0b0;
+  --creme:#F5F0EB;--dark:#0D1225;--white:#FFF;
+  --border:rgba(201,116,138,.18);--border-dim:rgba(201,116,138,.09);
+  --text-dim:rgba(245,240,235,.45);--text-mid:rgba(245,240,235,.7);
+  --ok:#4ade80;--nok:#f87171;--warn:#fbbf24;--gold:#D4AF37;
+  --input-bg:rgba(27,42,107,.12);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dark);color:var(--creme);font-family:'Montserrat',sans-serif;font-weight:300;min-height:100dvh;overflow-x:hidden;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+header{position:fixed;top:0;left:0;right:0;z-index:200;padding:13px 20px;background:rgba(13,18,37,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-dim);display:flex;align-items:center;justify-content:space-between;}
+.logo-fallback{font-family:'Cormorant Garamond',serif;font-size:1.45rem;letter-spacing:.15em;}
+.logo-fallback span{color:var(--rosa);}
+.back{font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;border:1px solid var(--border-dim);border-radius:8px;padding:7px 12px;}
+.back:hover{border-color:var(--border);color:var(--creme);}
+main{padding:84px 16px 100px;max-width:900px;margin:0 auto;}
+h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(1.7rem,6vw,2.3rem);margin-bottom:4px;}
+h1 em{color:var(--rosa);font-style:italic;}
+.sub{font-size:.6rem;color:var(--text-dim);letter-spacing:.06em;margin-bottom:20px;}
+.sec-title{font-size:.54rem;letter-spacing:.35em;text-transform:uppercase;color:var(--text-dim);margin:22px 0 12px;display:flex;align-items:center;gap:10px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border-dim);}
+
+/* login */
+#login{max-width:360px;margin:60px auto;background:rgba(27,42,107,.1);border:1px solid var(--border);border-radius:20px;padding:26px 22px;}
+.inp,select{width:100%;background:var(--input-bg);border:1px solid var(--border-dim);border-radius:11px;padding:11px 13px;font-family:inherit;font-size:.72rem;color:var(--creme);outline:none;}
+.inp:focus,select:focus{border-color:var(--rosa);}
+select option{background:#111827;}
+.btn{background:linear-gradient(135deg,var(--azul),var(--rosa));border:none;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#fff;cursor:pointer;}
+.btn:disabled{opacity:.5;cursor:wait;}
+.btn.ghost{background:rgba(27,42,107,.15);border:1px solid var(--border-dim);color:var(--text-mid);}
+.btn.ghost.active{border-color:var(--rosa);color:var(--rosa);}
+
+/* resumo */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px;}
+.stat{background:rgba(27,42,107,.15);border:1px solid var(--border-dim);border-radius:13px;padding:12px;text-align:center;}
+.stat b{display:block;font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;}
+.stat span{font-size:.48rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);}
+.stat.alert b{color:var(--warn);}
+
+/* filtros */
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.filters .full{grid-column:1/-1;}
+.filters label{font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);display:block;margin-bottom:4px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+
+/* cards */
+.list{display:flex;flex-direction:column;gap:8px;}
+.card{background:rgba(17,24,39,.55);border:1px solid var(--border-dim);border-radius:14px;padding:14px 15px;cursor:pointer;transition:.2s;animation:fadeUp .3s ease both;}
+.card:hover{border-color:var(--border);transform:translateY(-1px);}
+.top{display:flex;align-items:center;gap:11px;}
+.av{width:38px;height:38px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,var(--azul),var(--rosa));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;}
+.nm{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-weight:500;}
+.meta{font-size:.56rem;color:var(--text-dim);letter-spacing:.1em;margin-top:2px;}
+.wpp{margin-left:auto;flex-shrink:0;width:34px;height:34px;border-radius:9px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.2);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:.9rem;}
+.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px;}
+.tag{font-size:.52rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:rgba(27,42,107,.2);border:1px solid var(--border-dim);color:var(--text-mid);}
+.tag.proc{background:rgba(201,116,138,.1);border-color:rgba(201,116,138,.3);color:var(--rosa-light);}
+.tag.agend{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);color:var(--ok);}
+.tag.warn{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.35);color:var(--warn);font-weight:500;}
+.empty{text-align:center;padding:28px 16px;font-size:.68rem;color:var(--text-dim);border:1px dashed var(--border-dim);border-radius:14px;}
+.loader{text-align:center;padding:36px;font-size:.68rem;color:var(--text-dim);}
+.ring{display:inline-block;width:28px;height:28px;border-radius:50%;border:2px solid var(--border-dim);border-top-color:var(--rosa);animation:spin .8s linear infinite;margin-bottom:8px;}
+.pager{display:flex;justify-content:center;gap:8px;margin-top:16px;}
+
+/* ficha (painel lateral) */
+#overlay{position:fixed;inset:0;background:rgba(5,8,18,.7);z-index:300;display:none;}
+#ficha{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--dark);border-left:1px solid var(--border);z-index:301;overflow-y:auto;padding:18px 16px 60px;transform:translateX(100%);transition:transform .3s;}
+#ficha.open{transform:none;}
+.fh{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.fh .close{margin-left:auto;background:none;border:1px solid var(--border-dim);border-radius:9px;color:var(--text-mid);width:34px;height:34px;cursor:pointer;font-size:1rem;}
+.box{background:rgba(27,42,107,.14);border:1px solid var(--border-dim);border-radius:14px;padding:13px 14px;margin-bottom:10px;}
+.box h3{font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--rosa);font-weight:500;margin-bottom:9px;}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;font-size:.7rem;}
+.kv small{display:block;font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);}
+.alerta{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);border-radius:12px;padding:10px 12px;font-size:.68rem;color:#fca5a5;margin-bottom:10px;line-height:1.5;}
+.prazo{display:flex;justify-content:space-between;align-items:center;font-size:.68rem;padding:7px 0;border-bottom:1px solid var(--border-dim);}
+.prazo:last-child{border:none;}
+.prazo .st{font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;}
+.st.ok{color:var(--ok);}.st.late{color:var(--warn);}
+.bar{height:5px;border-radius:5px;background:rgba(245,240,235,.08);overflow:hidden;margin-top:4px;}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--azul),var(--rosa));}
+
+/* timeline */
+.tl{position:relative;padding-left:18px;}
+.tl::before{content:'';position:absolute;left:5px;top:4px;bottom:4px;width:1px;background:var(--border);}
+.ev{position:relative;margin-bottom:12px;}
+.ev::before{content:'';position:absolute;left:-17px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--rosa);box-shadow:0 0 0 3px rgba(201,116,138,.15);}
+.ev .d{font-size:.52rem;letter-spacing:.14em;color:var(--text-dim);text-transform:uppercase;}
+.ev .p{font-family:'Cormorant Garamond',serif;font-size:1rem;margin:2px 0;}
+.ev details{font-size:.64rem;color:var(--text-mid);margin-top:4px;}
+.ev summary{cursor:pointer;color:var(--rosa-light);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;}
+.ev .det{margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;}
+.ev .det div b{color:var(--text-dim);font-weight:400;display:block;font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;}
+.ev a{color:var(--rosa-light);}
+.aviso{font-size:.6rem;color:var(--text-dim);line-height:1.5;}
+
+/* assistente */
+.chat{max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:9px;}
+.msg{font-size:.7rem;line-height:1.55;padding:9px 12px;border-radius:12px;max-width:92%;white-space:pre-wrap;}
+.msg.u{align-self:flex-end;background:rgba(201,116,138,.18);border:1px solid var(--border);}
+.msg.b{align-self:flex-start;background:rgba(27,42,107,.25);border:1px solid var(--border-dim);}
+.chatrow{display:flex;gap:7px;}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;}
+.chip{font-size:.52rem;letter-spacing:.06em;padding:5px 10px;border-radius:20px;border:1px solid var(--border-dim);background:none;color:var(--text-mid);cursor:pointer;font-family:inherit;}
+.chip:hover{border-color:var(--rosa);color:var(--rosa);}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:rgba(27,42,107,.95);border:1px solid var(--border);border-radius:12px;padding:11px 18px;font-size:.65rem;z-index:999;opacity:0;transition:.3s;pointer-events:none;}
+.toast.show{opacity:1;}
+@media(min-width:700px){.list{display:grid;grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo-fallback">Áll<span>i</span>ra</span>
+  <a class="back" href="homeadm.html">‹ Painel</a>
+</header>
+
+<main>
+  <!-- LOGIN (mesma sessão do painel) -->
+  <div id="login" style="display:none">
+    <div class="sec-title" style="margin-top:0">Acesso profissional</div>
+    <input class="inp" id="lu" placeholder="Usuário" style="margin-bottom:8px">
+    <input class="inp" id="lp" type="password" placeholder="Senha" style="margin-bottom:12px">
+    <button class="btn" style="width:100%" onclick="entrar()">Entrar</button>
+  </div>
+
+  <div id="app" style="display:none">
+    <h1>Minhas <em>Clientes</em></h1>
+    <div class="sub">Jornada, histórico e retorno de cada cliente</div>
+
+    <div class="stats">
+      <div class="stat"><b id="s-total">–</b><span>Clientes</span></div>
+      <div class="stat alert"><b id="s-contato">–</b><span>Para contatar</span></div>
+      <div class="stat"><b id="s-agend">–</b><span>Com agenda</span></div>
+    </div>
+
+    <div class="sec-title">Filtros</div>
+    <div class="filters">
+      <div class="full"><label>Nome, CPF ou telefone</label><input class="inp" id="f-q" placeholder="Buscar..." oninput="aplicar()"></div>
+      <div><label>Último procedimento — de</label><input class="inp" type="date" id="f-de" onchange="aplicar()"></div>
+      <div><label>até</label><input class="inp" type="date" id="f-ate" onchange="aplicar()"></div>
+      <div class="full"><label>Procedimento</label>
+        <select id="f-proc" onchange="aplicar()"><option value="">Todos</option></select></div>
+    </div>
+    <div class="tabs">
+      <button class="btn ghost active" id="t-todas" onclick="aba('todas')">Todas</button>
+      <button class="btn ghost" id="t-contato" onclick="aba('contato')">⏰ Para contatar</button>
+      <button class="btn ghost" id="t-agend" onclick="aba('agend')">📅 Com agenda</button>
+    </div>
+
+    <div class="list" id="list"><div class="loader" style="grid-column:1/-1"><div class="ring"></div><br>Carregando clientes...</div></div>
+    <div class="pager" id="pager"></div>
+  </div>
+</main>
+
+<div id="overlay" onclick="fechar()"></div>
+<aside id="ficha"></aside>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══ CONFIG (mesma URL e credenciais do homeadm.html) ══ */
+const API = 'https://script.google.com/macros/s/AKfycbyVdcUAiI2IXAaEnBA_A3aBTmGd9QnxzO7_Tv-HAjO6ZjdD41n36yqB1dGHwKeP53Js/exec';
+const AUTH = { user:'allira', pass:'lashbrow2026' };
+const SESSION_KEY = 'allira_adm_auth';
+const POR_PAGINA = 12;
+
+let clientes = [], filtrados = [], intervalos = {}, pagina = 0, modo = 'todas';
+let chatHist = [], cpfAtual = '';
+
+/* ══ UTILS ══ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dig = s => String(s||'').replace(/\D/g,'');
+const cpf11 = s => dig(s).padStart(11,'0');
+function fmtCPF(c){c=cpf11(c);return c.slice(0,3)+'.'+c.slice(3,6)+'.'+c.slice(6,9)+'-'+c.slice(9);}
+function parseBR(s){ // dd/MM/yyyy[ HH:mm] ou yyyy-MM-dd
+  s=String(s||'');let m=s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+  if(m) return new Date(+m[3],+m[2]-1,+m[1]);
+  m=s.match(/^(\d{4})-(\d{2})-(\d{2})/); if(m) return new Date(+m[1],+m[2]-1,+m[3]);
+  return null;
+}
+const fmtDt = d => d? String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear() : '—';
+const hoje0 = () => { const d=new Date(); d.setHours(0,0,0,0); return d; };
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+async function api(params){
+  try{ const r=await fetch(API+'?'+new URLSearchParams(params)); return await r.json(); }
+  catch(e){ return {ok:false,error:String(e)}; }
+}
+async function apiPost(body){
+  try{ // sem Content-Type: evita preflight no Apps Script
+    const r=await fetch(API,{method:'POST',body:JSON.stringify(body)}); return await r.json(); }
+  catch(e){ return {ok:false,error:String(e)}; }
+}
+
+/* ══ AUTH ══ */
+function entrar(){
+  if($('lu').value.trim()===AUTH.user && $('lp').value===AUTH.pass){ localStorage.setItem(SESSION_KEY,'1'); iniciar(); }
+  else toast('Usuário ou senha incorretos');
+}
+function iniciar(){ $('login').style.display='none'; $('app').style.display='block'; carregar(); }
+if(localStorage.getItem(SESSION_KEY)) iniciar(); else $('login').style.display='block';
+$('lp').addEventListener('keydown',e=>{if(e.key==='Enter')entrar();});
+
+/* ══ CARGA + INTELIGÊNCIA ══ */
+async function carregar(){
+  const [rc, ra, rh, ri] = await Promise.all([
+    api({action:'listarClientes'}), api({action:'listarAgendamentos'}),
+    api({action:'listarHistoricoResumo'}), api({action:'getIntervalos'})
+  ]);
+  if(!rc.ok){ $('list').innerHTML='<div class="empty" style="grid-column:1/-1">Erro ao carregar clientes: '+esc(rc.error||'')+'</div>'; return; }
+  intervalos = (ri&&ri.intervalos)||{};
+  const agends = (ra.ok&&ra.agendamentos)||[];
+  const hist   = (rh.ok&&rh.historico)||[];
+  const semHistoricoBackend = !rh.ok; // backend v12 ainda não publicado
+
+  const hoje = hoje0();
+  const futMap={}, passMap={}, ultMap={};
+  agends.forEach(a=>{
+    const c=cpf11(a.cpf), d=parseBR(a.data); if(!d) return;
+    if(d>=hoje){ if(!futMap[c]||d<parseBR(futMap[c].data)) futMap[c]=a; }
+    else { if(!passMap[c]||d>parseBR(passMap[c].data)) passMap[c]=a; }
+  });
+  // último atendimento por procedimento (histórico real)
+  hist.forEach(h=>{
+    const c=cpf11(h.cpf), d=parseBR(h.dataHora); if(!d) return;
+    ultMap[c]=ultMap[c]||{};
+    h.procedimentos.forEach(p=>{ if(!ultMap[c][p]||d>ultMap[c][p]) ultMap[c][p]=d; });
+  });
+
+  clientes = rc.clientes.map(c=>{
+    const k=cpf11(c.cpf), procs=ultMap[k]||{};
+    const lista = Object.keys(procs).map(p=>{
+      const dias=Math.floor((hoje-procs[p])/86400000), lim=intervalos[p]||30;
+      return {proc:p,data:procs[p],dias,lim,atrasado:dias>=lim};
+    }).sort((a,b)=>b.dias-a.dias);
+    // último procedimento geral: histórico → senão agendamento passado
+    let ultimo = null;
+    if(lista.length){ const r=[...lista].sort((a,b)=>a.dias-b.dias)[0]; ultimo={proc:r.proc,data:r.data}; }
+    else if(passMap[k]) ultimo={proc:passMap[k].procedimentos,data:parseBR(passMap[k].data),viaAgenda:true};
+    const fut=futMap[k]||null;
+    return {
+      nome:c.nome||'', cpf:k, telefone:c.telefone||'', nascimento:c.nascimento||'',
+      ultimo, porProc:lista, fut,
+      contato: !fut && lista.some(x=>x.atrasado),
+      maxAtraso: Math.max(0,...lista.filter(x=>x.atrasado).map(x=>x.dias-x.lim))
+    };
+  });
+
+  // opções do filtro de procedimento
+  const procs=new Set(Object.keys(intervalos)); hist.forEach(h=>h.procedimentos.forEach(p=>procs.add(p)));
+  $('f-proc').innerHTML='<option value="">Todos</option>'+[...procs].map(p=>`<option>${esc(p)}</option>`).join('');
+
+  $('s-total').textContent=clientes.length;
+  $('s-contato').textContent=clientes.filter(c=>c.contato).length;
+  $('s-agend').textContent=clientes.filter(c=>c.fut).length;
+  if(semHistoricoBackend) toast('Atualize o Apps Script para a v12 (histórico indisponível)');
+  aplicar();
+}
+
+function aba(m){
+  modo=m; ['todas','contato','agend'].forEach(x=>$('t-'+x).classList.toggle('active',x===m));
+  pagina=0; aplicar();
+}
+
+function aplicar(){
+  const q=$('f-q').value.toLowerCase().trim(), qd=dig(q);
+  const de=$('f-de').value?parseBR($('f-de').value):null;
+  const ate=$('f-ate').value?parseBR($('f-ate').value):null;
+  const pf=$('f-proc').value;
+  filtrados = clientes.filter(c=>{
+    if(q && !(c.nome.toLowerCase().includes(q) || (qd && (c.cpf.includes(qd)||dig(c.telefone).includes(qd))))) return false;
+    if(modo==='contato' && !c.contato) return false;
+    if(modo==='agend' && !c.fut) return false;
+    if(pf){
+      const r=c.porProc.find(x=>x.proc===pf); if(!r) return false;
+      if(de && r.data<de) return false; if(ate && r.data>ate) return false;
+    } else if(de||ate){
+      if(!c.ultimo||!c.ultimo.data) return false;
+      if(de && c.ultimo.data<de) return false; if(ate && c.ultimo.data>ate) return false;
+    }
+    return true;
+  });
+  filtrados.sort((a,b)=>{
+    if(modo==='contato') return b.maxAtraso-a.maxAtraso;
+    const da=a.ultimo&&a.ultimo.data, db=b.ultimo&&b.ultimo.data;
+    if(da&&db) return db-da; if(da) return -1; if(db) return 1;
+    return a.nome.localeCompare(b.nome,'pt-BR');
+  });
+  pagina=Math.min(pagina,Math.max(0,Math.ceil(filtrados.length/POR_PAGINA)-1));
+  render();
+}
+
+function msgRetorno(c){
+  const r=c.porProc.find(x=>x.atrasado)||{proc:'seu procedimento'};
+  return `Olá, ${c.nome.split(' ')[0]}! 🌸\n\nJá faz um tempinho desde o seu *${r.proc}* aqui no estúdio Állira Lash & Brow. Que tal agendarmos a sua manutenção? ✨`;
+}
+
+function render(){
+  const el=$('list');
+  if(!filtrados.length){ el.innerHTML='<div class="empty" style="grid-column:1/-1">Nenhuma cliente encontrada.</div>'; $('pager').innerHTML=''; return; }
+  const fatia=filtrados.slice(pagina*POR_PAGINA,(pagina+1)*POR_PAGINA);
+  el.innerHTML=fatia.map((c,i)=>{
+    const tel=dig(c.telefone);
+    const wpp=tel?`https://wa.me/55${tel}?text=${encodeURIComponent(c.contato?msgRetorno(c):'')}`:'#';
+    let tags='';
+    if(c.fut) tags+=`<span class="tag agend">📅 ${fmtDt(parseBR(c.fut.data))}${c.fut.hora?' às '+esc(c.fut.hora):''} · ${esc(c.fut.procedimentos)}</span>`;
+    if(c.ultimo) tags+=`<span class="tag proc">Último: ${esc(c.ultimo.proc)} · ${fmtDt(c.ultimo.data)}</span>`;
+    c.porProc.filter(x=>x.atrasado).slice(0,2).forEach(x=>{ tags+=`<span class="tag warn">⏰ ${esc(x.proc)} há ${x.dias} dias</span>`; });
+    return `<div class="card" style="animation-delay:${i*.03}s" onclick="abrir('${c.cpf}')">
+      <div class="top"><div class="av">${esc((c.nome||'?')[0].toUpperCase())}</div>
+      <div><div class="nm">${esc(c.nome)}</div><div class="meta">${fmtCPF(c.cpf)}</div></div>
+      <a class="wpp" href="${wpp}" target="_blank" rel="noopener" onclick="event.stopPropagation()">💬</a></div>
+      ${tags?`<div class="tags">${tags}</div>`:''}</div>`;
+  }).join('');
+  const tot=Math.ceil(filtrados.length/POR_PAGINA);
+  $('pager').innerHTML= tot<=1?'':
+    `<button class="btn ghost" ${pagina===0?'disabled':''} onclick="pagina--;render()">‹</button>
+     <span style="font-size:.6rem;color:var(--text-dim);align-self:center">${pagina+1} / ${tot}</span>
+     <button class="btn ghost" ${pagina>=tot-1?'disabled':''} onclick="pagina++;render()">›</button>`;
+}
+
+/* ══ FICHA DA CLIENTE ══ */
+const ROT = {olharFormato:'Formato do olhar',olharTamanho:'Tamanho',olharInclinacao:'Inclinação',olharDistancia:'Distância',olharProfundidade:'Profundidade',
+  cilDirecao:'Direção cílios',cilDensidade:'Densidade cílios',cilEspessura:'Espessura cílios',cilComp:'Comprimento cílios',cilEsp:'Espaçamento cílios',cilCresc:'Crescimento cílios',
+  sobAltura:'Altura sobrancelha',sobFormato:'Formato sobrancelha',sobEsp:'Espessura sobrancelha',sobDens:'Densidade sobrancelha',sobArco:'Arco',
+  llCor:'Cor (lash lifting)',llMolde:'Molde',browCor:'Cor (brow)',designCor:'Cor (design)',hennaCor:'Cor (henna)',
+  extMapping:'Mapping',extTec:'Técnica',extCurvaturas:'Curvaturas',extEspessuras:'Espessuras',extTamanhos:'Tamanhos',obsGeral:'Observações',tempoTotal:'Tempo total'};
+
+async function abrir(cpf){
+  cpfAtual=cpf; chatHist=[];
+  const c=clientes.find(x=>x.cpf===cpf)||{nome:'',telefone:''};
+  $('overlay').style.display='block'; $('ficha').classList.add('open');
+  $('ficha').innerHTML=`<div class="fh"><div class="av">${esc((c.nome||'?')[0].toUpperCase())}</div>
+    <div><div class="nm">${esc(c.nome)}</div><div class="meta">${fmtCPF(cpf)}</div></div>
+    <button class="close" onclick="fechar()">✕</button></div>
+    <div class="loader"><div class="ring"></div><br>Carregando ficha...</div>`;
+  const f=await api({action:'getFichaCliente',cpf});
+  if(!f.ok){ $('ficha').innerHTML+=`<div class="alerta">Não foi possível carregar a ficha: ${esc(f.error||'')}</div>`; return; }
+  $('ficha').innerHTML=fichaHTML(c,f);
+  $('ficha').scrollTop=0;
+}
+function fechar(){ $('ficha').classList.remove('open'); $('overlay').style.display='none'; }
+
+function fichaHTML(c,f){
+  const a=f.anamnese, fid=f.fidelidade;
+  let h=`<div class="fh"><div class="av">${esc((c.nome||'?')[0].toUpperCase())}</div>
+    <div><div class="nm">${esc(c.nome)}</div><div class="meta">${fmtCPF(f.cpf)}</div></div>
+    <button class="close" onclick="fechar()">✕</button></div>`;
+
+  // alertas de saúde
+  if(a){
+    const av=[];
+    if(a.condicoesOculares&&a.condicoesOculares.length&&!a.condicoesOculares.includes('Nenhuma das acima')) av.push('Condições oculares: '+a.condicoesOculares.join(', '));
+    if(a.alergia) av.push('Alergia: '+(a.alergiaDetalhe||'sim'));
+    if(a.gestante) av.push('Gestante');
+    if(a.reacao) av.push('Reação anterior: '+(a.reacaoDet||'sim'));
+    if(a.lentesContato) av.push('Usa lentes de contato');
+    if(a.tireoide) av.push('Tireoide: '+(a.tireoideDet||'sim'));
+    if(av.length) h+=`<div class="alerta"><b>⚠️ Atenção</b><br>${av.map(esc).join('<br>')}</div>`;
+  }
+
+  // retorno
+  if(f.inteligencia&&f.inteligencia.length){
+    h+=`<div class="box"><h3>Retorno</h3>`+f.inteligencia.map(x=>
+      `<div class="prazo"><span>${esc(x.proc)}<br><small style="color:var(--text-dim);font-size:.52rem">último em ${x.ultimaData} · retorno a cada ${x.intervaloRecomendado} dias</small></span>
+       <span class="st ${x.precisaContato?'late':'ok'}">${x.diasDesde} dias${x.precisaContato?' · contatar':''}</span></div>`).join('')+`</div>`;
+  }
+  if(f.agendamentos.futuros.length){
+    h+=`<div class="box"><h3>Próximos agendamentos</h3>`+f.agendamentos.futuros.map(x=>
+      `<div class="prazo"><span>${esc(x.procedimentos)}</span><span class="st ok">${esc(x.data)} ${esc(x.hora)}</span></div>`).join('')+`</div>`;
+  }
+
+  // dados pessoais
+  h+=`<div class="box"><h3>Dados</h3><div class="kv">
+    <div><small>Telefone</small>${esc(c.telefone||(a&&a.telefone)||'—')}</div>
+    <div><small>Nascimento</small>${esc(a&&a.nascimento?fmtDt(parseBR(a.nascimento)):'—')}</div>
+    <div><small>Instagram</small>${esc((a&&a.instagram)||'—')}</div>
+    <div><small>Primeira vez</small>${a?(a.primeiraVez?'Sim':'Não'):'—'}</div>
+    <div style="grid-column:1/-1"><small>Objetivo</small>${esc((a&&a.objetivo)||'—')}</div>
+    ${a&&a.observacao?`<div style="grid-column:1/-1"><small>Observações da ficha</small>${esc(a.observacao)}</div>`:''}
+    ${a&&a.urlAnalise?`<div style="grid-column:1/-1"><a href="${esc(a.urlAnalise)}" target="_blank" rel="noopener" style="color:var(--rosa-light)">Abrir Análise do Olhar ↗</a></div>`:''}
+    </div></div>`;
+
+  // fidelidade
+  if(fid&&fid.pontosPorProc){
+    const itens=Object.keys(fid.pontosPorProc).filter(p=>fid.pontosPorProc[p]>0);
+    h+=`<div class="box"><h3>Fidelidade · ${fid.premiosGanhos||0} prêmio(s)</h3>`+(itens.length?itens.map(p=>{
+      const meta=(fid.metas&&fid.metas[p])||1, pts=fid.pontosPorProc[p];
+      return `<div style="margin-bottom:8px;font-size:.68rem">${esc(p)} <span style="float:right;color:var(--text-dim)">${pts}/${meta}</span>
+        <div class="bar"><i style="width:${Math.min(100,pts/meta*100)}%"></i></div></div>`;}).join(''):'<div class="aviso">Sem pontos ainda.</div>')+`</div>`;
+  }
+
+  // histórico
+  h+=`<div class="box"><h3>Jornada · histórico de atendimentos</h3>`;
+  if(!f.historico.length){
+    h+=`<div class="aviso">Nenhum atendimento no histórico. O histórico passa a ser gravado a cada atendimento salvo na Análise do Olhar a partir da atualização v12 — atendimentos anteriores não são recuperáveis.</div>`;
+  } else {
+    h+=`<div class="tl">`+f.historico.map(ev=>{
+      const d=ev.detalhes||{}; const campos=Object.keys(ROT).filter(k=>d[k]&&String(d[k]).trim()&&d[k]!==0);
+      const fotos=[d.urlFotoAntes&&['Antes',d.urlFotoAntes],d.urlFotoDepois&&['Depois',d.urlFotoDepois]].filter(Boolean);
+      return `<div class="ev"><div class="d">${esc(ev.dataHora)}${ev.profissional?' · '+esc(ev.profissional):''}</div>
+        <div class="p">${esc(ev.resumo||ev.procedimentos.join(', '))}</div>
+        ${(campos.length||fotos.length)?`<details><summary>Ver detalhes</summary><div class="det">
+          ${campos.map(k=>`<div><b>${ROT[k]}</b>${esc(d[k])}</div>`).join('')}
+          ${fotos.map(([t,u])=>`<div><b>Foto ${t}</b><a href="${esc(u)}" target="_blank" rel="noopener">abrir ↗</a></div>`).join('')}
+        </div></details>`:''}</div>`;}).join('')+`</div>`;
+  }
+  h+=`</div>`;
+
+  // assistente
+  h+=`<div class="box"><h3>✨ Assistente · insights da cliente</h3>
+    <div class="chips">
+      <button class="chip" onclick="perguntar('Gere insights sobre esta cliente: perfil, pontos de atenção, frequência e melhor abordagem para o próximo contato.')">Gerar insights</button>
+      <button class="chip" onclick="perguntar('Quais cuidados devo ter no próximo atendimento desta cliente?')">Cuidados</button>
+      <button class="chip" onclick="perguntar('Escreva uma mensagem de WhatsApp acolhedora convidando esta cliente para o retorno.')">Mensagem de retorno</button>
+    </div>
+    <div class="chat" id="chat"></div>
+    <div class="chatrow"><input class="inp" id="chat-in" placeholder="Pergunte algo sobre esta cliente..." onkeydown="if(event.key==='Enter')perguntar()">
+    <button class="btn" id="chat-btn" onclick="perguntar()">Enviar</button></div></div>`;
+  return h;
+}
+
+async function perguntar(texto){
+  const inp=$('chat-in'); const q=(texto||inp.value).trim(); if(!q) return;
+  inp.value=''; const chat=$('chat'), btn=$('chat-btn');
+  chat.insertAdjacentHTML('beforeend',`<div class="msg u">${esc(q)}</div>`);
+  const wait=document.createElement('div'); wait.className='msg b'; wait.textContent='Analisando...'; chat.appendChild(wait);
+  chat.scrollTop=chat.scrollHeight; btn.disabled=true;
+  const r=await apiPost({action:'assistenteCliente',cpf:cpfAtual,pergunta:q,history:chatHist.slice(-8)});
+  btn.disabled=false;
+  if(r.ok&&r.reply){ wait.textContent=r.reply; chatHist.push({role:'user',content:q},{role:'assistant',content:r.reply}); }
+  else wait.textContent='⚠️ '+(r.error||'Não consegui responder agora.');
+  chat.scrollTop=chat.scrollHeight;
+}
+</script>
+</body>
+</html>
