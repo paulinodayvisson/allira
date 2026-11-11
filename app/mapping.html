@@ -932,7 +932,7 @@ to{stroke-dashoffset:0;}}
         </div>
         <img class="foto-preview" id="fotoAntesPreview" alt="Antes">
       </div>
-      <input type="file" id="fotoAntes" accept="image/*" style="display:none" onchange="previewFoto(this,'fotoAntesPreview','fotoAntesPlaceholder','fotoAntesRemove','fotoAntesWrap')">
+      <div class="camera-actions"><button type="button" class="camera-open" onclick="event.stopPropagation();alliraCameraOpen('fotoAntes')">Tirar foto do antes</button></div><input type="file" id="fotoAntes" accept="image/*" style="display:none" onchange="previewFoto(this,'fotoAntesPreview','fotoAntesPlaceholder','fotoAntesRemove','fotoAntesWrap')">
       <button class="foto-remove-btn" id="fotoAntesRemove" onclick="removeFoto('fotoAntes','fotoAntesPreview','fotoAntesPlaceholder','fotoAntesRemove','fotoAntesWrap')">✕ Remover foto antes</button>
     </div>
 
@@ -1421,7 +1421,7 @@ to{stroke-dashoffset:0;}}
         </div>
         <img class="foto-preview" id="fotoDepoisPreview" alt="Depois">
       </div>
-      <input type="file" id="fotoDepois" accept="image/*" style="display:none" onchange="previewFoto(this,'fotoDepoisPreview','fotoDepoisPlaceholder','fotoDepoisRemove','fotoDepoisWrap')">
+      <div class="camera-actions"><button type="button" class="camera-open" onclick="event.stopPropagation();alliraCameraOpen('fotoDepois')">Tirar foto do depois</button></div><input type="file" id="fotoDepois" accept="image/*" style="display:none" onchange="previewFoto(this,'fotoDepoisPreview','fotoDepoisPlaceholder','fotoDepoisRemove','fotoDepoisWrap')">
       <button class="foto-remove-btn" id="fotoDepoisRemove" onclick="removeFoto('fotoDepois','fotoDepoisPreview','fotoDepoisPlaceholder','fotoDepoisRemove','fotoDepoisWrap')">✕ Remover foto depois</button>
     </div>
 
@@ -2576,5 +2576,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('fichaDate').textContent = new Date().toLocaleDateString('pt-BR');
 });
 </script>
-</body>
+<style>
+.camera-actions{display:flex;gap:9px;flex-wrap:wrap;margin:8px 0}.camera-open{border:1px solid #c9748a;background:rgba(201,116,138,.1);color:#c9748a;border-radius:8px;padding:10px 14px;font:600 12px Montserrat,Arial,sans-serif;cursor:pointer}.camera-modal{position:fixed;inset:0;z-index:20000;background:rgba(9,14,30,.86);display:none;align-items:center;justify-content:center;padding:18px}.camera-modal.open{display:flex}.camera-dialog{width:min(620px,100%);background:#fff;border-radius:14px;padding:16px;color:#202942}.camera-dialog video{width:100%;max-height:65vh;background:#111;border-radius:10px;object-fit:cover}.camera-dialog-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px}.camera-dialog-actions button{padding:11px 15px;border-radius:8px;border:1px solid #dfe3ec;background:#fff;color:#1b2a6b;font:600 12px Montserrat,Arial,sans-serif}.camera-dialog-actions .camera-capture{background:#1b2a6b;border-color:#1b2a6b;color:#fff}.camera-error{color:#9f3448;font-size:12px;margin-top:8px}@media(max-width:600px){.camera-dialog{padding:12px}.camera-dialog-actions button{flex:1}}
+</style>
+<div class="camera-modal" id="alliraCameraModal" role="dialog" aria-modal="true" aria-label="Tirar foto">
+<div class="camera-dialog"><video id="alliraCameraVideo" autoplay playsinline></video><div id="alliraCameraError" class="camera-error"></div><div class="camera-dialog-actions"><button type="button" onclick="alliraCameraClose()">Cancelar</button><button type="button" class="camera-capture" onclick="alliraCameraCapture()">Tirar foto</button></div></div></div>
+<script>
+let alliraCameraStream=null,alliraCameraTarget='';
+async function alliraCameraOpen(inputId){alliraCameraTarget=inputId;const modal=document.getElementById('alliraCameraModal'),video=document.getElementById('alliraCameraVideo'),error=document.getElementById('alliraCameraError');error.textContent='';if(!navigator.mediaDevices?.getUserMedia){error.textContent='A câmera não está disponível neste navegador. Use a opção de escolher uma foto.';modal.classList.add('open');return}try{alliraCameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});video.srcObject=alliraCameraStream;modal.classList.add('open');await video.play()}catch(e){modal.classList.add('open');error.textContent='Não foi possível abrir a câmera. Permita o acesso à câmera ou escolha uma foto do aparelho.'}}
+function alliraCameraClose(){if(alliraCameraStream){alliraCameraStream.getTracks().forEach(t=>t.stop());alliraCameraStream=null}const v=document.getElementById('alliraCameraVideo');if(v)v.srcObject=null;document.getElementById('alliraCameraModal')?.classList.remove('open')}
+function alliraCameraCapture(){const v=document.getElementById('alliraCameraVideo');if(!v||!v.videoWidth){document.getElementById('alliraCameraError').textContent='A câmera ainda está iniciando. Tente novamente.';return}const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0,c.width,c.height);c.toBlob(blob=>{if(!blob)return;const input=document.getElementById(alliraCameraTarget);try{const file=new File([blob],alliraCameraTarget+'_camera_'+Date.now()+'.jpg',{type:'image/jpeg'}),dt=new DataTransfer();dt.items.add(file);input.files=dt.files;input.dispatchEvent(new Event('change',{bubbles:true}));alliraCameraClose()}catch(e){document.getElementById('alliraCameraError').textContent='Este navegador não permitiu anexar a foto capturada. Use a galeria.'}},'image/jpeg',.9)}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')alliraCameraClose()});
+</script></body>
 </html>
