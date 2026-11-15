@@ -1203,6 +1203,49 @@ body::before { opacity:0 !important; }
 .hero-bg::before, .hero-grid, .floating-quote::before, #contato::before { background:none !important; }
 #pilares, #depoimentos { background:#FFFFFF !important; }
 .pilar-card, .valor-item, .dep-card { background:#FFFFFF !important; }
+
+/* Menu principal: navegação recolhida no botão sanduíche. */
+nav { isolation:isolate; }
+.nav-logo, .nav-toggle { position:relative; z-index:3; }
+.nav-toggle {
+  width:48px; height:48px; display:inline-flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:6px; padding:0;
+  color:#1B2A6B; background:rgba(255,255,255,.72);
+  border:1px solid rgba(27,42,107,.28); cursor:pointer;
+  transition:background .3s ease, color .3s ease, border-color .3s ease;
+}
+.nav-toggle:hover,.nav-toggle:focus-visible { color:#fff; background:#1B2A6B; border-color:#1B2A6B; outline:none; }
+.nav-toggle-line { width:20px; height:1px; background:currentColor; transition:transform .3s ease,opacity .2s ease; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-line:first-of-type { transform:translateY(3.5px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-line:nth-of-type(2) { opacity:0; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-line:last-of-type { transform:translateY(-3.5px) rotate(-45deg); }
+.nav-menu {
+  position:fixed; inset:0; z-index:1; display:flex; align-items:center; justify-content:center;
+  padding:120px 24px 36px; background:rgba(12,31,75,.98); backdrop-filter:blur(24px);
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .35s ease,visibility 0s linear .35s;
+}
+.nav-menu.is-open { opacity:1; visibility:visible; pointer-events:auto; transition:opacity .35s ease; }
+.nav-menu-inner { width:min(100%,560px); padding:40px 0; border-top:1px solid rgba(232,160,176,.72); border-bottom:1px solid rgba(232,160,176,.28); }
+#primary-navigation .nav-links { display:grid; gap:0; list-style:none; }
+#primary-navigation .nav-links a {
+  display:block; padding:18px 0; font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,7vw,3.4rem); line-height:1; letter-spacing:.02em;
+  text-transform:none; color:#fff !important; text-decoration:none; position:relative;
+}
+#primary-navigation .nav-links a::after { bottom:12px; background:#e8a0b0; }
+#primary-navigation .nav-links a:hover,#primary-navigation .nav-links a:focus-visible { color:#f0c8d4 !important; outline:none; }
+.nav-cta { display:inline-flex; align-items:center; justify-content:center; min-height:52px; margin-top:28px; padding:13px 28px; color:#fff; background:#C9748A; border-color:#C9748A; }
+.nav-cta:hover { color:#f0c8d4; background:transparent; border-color:#f0c8d4; }
+nav.menu-open { background:rgba(255,255,255,.97); backdrop-filter:blur(24px); }
+body.menu-open { overflow:hidden; }
+@media (max-width:768px) {
+  .nav-logo img { width:112px; }
+  .nav-menu { padding-top:96px; }
+  .nav-menu-inner { padding:24px 0; }
+  #primary-navigation .nav-cta { min-height:52px; padding:13px 28px !important; font-size:.7rem !important; }
+}
+@media (prefers-reduced-motion:reduce) { .nav-menu,.nav-toggle-line { transition:none; } }
 </style>
 </head>
 
@@ -1220,13 +1263,22 @@ body::before { opacity:0 !important; }
 <!-- NAV -->
 <nav id="nav">
   <a href="#" class="nav-logo" aria-label="ALLIRA, Lash e Brow"><img src="assets/allira-logo.png" alt="ALLIRA Lash &amp; Brow"></a>
-  <ul class="nav-links">
-    <li><a href="#manifesto">Sobre</a></li>
-    <li><a href="#procedimentos">Procedimentos</a></li>
-    <li><a href="#sobre">Ana Gabrielle</a></li>
-    <li><a href="#depoimentos">Depoimentos</a></li>
-  </ul>
-  <a href="#contato" class="nav-cta">Agendar</a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Abrir menu">
+    <span class="nav-toggle-line"></span>
+    <span class="nav-toggle-line"></span>
+    <span class="nav-toggle-line"></span>
+  </button>
+  <div class="nav-menu" id="primary-navigation" aria-hidden="true" inert>
+    <div class="nav-menu-inner">
+      <ul class="nav-links">
+        <li><a href="#manifesto">Sobre</a></li>
+        <li><a href="#procedimentos">Procedimentos</a></li>
+        <li><a href="#sobre">Ana Gabrielle</a></li>
+        <li><a href="#depoimentos">Depoimentos</a></li>
+      </ul>
+      <a href="#contato" class="nav-cta">Agendar meu olhar</a>
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -2143,6 +2195,43 @@ document.querySelectorAll('a, button, .proc-card, .pilar-card').forEach(el => {
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── MENU PRINCIPAL ─────────────────────────────────────────────────────
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
+const navMenuLinks = navMenu.querySelectorAll('a');
+
+function setNavigation(open) {
+  navToggle.setAttribute('aria-expanded', String(open));
+  navToggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  nav.classList.toggle('menu-open', open);
+  navMenu.classList.toggle('is-open', open);
+  navMenu.setAttribute('aria-hidden', String(!open));
+  navMenu.toggleAttribute('inert', !open);
+  document.body.classList.toggle('menu-open', open);
+
+  if (open) {
+    window.setTimeout(() => navMenuLinks[0].focus(), 100);
+  } else {
+    navToggle.focus();
+  }
+}
+
+navToggle.addEventListener('click', () => {
+  setNavigation(navToggle.getAttribute('aria-expanded') !== 'true');
+});
+
+navMenu.addEventListener('click', (event) => {
+  if (event.target === navMenu) setNavigation(false);
+});
+
+navMenuLinks.forEach((link) => link.addEventListener('click', () => setNavigation(false)));
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
+    setNavigation(false);
+  }
 });
 
 // ── REVEAL ON SCROLL ────────────────────────────────────────────────────
