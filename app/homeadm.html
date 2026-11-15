@@ -567,9 +567,6 @@ dashMenuButton.addEventListener('click', () => {
   setDashNavigation(dashMenuButton.getAttribute('aria-expanded') !== 'true');
 });
 dashMenuBackdrop.addEventListener('click', () => setDashNavigation(false));
-dashNavigation.querySelectorAll('a').forEach((link) => {
-  link.addEventListener('click', () => setDashNavigation(false, false));
-});
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && dashMenuButton.getAttribute('aria-expanded') === 'true') {
     setDashNavigation(false);
