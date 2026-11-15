@@ -70,6 +70,17 @@ header{
 .logo-img[data-failed="true"]~.logo-fallback{display:block;}
 .header-right{display:flex;align-items:center;gap:14px;}
 .header-tag{font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-dim);}
+#btn-dash-menu{
+  display:none;width:38px;height:38px;padding:0;border-radius:9px;
+  background:rgba(27,42,107,.16);border:1px solid var(--border-dim);color:var(--creme);
+  cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:4px;
+  transition:all .22s;
+}
+#btn-dash-menu:hover,#btn-dash-menu:focus-visible{border-color:var(--rosa);background:rgba(201,116,138,.12);outline:none;}
+.dash-menu-line{width:16px;height:1px;background:currentColor;transition:transform .25s ease,opacity .2s ease;}
+#btn-dash-menu[aria-expanded="true"] .dash-menu-line:first-child{transform:translateY(5px) rotate(45deg);}
+#btn-dash-menu[aria-expanded="true"] .dash-menu-line:nth-child(2){opacity:0;}
+#btn-dash-menu[aria-expanded="true"] .dash-menu-line:last-child{transform:translateY(-5px) rotate(-45deg);}
 #btn-logout{
   background:none;border:1px solid var(--border-dim);border-radius:8px;
   padding:6px 12px;font-family:'Montserrat',sans-serif;
@@ -139,13 +150,19 @@ main{padding-top:68px;min-height:100dvh;position:relative;z-index:1;}
 
 /* nav pills */
 .dash-nav{
-  display:flex;flex-wrap:wrap;gap:8px;
-  margin-bottom:26px;
-  animation:fadeUp .4s ease both;
+  position:fixed;z-index:190;top:63px;left:0;
+  width:min(360px,calc(100vw - 24px));height:calc(100dvh - 63px);
+  display:flex;flex-direction:column;flex-wrap:nowrap;gap:8px;
+  margin:0;padding:20px 16px 36px;overflow-y:auto;
+  background:rgba(13,18,37,.99);border-right:1px solid var(--border);
+  box-shadow:18px 0 44px rgba(0,0,0,.28);
+  transform:translateX(-105%);opacity:0;pointer-events:none;
+  transition:transform .3s ease,opacity .25s ease;
 }
+.dash-nav.is-open{transform:translateX(0);opacity:1;pointer-events:auto;}
 .dash-nav a,.dash-nav button{
   background:rgba(27,42,107,.12);border:1px solid var(--border-dim);
-  border-radius:12px;padding:10px 14px;
+  border-radius:12px;padding:13px 14px;min-height:48px;width:100%;
   text-decoration:none;
   font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:500;
   letter-spacing:.12em;text-transform:uppercase;
@@ -157,6 +174,10 @@ main{padding-top:68px;min-height:100dvh;position:relative;z-index:1;}
   background:linear-gradient(135deg,rgba(201,116,138,.12),rgba(27,42,107,.12));
   border-color:var(--border);color:var(--rosa-light);
 }
+.dash-nav a.site-link{margin-top:10px;}
+.dash-nav-backdrop{position:fixed;inset:63px 0 0;z-index:180;background:rgba(5,9,24,.54);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility 0s linear .25s;}
+.dash-nav-backdrop.is-open{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .25s ease;}
+body.dash-menu-open{overflow:hidden;}
 .nav-icon{font-size:.9rem;}
 
 /* greeting */
@@ -375,10 +396,14 @@ main{padding-top:68px;min-height:100dvh;position:relative;z-index:1;}
     <span class="logo-fallback">Áll<span>i</span>ra</span>
   </a>
   <div class="header-right">
+    <button id="btn-dash-menu" type="button" aria-expanded="false" aria-controls="dash-nav" aria-label="Abrir menu do painel">
+      <span class="dash-menu-line"></span><span class="dash-menu-line"></span><span class="dash-menu-line"></span>
+    </button>
     <span class="header-tag" id="header-tag">Área Profissional</span>
     <button id="btn-logout" onclick="logout()">Sair</button>
   </div>
 </header>
+<div class="dash-nav-backdrop" id="dash-nav-backdrop" aria-hidden="true"></div>
 
 <main>
 
@@ -404,7 +429,7 @@ main{padding-top:68px;min-height:100dvh;position:relative;z-index:1;}
 <div id="screen-dash" class="screen">
 
   <!-- nav rápida -->
-  <div class="dash-nav">
+  <nav class="dash-nav" id="dash-nav" aria-label="Navegação do painel" aria-hidden="true" inert>
     <a href="clientes.html">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
       Clientes
@@ -449,7 +474,7 @@ main{padding-top:68px;min-height:100dvh;position:relative;z-index:1;}
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
       allira.art
     </a>
-  </div>
+  </nav>
 
   <!-- saudação -->
   <div class="dash-greeting">
@@ -518,6 +543,38 @@ const API = 'https://script.google.com/macros/s/AKfycbyVdcUAiI2IXAaEnBA_A3aBTmGd
 // ── CREDENCIAIS DE ACESSO ──
 const SESSION_KEY = 'allira_adm_auth';
 const ADMIN_TOKEN_KEY = 'allira_admin_token';
+const dashMenuButton = document.getElementById('btn-dash-menu');
+const dashNavigation = document.getElementById('dash-nav');
+const dashMenuBackdrop = document.getElementById('dash-nav-backdrop');
+
+function setDashNavigation(open, restoreFocus = true) {
+  dashMenuButton.setAttribute('aria-expanded', String(open));
+  dashMenuButton.setAttribute('aria-label', open ? 'Fechar menu do painel' : 'Abrir menu do painel');
+  dashNavigation.classList.toggle('is-open', open);
+  dashNavigation.setAttribute('aria-hidden', String(!open));
+  dashNavigation.toggleAttribute('inert', !open);
+  dashMenuBackdrop.classList.toggle('is-open', open);
+  document.body.classList.toggle('dash-menu-open', open);
+
+  if (open) {
+    setTimeout(() => dashNavigation.querySelector('a').focus(), 80);
+  } else if (restoreFocus) {
+    dashMenuButton.focus();
+  }
+}
+
+dashMenuButton.addEventListener('click', () => {
+  setDashNavigation(dashMenuButton.getAttribute('aria-expanded') !== 'true');
+});
+dashMenuBackdrop.addEventListener('click', () => setDashNavigation(false));
+dashNavigation.querySelectorAll('a').forEach((link) => {
+  link.addEventListener('click', () => setDashNavigation(false, false));
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && dashMenuButton.getAttribute('aria-expanded') === 'true') {
+    setDashNavigation(false);
+  }
+});
 
 /* ══════════════════════════════════════════
    AUTENTICAÇÃO (sessionStorage — válido até fechar a aba)
@@ -547,11 +604,13 @@ async function fazerLogin() {
   } finally { btn.disabled = false; }
 }
 function logout() {
+  setDashNavigation(false, false);
   localStorage.removeItem(SESSION_KEY);
   localStorage.removeItem(ADMIN_TOKEN_KEY);
   document.getElementById('screen-dash').style.display = 'none';
   document.getElementById('screen-login').style.display = 'flex';
   document.getElementById('btn-logout').style.display = 'none';
+  dashMenuButton.style.display = 'none';
   document.getElementById('header-tag').textContent = 'Área Profissional';
 }
 
@@ -567,6 +626,7 @@ function abrirDash() {
   document.getElementById('screen-dash').style.display = 'block';
   document.getElementById('screen-dash').style.animation = 'slideUp .4s ease';
   document.getElementById('btn-logout').style.display = 'block';
+  dashMenuButton.style.display = 'inline-flex';
   document.getElementById('header-tag').textContent = 'Painel Administrativo';
   initDash();
 }
