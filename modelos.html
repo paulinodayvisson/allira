@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0D1225"><title>Modelos • Állira Lash & Brow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#1B2A6B;--rosa:#C9748A;--pink:#e8a0b0;--creme:#F5F0EB;--dark:#0D1225;--card:#111827;--line:rgba(201,116,138,.18);--muted:rgba(245,240,235,.52);--green:#4ade80;--gold:#D4AF37}
+*{box-sizing:border-box}body{margin:0;background:var(--dark);color:var(--creme);font-family:Montserrat,sans-serif;font-weight:300;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E")}
+header{height:66px;position:sticky;top:0;z-index:5;background:rgba(13,18,37,.95);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,48px)}
+.brand{font:500 1.5rem 'Cormorant Garamond';letter-spacing:.16em;color:var(--creme);text-decoration:none}.brand span{color:var(--rosa)}
+.head-actions{display:flex;gap:10px;align-items:center}.btn{border:1px solid var(--line);background:transparent;color:var(--creme);padding:10px 14px;font:500 .62rem Montserrat;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-decoration:none}.btn:hover{border-color:var(--rosa);color:var(--pink)}.btn.primary{background:linear-gradient(120deg,var(--rosa),var(--pink));color:white;border:0}
+main{position:relative;max-width:1280px;margin:auto;padding:48px clamp(16px,4vw,48px) 80px}.eyebrow{color:var(--rosa);font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;margin-bottom:12px}
+h1{font:400 clamp(2.5rem,6vw,4.2rem)/.95 'Cormorant Garamond';margin:0}h1 em{color:var(--rosa);font-style:italic}.intro{font-size:.72rem;line-height:1.9;color:var(--muted);max-width:620px;margin:16px 0 30px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:28px 0}.stat{background:rgba(27,42,107,.14);border:1px solid var(--line);padding:18px 20px}.stat small{display:block;color:var(--muted);font-size:.55rem;letter-spacing:.17em;text-transform:uppercase}.stat strong{display:block;font:400 2rem 'Cormorant Garamond';margin-top:5px;color:var(--pink)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0 20px}.toolbar input,.toolbar select{background:#111827;border:1px solid var(--line);color:var(--creme);padding:12px 14px;font:300 .72rem Montserrat;outline:none}.toolbar input{flex:1;min-width:220px}.toolbar select{min-width:160px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.candidate{background:rgba(17,24,39,.92);border:1px solid var(--line);overflow:hidden;transition:.25s}.candidate:hover{border-color:rgba(201,116,138,.5);transform:translateY(-3px)}.cover{height:220px;background:#171d30;position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;overflow:hidden}.cover img{width:100%;height:100%;object-fit:cover;min-width:0;cursor:pointer}.cover .empty{grid-column:1/-1;display:grid;place-items:center;color:var(--muted);font:italic 1.4rem 'Cormorant Garamond'}
+.status{position:absolute;top:12px;left:12px;background:rgba(13,18,37,.88);border:1px solid var(--line);padding:6px 9px;font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pink)}
+.card-body{padding:18px}.date{font-size:.55rem;color:var(--muted);letter-spacing:.1em}.name{font:500 1.65rem 'Cormorant Garamond';margin:5px 0 12px}.meta{font-size:.66rem;line-height:1.8;color:var(--muted);overflow-wrap:anywhere}.meta b{color:var(--creme);font-weight:500}.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.tag{border:1px solid var(--line);padding:5px 8px;color:var(--pink);font-size:.52rem}.card-actions{display:flex;gap:8px;margin-top:16px}.card-actions .btn{flex:1;text-align:center}
+.state{padding:50px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line);font-size:.72rem;line-height:1.8}.spinner{width:25px;height:25px;border:2px solid var(--line);border-top-color:var(--rosa);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}@keyframes spin{to{transform:rotate(360deg)}}
+.modal{display:none;position:fixed;inset:0;z-index:20;background:rgba(4,7,16,.92);padding:24px;overflow:auto}.modal.open{display:grid;place-items:center}.modal-box{width:min(900px,100%);background:#111827;border:1px solid var(--line);padding:24px;position:relative}.close{position:absolute;right:14px;top:12px;background:none;border:0;color:var(--creme);font-size:1.5rem;cursor:pointer}.modal h2{font:400 2rem 'Cormorant Garamond';margin:0 30px 16px 0}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}.detail{font-size:.68rem;line-height:1.8;color:var(--muted);overflow-wrap:anywhere}.detail b{display:block;color:var(--pink);font-size:.53rem;letter-spacing:.13em;text-transform:uppercase;font-weight:500}.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:22px}.gallery img{width:100%;aspect-ratio:1;object-fit:cover;cursor:zoom-in}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){main{padding-top:34px}.stats{gap:7px}.stat{padding:13px 10px}.stat strong{font-size:1.6rem}.grid{grid-template-columns:1fr}.cover{height:250px}.detail-grid{grid-template-columns:1fr}.gallery{grid-template-columns:repeat(2,1fr)}.head-actions .btn{padding:9px 10px;font-size:.52rem}}
+</style></head><body>
+<header><a class="brand" href="homeadm.html">ÁLLIRA<span>.</span></a><div class="head-actions"><a class="btn" href="homeadm.html">← Painel</a><button class="btn" onclick="carregar()">Atualizar</button></div></header>
+<main><div class="eyebrow">Painel administrativo · Banco de candidaturas</div><h1>Banco de <em>modelos</em></h1><p class="intro">Visualize as candidatas inscritas, consulte os dados enviados no formulário e analise as fotografias anexadas à candidatura.</p>
+<section class="stats"><div class="stat"><small>Total de candidatas</small><strong id="total">—</strong></div><div class="stat"><small>Novas candidaturas</small><strong id="novas">—</strong></div><div class="stat"><small>Com fotografias</small><strong id="comFotos">—</strong></div></section>
+<div class="toolbar"><input id="busca" placeholder="Buscar por nome, WhatsApp ou Instagram..." oninput="render()"><select id="filtro" onchange="render()"><option value="">Todos os status</option><option>Novo</option><option>Em análise</option><option>Aprovada</option><option>Recusada</option></select></div>
+<div id="lista" class="state"><div class="spinner"></div>Carregando candidaturas...</div></main>
+<div id="modal" class="modal" onclick="if(event.target===this)fecharModal()"><div class="modal-box"><button class="close" onclick="fecharModal()">×</button><div id="detalhe"></div></div></div>
+<script>
+const API="https://script.google.com/macros/s/AKfycbyVdcUAiI2IXAaEnBA_A3aBTmGd9QnxzO7_Tv-HAjO6ZjdD41n36yqB1dGHwKeP53Js/exec";
+const TOKEN_KEY='allira_admin_token';
+let candidatas=[];
+function token(){return sessionStorage.getItem(TOKEN_KEY)||localStorage.getItem(TOKEN_KEY)||''}
+async function carregar(){
+ const t=token();
+ if(!t){document.getElementById('lista').innerHTML='Sessão administrativa não encontrada. <a style="color:#e8a0b0" href="homeadm.html">Entre pelo painel administrativo</a> e acesse Modelos novamente.';return}
+ document.getElementById('lista').innerHTML='<div class="spinner"></div>Consultando a planilha...';
+ try{
+  const u=API+'?'+new URLSearchParams({action:'listarModelos',token:t});
+  const r=await fetch(u);const d=await r.json();
+  if(!d.ok){document.getElementById('lista').textContent=d.error||'Não foi possível consultar as candidaturas.';return}
+  candidatas=d.modelos||[];
+  document.getElementById('total').textContent=candidatas.length;
+  document.getElementById('novas').textContent=candidatas.filter(x=>(x.status||'Novo').toLowerCase()==='novo').length;
+  document.getElementById('comFotos').textContent=candidatas.filter(x=>x.fotos&&x.fotos.length).length;
+  render();
+ }catch(e){document.getElementById('lista').textContent='Falha na comunicação com o Apps Script: '+e.message}
+}
+function render(){
+ const q=document.getElementById('busca').value.toLowerCase(),f=document.getElementById('filtro').value;
+ const arr=candidatas.filter(x=>(!f||x.status===f)&&[x.nome,x.whatsapp,x.instagram,x.endereco,x.procedimentos].join(' ').toLowerCase().includes(q));
+ const el=document.getElementById('lista');
+ if(!arr.length){el.className='state';el.textContent=candidatas.length?'Nenhuma candidatura corresponde aos filtros.':'Ainda não há candidaturas registradas na aba 🌷 Modelos.';return}
+ el.className='grid';
+ el.innerHTML=arr.map((x)=>{const idx=candidatas.indexOf(x);const fotos=(x.fotos||[]).slice(0,3);return `<article class="candidate"><div class="cover">${fotos.length?fotos.map((u,i)=>`<img src="${esc(u)}" alt="Foto ${i+1} de ${esc(x.nome)}" onclick="abrir(${idx})" loading="lazy">`).join(''):'<div class="empty">Sem fotografias</div>'}<span class="status">${esc(x.status||'Novo')}</span></div><div class="card-body"><div class="date">${esc(x.data||'Data não informada')}</div><div class="name">${esc(x.nome||'Candidata sem nome')}</div><div class="meta"><b>WhatsApp:</b> ${esc(x.whatsapp||'—')}<br><b>Instagram:</b> ${esc(x.instagram||'—')}<br><b>Endereço:</b> ${esc(x.endereco||'—')}</div><div class="tags">${(x.procedimentos||'').split(',').filter(Boolean).map(p=>`<span class="tag">${esc(p.trim())}</span>`).join('')}</div><div class="card-actions"><button class="btn primary" onclick="abrir(${idx})">Ver candidatura</button></div></div></article>`}).join('');
+}
+function abrir(i){
+ const x=candidatas[i];if(!x)return;
+ const photos=(x.fotos||[]).map((u,n)=>`<img src="${esc(u)}" alt="Foto ${n+1}" onclick="window.open(this.src,'_blank')">`).join('');
+ document.getElementById('detalhe').innerHTML=`<div class="eyebrow">Candidatura recebida · ${esc(x.data||'')}</div><h2>${esc(x.nome)}</h2><div class="detail-grid"><div class="detail"><b>Endereço</b>${esc(x.endereco||'—')}</div><div class="detail"><b>WhatsApp</b>${esc(x.whatsapp||'—')}</div><div class="detail"><b>Instagram</b>${esc(x.instagram||'—')}</div><div class="detail"><b>Procedimentos de interesse</b>${esc(x.procedimentos||'—')}</div><div class="detail"><b>Consentimento de uso de imagem</b>${esc(x.consentimento||'—')}</div><div class="detail"><b>Status</b>${esc(x.status||'Novo')}</div><div class="detail"><b>Observações internas</b>${esc(x.observacoes||'Nenhuma')}</div></div><div class="gallery">${photos||'<p class="detail">Nenhuma foto cadastrada.</p>'}</div>`;
+ document.getElementById('modal').classList.add('open');
+}
+function fecharModal(){document.getElementById('modal').classList.remove('open')}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharModal()});
+carregar();
+</script></body></html>
