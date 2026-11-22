@@ -409,6 +409,99 @@ main { padding-top:72px;min-height:100dvh;position:relative;z-index:1; }
 
 @media(min-width:480px){#screen-busca,#screen-form,#screen-lista{padding-left:28px;padding-right:28px;}}
 @media(min-width:640px){main,header{max-width:560px;margin-left:auto;margin-right:auto;}header{left:50%;transform:translateX(-50%);width:100%;max-width:560px;}}
+@media(min-width:640px) and (max-width:899px){body.calendar-view main,body.calendar-view header{max-width:900px;width:calc(100% - 32px);margin-left:auto;margin-right:auto}body.calendar-view header{left:50%;transform:translateX(-50%)}body.calendar-view #screen-lista{max-width:860px;width:100%;padding-left:20px;padding-right:20px}body.calendar-view .ag-calendar{max-width:820px}}
+@media(min-width:900px){body.calendar-view main,body.calendar-view header{max-width:1320px;width:calc(100% - 48px);margin-left:auto;margin-right:auto}body.calendar-view header{left:50%;transform:translateX(-50%)}body.calendar-view #screen-lista{max-width:1280px;width:100%;padding-left:32px;padding-right:32px}body.calendar-view .ag-calendar{max-width:1220px}body.calendar-view .agcal-day{min-height:122px;padding:8px}body.calendar-view .agcal-event{font-size:.58rem;padding:5px 6px}body.calendar-view .agcal-grid{gap:6px}}
+
+/* CALENDÁRIO MENSAL */
+.ag-calendar{width:100%;max-width:1100px;margin:0 auto}
+.agcal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.agcal-title{font:500 1.5rem 'Cormorant Garamond',serif}
+.agcal-actions,.agcal-filters{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.agcal-actions button,.agcal-filters select,.agcal-filters input{background:rgba(27,42,107,.22);border:1px solid var(--border-dim);border-radius:8px;color:var(--creme);padding:9px 11px;font: .62rem Montserrat;cursor:pointer}
+.agcal-filters{margin-bottom:12px}
+.agcal-legend{display:flex;gap:13px;flex-wrap:wrap;margin:0 0 12px;color:var(--text-dim);font-size:.56rem}
+.agcal-legend span{display:flex;align-items:center;gap:5px}
+.agcal-legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.agcal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.agcal-week{text-align:center;color:var(--text-dim);font-size:.55rem;padding:8px 0}
+.agcal-day{min-height:112px;min-width:0;padding:6px;background:rgba(17,24,39,.55);border:1px solid var(--border-dim);border-radius:9px}
+.agcal-day.other{opacity:.35}.agcal-day.today{border-color:var(--rosa);background:rgba(201,116,138,.07)}
+.agcal-num{font-size:.62rem;color:var(--text-mid);margin-bottom:5px}
+.agcal-event{display:block;width:100%;text-align:left;border:0;border-radius:5px;padding:4px 5px;margin:3px 0;color:white;font:500 .5rem Montserrat;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.agcal-event.future{background:#8e496e}.agcal-event.remind{background:#956323}.agcal-event.past{background:#913f4a}
+.agcal-day{cursor:pointer;transition:border-color .18s,background .18s}.agcal-day:hover{border-color:rgba(201,116,138,.55)}.agcal-day.selected{border-color:var(--rosa);box-shadow:inset 0 0 0 1px rgba(201,116,138,.35);background:rgba(201,116,138,.12)}.agcal-day:focus-visible{outline:2px solid var(--rosa);outline-offset:2px}
+.agcal-day-markers{display:flex;gap:3px;margin-top:5px}.agcal-day-markers i{width:5px;height:5px;border-radius:50%;display:inline-block}
+.agcal-day-detail{margin-top:17px;padding:18px;border:1px solid var(--border-dim);border-radius:14px;background:rgba(13,18,37,.48);min-width:0}
+.agcal-detail-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:13px}
+.agcal-detail-date{font:500 1.2rem 'Cormorant Garamond',serif;color:var(--creme);text-transform:capitalize}.agcal-detail-count{font-size:.57rem;color:var(--text-dim)}
+.agcal-detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.agcal-detail-item{display:flex;align-items:flex-start;gap:11px;width:100%;min-width:0;text-align:left;padding:13px;border:1px solid var(--border-dim);border-radius:11px;background:rgba(27,42,107,.12);color:var(--creme);cursor:pointer;font:inherit}
+.agcal-detail-item:hover{border-color:var(--border)}.agcal-detail-time{flex:0 0 58px;color:var(--rosa-light);font-size:.72rem;font-weight:500;padding-top:1px}.agcal-detail-info{display:block;min-width:0}.agcal-detail-name{display:block;font-size:.72rem;font-weight:500;overflow-wrap:anywhere}.agcal-detail-proc{display:block;margin-top:4px;color:var(--text-dim);font-size:.58rem;line-height:1.55;overflow-wrap:anywhere}.agcal-detail-meta{display:block;margin-top:5px;color:var(--text-dim);font-size:.54rem;line-height:1.5;overflow-wrap:anywhere}
+.agcal-day-empty{padding:14px;border-radius:10px;background:rgba(27,42,107,.08);font-size:.65rem;line-height:1.6;color:var(--text-dim)}
+.agcal-empty{padding:25px;text-align:center;color:var(--text-dim);font-size:.7rem}
+.agcal-modal-bg{display:none;position:fixed;inset:0;background:#030714d9;z-index:900;align-items:center;justify-content:center;padding:16px}
+.agcal-modal-bg.open{display:flex}.agcal-modal{width:min(460px,100%);max-height:85vh;overflow:auto;background:#111a38;border:1px solid var(--border);border-radius:18px;padding:22px}
+.agcal-modal h3{font:500 1.5rem 'Cormorant Garamond',serif;margin-bottom:12px}
+.agcal-modal p{font-size:.7rem;color:var(--text-mid);line-height:1.7;margin:7px 0}
+.agcal-modal button,.agcal-modal a{display:inline-block;margin:12px 7px 0 0;background:rgba(201,116,138,.14);border:1px solid var(--border);border-radius:8px;color:var(--creme);padding:9px 13px;text-decoration:none;font: .62rem Montserrat;cursor:pointer}
+@media(max-width:700px){.agcal-detail-list{grid-template-columns:1fr}}
+@media(max-width:620px){.agcal-toolbar{align-items:flex-start}.agcal-actions{width:100%;justify-content:space-between}.agcal-actions button{padding:8px 9px}.agcal-filters select,.agcal-filters input{flex:1;min-width:0}.agcal-grid{gap:2px}.agcal-day{min-height:72px;padding:3px;border-radius:6px}.agcal-week{font-size:.48rem;padding:6px 0}.agcal-num{font-size:.58rem;margin-bottom:3px}.agcal-event{font-size:.39rem;padding:2px 3px;margin:2px 0}.agcal-day-markers{gap:2px;margin-top:4px}.agcal-day-markers i{width:4px;height:4px}.agcal-day-detail{padding:11px;margin-top:12px}.agcal-detail-date{font-size:1.05rem}.agcal-detail-item{padding:11px}.agcal-detail-time{flex-basis:48px;font-size:.66rem}.agcal-detail-name{font-size:.67rem}}
+@media(max-width:370px){.agcal-event{display:none}.agcal-day{min-height:58px}.agcal-num{font-size:.54rem}.agcal-week{font-size:.42rem}}
+
+
+
+/* CONTRASTE DOS CAMPOS DE SELEÇÃO DO CALENDÁRIO */
+.cal-filters select,
+.agcal-filters select {
+  color-scheme: dark;
+  color: #F5F0EB !important;
+  background-color: #111A38 !important;
+  border: 1px solid rgba(201,116,138,.42) !important;
+  border-radius: 9px;
+  min-height: 40px;
+  padding: 9px 34px 9px 12px !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: .68rem !important;
+  font-weight: 500 !important;
+  line-height: 1.3;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23F0C8D4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 11px center !important;
+  background-size: 14px 14px !important;
+  cursor: pointer;
+}
+.cal-filters select:focus,
+.agcal-filters select:focus {
+  outline: none;
+  border-color: #E8A0B0 !important;
+  box-shadow: 0 0 0 3px rgba(201,116,138,.18);
+}
+.cal-filters select option,
+.agcal-filters select option,
+.cal-filters select optgroup,
+.agcal-filters select optgroup {
+  color: #F5F0EB !important;
+  background-color: #111A38 !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+.cal-filters select option:checked,
+.agcal-filters select option:checked {
+  color: #FFFFFF !important;
+  background-color: #243580 !important;
+}
+@media(max-width:620px) {
+  .cal-filters select,
+  .agcal-filters select {
+    min-height: 42px;
+    font-size: .65rem !important;
+    padding-left: 10px !important;
+    padding-right: 30px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -565,13 +658,21 @@ main { padding-top:72px;min-height:100dvh;position:relative;z-index:1; }
       <p style="font-size:.62rem;color:var(--text-dim);margin-top:4px;">Todos os agendamentos registrados</p>
     </div>
 
-    <div class="tab-bar">
-      <button class="tab-btn active" id="tab-todos"    onclick="filtrarLista('todos')">Todos</button>
-      <button class="tab-btn"        id="tab-hoje"     onclick="filtrarLista('hoje')">Hoje</button>
-      <button class="tab-btn"        id="tab-proximos" onclick="filtrarLista('proximos')">Próximos</button>
+    <div class="ag-calendar">
+      <div class="agcal-toolbar">
+        <div class="agcal-title" id="agcal-title">Calendário</div>
+        <div class="agcal-actions"><button onclick="moverAgCal(-1)">‹ Anterior</button><button onclick="irHojeAgCal()">Hoje</button><button onclick="moverAgCal(1)">Próximo ›</button></div>
+      </div>
+      <div class="agcal-filters">
+        <select id="agcal-filter" onchange="renderAgCal()"><option value="all">Todos</option><option value="future">Futuros</option><option value="today">Hoje</option><option value="past">Datas passadas</option><option value="remind">Lembretes</option></select>
+        <input id="agcal-date" type="date" aria-label="Selecionar dia" onchange="selecionarDataAgCal(this.value)">
+      </div>
+      <div class="agcal-legend"><span><i style="background:#8e496e"></i>Agendamentos futuros</span><span><i style="background:#956323"></i>Lembretes</span><span><i style="background:#913f4a"></i>Datas passadas</span></div>
+      <div class="agcal-grid" id="agcal-grid"></div>
+      <section class="agcal-day-detail" id="agcal-day-detail" aria-live="polite" aria-label="Agendamentos do dia selecionado"></section>
+      <div id="lista-container" style="display:none"></div>
     </div>
-
-    <div id="lista-container"></div>
+    <div class="agcal-modal-bg" id="agcal-modal" onclick="if(event.target===this)fecharAgCal()"><div class="agcal-modal" id="agcal-modal-body"></div></div>
   </div>
 
 </main>
@@ -600,8 +701,8 @@ let sugIndex          = -1;    // navegação pelo teclado nas sugestões
 //  UTILS
 // ══════════════════════════════════════════════════════════════════════
 const $ = id => document.getElementById(id);
-function show(id){ $(id).style.display='block'; }
-function hide(id){ $(id).style.display='none'; }
+function show(id){ $(id).style.display='block'; if(id==='screen-lista'){document.body.classList.add('calendar-view');} }
+function hide(id){ $(id).style.display='none'; if(id==='screen-lista'){document.body.classList.remove('calendar-view');} }
 
 function toastMsg(msg, tipo='ok', ms=3200){
   const t=$('toast'), m=$('toast-msg');
@@ -908,8 +1009,9 @@ async function carregarProcedimentos(){
     const lista=(data&&Array.isArray(data.procedimentos)&&data.procedimentos.length)?data.procedimentos.map(p=>String(p).trim()).filter(Boolean):defaults.slice();
     const normalize=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
     if(!lista.some(p=>normalize(p)===normalize('Limpeza de pele')))lista.push('Limpeza de pele');
+    ['Manutenção de Brow Lamination','Manutenção de Extensão de Cílios'].forEach(p=>{if(!lista.some(x=>normalize(x)===normalize(p)))lista.push(p)});
     todosProcedimentos=lista;
-  }catch(e){todosProcedimentos=[...defaults,'Limpeza de pele']}
+  }catch(e){todosProcedimentos=[...defaults,'Limpeza de pele','Manutenção de Brow Lamination','Manutenção de Extensão de Cílios']}
   renderProcedimentos();
 }
 function renderProcedimentos(){
@@ -1027,6 +1129,7 @@ async function abrirLista(){
   try{
     const data=await scriptGet({ action:'listarAgendamentos' });
     todosAgendamentos=(data&&data.agendamentos)?data.agendamentos:[];
+    if(!$('agcal-date').value){agCalSelected=calAgISO(new Date());agCalDate=new Date();$('agcal-date').value=agCalSelected;}
     renderLista('todos');
   } catch(e){
     $('lista-container').innerHTML='<div class="empty-state"><div class="empty-icon">📅</div><p class="empty-text">Erro ao carregar. Verifique a conexão.</p></div>';
@@ -1043,11 +1146,14 @@ function dataParaISO(val){
   const s=String(val).trim();
   const iso=s.match(/^(\d{4}-\d{2}-\d{2})/);
   if(iso) return iso[1];
+  const br=s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if(br) return br[3]+"-"+br[2]+"-"+br[1];
   const d=new Date(s);
   if(!isNaN(d.getTime())) return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
   return s;
 }
 function renderLista(filtro){
+  renderAgCal(); return;
   const container=$('lista-container');
   const hojeStr=hojeISO();
   let lista=[...todosAgendamentos];
@@ -1095,6 +1201,40 @@ function renderLista(filtro){
     </div>`;
   }).join('');
 }
+
+
+let agCalDate=new Date();
+let agCalSelected=calAgISO(new Date());
+function moverAgCal(n){const current=new Date(agCalSelected+'T12:00:00');const target=new Date(agCalDate.getFullYear(),agCalDate.getMonth()+n,1);const day=Math.min(current.getDate(),new Date(target.getFullYear(),target.getMonth()+1,0).getDate());selecionarDiaAgCal(calAgISO(new Date(target.getFullYear(),target.getMonth(),day)))}
+function irHojeAgCal(){selecionarDiaAgCal(calAgISO(new Date()));$('agcal-filter').value='all'}
+function selecionarDataAgCal(v){if(v)selecionarDiaAgCal(v)}
+function selecionarDiaAgCal(iso){const d=new Date(iso+'T12:00:00');if(isNaN(d))return;agCalSelected=calAgISO(d);agCalDate=new Date(d.getFullYear(),d.getMonth(),1);$('agcal-date').value=agCalSelected;renderAgCal()}
+function renderAgCal(){
+ const grid=$('agcal-grid');if(!grid)return;
+ const y=agCalDate.getFullYear(),m=agCalDate.getMonth(),title=agCalDate.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});$('agcal-title').textContent=title.charAt(0).toUpperCase()+title.slice(1);
+ const filter=$('agcal-filter').value,today=hojeISO(),tomorrow=calAgISO(new Date(Date.now()+86400000)),start=new Date(y,m,1);start.setDate(1-start.getDay());
+ const days=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];grid.innerHTML=days.map(d=>`<div class="agcal-week">${d}</div>`).join('');
+ for(let i=0;i<42;i++){
+  const d=new Date(start);d.setDate(start.getDate()+i);const iso=calAgISO(d),events=[];
+  todosAgendamentos.forEach((a,index)=>{const date=dataParaISO(a.data);if(date!==iso)return;const past=date<today,remind=date===tomorrow;if(filter==='future'&&date<today||filter==='today'&&date!==today||filter==='past'&&!past||filter==='remind'&&!remind)return;events.push({a,index,type:past?'past':remind?'remind':'future',label:(a.hora?(formatHoraBR(a.hora)+' · '):'')+(a.nome||'Cliente')})});
+  const markers=[...new Set(events.map(e=>e.type))].map(t=>`<i style="background:${t==='future'?'#8e496e':t==='remind'?'#956323':'#913f4a'}"></i>`).join('');
+  grid.innerHTML+=`<div class="agcal-day ${d.getMonth()!==m?'other':''} ${iso===today?'today':''} ${iso===agCalSelected?'selected':''}" role="button" tabindex="0" aria-label="Selecionar ${iso.split('-').reverse().join('/')}" onclick="selecionarDiaAgCal('${iso}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selecionarDiaAgCal('${iso}')}" ><div class="agcal-num">${d.getDate()}</div>${events.slice(0,4).map(e=>`<button type="button" class="agcal-event ${e.type}" onclick="event.stopPropagation();abrirAgCalEvento(${e.index})" onkeydown="event.stopPropagation()">${escapeTxt(e.label)}</button>`).join('')}${events.length>4?`<div style="font-size:.48rem;color:var(--text-dim)">+${events.length-4} mais</div>`:''}<div class="agcal-day-markers">${markers}</div></div>`;
+ }
+ renderAgCalDayDetail();
+}
+function renderAgCalDayDetail(){
+ const el=$('agcal-day-detail');if(!el)return;const filter=$('agcal-filter').value,today=hojeISO(),tomorrow=calAgISO(new Date(Date.now()+86400000));
+ const d=new Date(agCalSelected+'T12:00:00'),label=d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+ const items=todosAgendamentos.map((a,index)=>({a,index,date:dataParaISO(a.data)})).filter(x=>{if(x.date!==agCalSelected)return false;const past=x.date<today,remind=x.date===tomorrow;if(filter==='future'&&past)return false;if(filter==='today'&&x.date!==today)return false;if(filter==='past'&&!past)return false;if(filter==='remind'&&!remind)return false;return true}).sort((a,b)=>(a.a.hora||'').localeCompare(b.a.hora||''));
+ el.innerHTML=`<div class="agcal-detail-head"><div class="agcal-detail-date">${label}</div><div class="agcal-detail-count">${items.length} ${items.length===1?'agendamento':'agendamentos'}</div></div>${items.length?`<div class="agcal-detail-list">${items.map(x=>`<button type="button" class="agcal-detail-item" onclick="abrirAgCalEvento(${x.index})"><span class="agcal-detail-time">${escapeTxt(formatHoraBR(x.a.hora||''))}</span><span class="agcal-detail-info"><span class="agcal-detail-name">${escapeTxt(x.a.nome||'Cliente')}</span><span class="agcal-detail-proc">${escapeTxt(x.a.procedimentos||'Procedimento não informado')}</span>${x.a.telefone?`<span class="agcal-detail-meta">Telefone: ${escapeTxt(x.a.telefone)}</span>`:''}${x.a.obs?`<span class="agcal-detail-meta">Observações: ${escapeTxt(x.a.obs)}</span>`:''}</span></button>`).join('')}</div>`:`<div class="agcal-day-empty">Nenhum agendamento registrado para este dia com o filtro selecionado.</div>`}`;
+}
+function calAgISO(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function abrirAgCalEvento(index){
+ const a=todosAgendamentos[index];if(!a)return;const tel=limparNumero(a.telefone||''),msg=encodeURIComponent(`Olá, ${(a.nome||'').split(' ')[0]}! 🌸 Lembrete do seu agendamento na Állira: ${formatDataBR(a.data)} às ${formatHoraBR(a.hora)}. Procedimento: ${a.procedimentos||''}.`);
+ $('agcal-modal-body').innerHTML=`<h3>${escapeTxt(a.nome||'Cliente')}</h3><p><b>Data:</b> ${formatDataBR(a.data)} às ${formatHoraBR(a.hora)}</p><p><b>Procedimentos:</b> ${escapeTxt(a.procedimentos||'—')}</p><p><b>Telefone:</b> ${escapeTxt(a.telefone||'—')}</p>${a.obs?`<p><b>Observações:</b> ${escapeTxt(a.obs)}</p>`:''}${tel?`<a target="_blank" rel="noopener" href="https://wa.me/${tel}?text=${msg}">Conversar no WhatsApp</a>`:''}<button onclick="fecharAgCal()">Fechar</button>`;
+ $('agcal-modal').classList.add('open');
+}
+function fecharAgCal(){$('agcal-modal').classList.remove('open')}
 
 async function confirmarExcluir(idx){
   if(!confirm('Excluir este agendamento?')) return;
