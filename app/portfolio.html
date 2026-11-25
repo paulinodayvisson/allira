@@ -617,85 +617,432 @@ const WPP_NUM         = '553172488204';
 /* ════════════════════════════════════════
    IMAGENS FALLBACK — Unsplash
 ════════════════════════════════════════ */
-const IMGS = {
-  cilios:      ['https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=400&q=80',
-                'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80',
-                'https://images.unsplash.com/photo-1519340241574-2cec6aef0c01?w=400&q=80'],
-  sobrancelha: ['https://images.unsplash.com/photo-1523263685509-57c1d050d19b?w=400&q=80',
-                'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&q=80',
-                'https://images.unsplash.com/photo-1526413232644-8a40f03cc03b?w=400&q=80'],
-  depilacao:   ['https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80',
-                'https://images.unsplash.com/photo-1559181567-c3190ca9be46?w=400&q=80',
-                'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400&q=80'],
-  combo:       ['https://images.unsplash.com/photo-1503236823255-94609f598e71?w=400&q=80',
-                'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=400&q=80',
-                'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&q=80'],
-};
-
 /* ════════════════════════════════════════
-   FALLBACK LOCAL (sem planilha)
-   — campo precoManut: valor da manutenção
+   FALLBACK INICIAL — espelho da aba Servicos
+   As URLs de imagem são as mesmas já cadastradas na planilha.
 ════════════════════════════════════════ */
 const SERVICOS_FALLBACK = [
-  {id:1,ativo:true,destaque:true,   categoria:'Cílios',      nome:'Lash Lifting',
-   descricao:'Levantamento natural dos cílios com efeito de olhar aberto e expressivo.',
-   descricaoCompleta:'Levantamento permanente dos cílios com efeito de olhar aberto e expressivo. Inclui nutrição e hidratação dos fios. Dura até 8 semanas sem precisar de rímel.',
-   preco:'R$ 120,00',precoManut:null,duracao:'1h30',durResult:'8 semanas',manutencao:'—',
-   tags:['Sem cola','Efeito natural','Até 8 sem'],fotos:IMGS.cilios,emoji:'👁'},
-
-  {id:2,ativo:true,destaque:true,   categoria:'Cílios',      nome:'Extensão Classic',
-   descricao:'Extensão fio a fio para um olhar sofisticado, natural e elegante.',
-   descricaoCompleta:'Aplicação de extensões fio a fio em cílios naturais para efeito delicado e elegante. Ideal para o cotidiano e eventos especiais.',
-   preco:'R$ 180,00',precoManut:'R$ 100,00',duracao:'2h',durResult:'4 semanas',manutencao:'Retoque em 3 semanas',
-   tags:['Fio a fio','Leveza','Durabilidade'],fotos:IMGS.cilios,emoji:'✨'},
-
-  {id:3,ativo:true,destaque:false,  categoria:'Cílios',      nome:'Volume Russo',
-   descricao:'Técnica de leque para cílios dramaticamente volumosos e impactantes.',
-   descricaoCompleta:'Extensão com técnica de leque para volume dramático e impactante. Múltiplas extensões por cílio natural com manutenção indicada a cada 3 semanas.',
-   preco:'R$ 220,00',precoManut:'R$ 130,00',duracao:'2h30',durResult:'3 semanas',manutencao:'Retoque em 3 semanas',
-   tags:['Mega volume','Leque 3D','Impactante'],fotos:IMGS.cilios,emoji:'💫'},
-
-  {id:4,ativo:true,destaque:true,   categoria:'Sobrancelha', nome:'Design de Sobrancelha',
-   descricao:'Mapeamento personalizado que valoriza o formato do seu rosto.',
-   descricaoCompleta:'Design completo com mapeamento facial para criar a sobrancelha ideal para cada rosto. Inclui hialuronização e finalização com sérum.',
-   preco:'R$ 60,00',precoManut:null,duracao:'45min',durResult:'3–4 sem',manutencao:'—',
-   tags:['Mapeamento','Personalizado','Natural'],fotos:IMGS.sobrancelha,emoji:'✏️'},
-
-  {id:5,ativo:true,destaque:false,  categoria:'Sobrancelha', nome:'Brow Lamination',
-   descricao:'Alinhamento e fixação dos fios para sobrancelhas penteadas e definidas.',
-   descricaoCompleta:'Técnica que alinha e fixa os fios das sobrancelhas para um look mais denso, uniforme e com aspecto penteado. Inclui hidratação dos fios.',
-   preco:'R$ 110,00',precoManut:null,duracao:'1h',durResult:'6 semanas',manutencao:'—',
-   tags:['Penteado','Fixação','Volume'],fotos:IMGS.sobrancelha,emoji:'🌿'},
-
-  {id:6,ativo:true,destaque:false,  categoria:'Sobrancelha', nome:'Henna',
-   descricao:'Coloração natural para preencher falhas e uniformizar a cor das sobrancelhas.',
-   descricaoCompleta:'Pigmentação à base de henna vegetal para preencher falhas e uniformizar a cor das sobrancelhas com resultado gradual e duradouro.',
-   preco:'R$ 50,00',precoManut:null,duracao:'40min',durResult:'3–4 sem',manutencao:'—',
-   tags:['Natural','Preenchimento','Sem químicos'],fotos:IMGS.sobrancelha,emoji:'🎨'},
-
-  {id:12,ativo:true,destaque:false,  categoria:'Lábios',      nome:'Spa Labial',
-   descricao:'Esfoliação e hidratação para lábios macios e saudáveis.',
-   descricaoCompleta:'Tratamento labial com esfoliação suave seguida de máscara hidratante, deixando os lábios macios, nutridos e com aspecto saudável.',
-   preco:'R$ 30,00',precoManut:null,duracao:'20min',durResult:'2–3 sem',manutencao:'—',
-   tags:['Hidratação','Esfoliação','Cuidado labial'],fotos:IMGS.sobrancelha,emoji:'💋'},
-
-  {id:13,ativo:true,destaque:false,  categoria:'Sobrancelha', nome:'Aplicação de Henna',
-   descricao:'Aplicação de henna para preenchimento complementar, sem alterar o design das sobrancelhas.',
-   descricaoCompleta:'Aplicação de henna vegetal para preencher falhas e uniformizar a cor das sobrancelhas, sem alterar o design. Resultado natural e duradouro.',
-   preco:'R$ 20,00',precoManut:null,duracao:'30min',durResult:'2–3 sem',manutencao:'—',
-   tags:['Aplicação','Preenchimento','Rápido'],fotos:IMGS.sobrancelha,emoji:'🌿'},
-
-  {id:7,ativo:true,destaque:false,  categoria:'Depilação',   nome:'Depilação de Buço',
-   descricao:'Remoção suave dos pelos do buço sem irritação.',
-   descricaoCompleta:'Remoção dos pelos do buço com linha ou cera específica para pele sensível. Rápido, higiênico e sem dor.',
-   preco:'R$ 25,00',precoManut:null,duracao:'15min',durResult:'2–3 sem',manutencao:'—',
-   tags:['Linha ou cera','Sem irritação','Rápido'],fotos:IMGS.depilacao,emoji:'🪷'},
-
-  {id:8,ativo:true,destaque:true,   categoria:'Combos',      nome:'Combo Olhar Perfeito',
-   descricao:'Lash Lifting + Design de Sobrancelha + Henna. Transformação completa do olhar.',
-   descricaoCompleta:'Pacote completo com Lash Lifting, Design de Sobrancelha e Henna. Transformação total do olhar em uma única sessão com economia especial.',
-   preco:'R$ 200,00',precoManut:null,duracao:'2h30',durResult:'6–8 sem',manutencao:'—',
-   tags:['3 em 1','Economia','Mais vendido'],fotos:IMGS.combo,emoji:'🌸'},
+  {
+    "id": 3,
+    "idOrigem": 1,
+    "ativo": true,
+    "destaque": true,
+    "categoria": "Cílios",
+    "emoji": "",
+    "nome": "Lash Lifting",
+    "descricao": "Levantamento natural dos cílios com efeito de olhar aberto e expressivo.",
+    "descricaoCompleta": "Levantamento permanente dos cílios com efeito de olhar aberto e expressivo. Inclui nutrição e hidratação dos fios. Dura até 8 semanas sem precisar de rímel.",
+    "preco": "R$ 120,00",
+    "precoManut": null,
+    "nomeManutencao": "",
+    "duracao": "1h30",
+    "durResult": "8 semanas",
+    "manutencao": "—",
+    "fotos": [
+      "https://i.pinimg.com/736x/9f/8f/a2/9f8fa2f7933af6f3f0ad1f6117f551dc.jpg",
+      "https://i.pinimg.com/736x/1c/cf/af/1ccfaf509940b0edd0a3ba7029fa055d.jpg",
+      "https://i.pinimg.com/736x/02/5f/13/025f13b26e97fe1a7a729f7b036970cd.jpg"
+    ],
+    "tags": [
+      "Sem cola",
+      "Efeito natural",
+      "Até 8 sem"
+    ],
+    "ordem": 1.0
+  },
+  {
+    "id": 4,
+    "idOrigem": 5,
+    "ativo": true,
+    "destaque": true,
+    "categoria": "Sobrancelha",
+    "emoji": "",
+    "nome": "Brow Lamination",
+    "descricao": "Alinhamento e fixação dos fios para sobrancelhas penteadas e definidas.",
+    "descricaoCompleta": "Técnica que alinha e fixa os fios das sobrancelhas para um look mais denso, uniforme e com aspecto penteado. Inclui hidratação dos fios.",
+    "preco": "R$ 90,00",
+    "precoManut": "R$ 70,00",
+    "nomeManutencao": "Manutenção Nutritiva",
+    "duracao": "1h",
+    "durResult": "6 semanas",
+    "manutencao": "Retoque em 4–6 semanas",
+    "fotos": [
+      "https://i.pinimg.com/736x/b2/45/97/b2459773e6396199780c1d4eebb4f280.jpg",
+      "https://i.pinimg.com/736x/87/b5/73/87b573d05906b75c794b8a0d67e4118e.jpg",
+      "https://i.pinimg.com/736x/6e/05/90/6e05908ac2c7da95835035bb454db94c.jpg"
+    ],
+    "tags": [
+      "Penteado",
+      "Fixação",
+      "Volume"
+    ],
+    "ordem": 2.0
+  },
+  {
+    "id": 13,
+    "idOrigem": 5,
+    "ativo": true,
+    "destaque": true,
+    "categoria": "Sobrancelha",
+    "emoji": "",
+    "nome": "Brow Lamination+manutenão nutritiva",
+    "descricao": "Para que deseja manter os fios alinhados e saudáveis",
+    "descricaoCompleta": "Um protocolo completo para alinhar, estruturar, e preservar a harmonia das sobrancelhas. A manutenção é realizada entre 15 e 20 dias após o procedimento, sendo agendada previamente para assegurar o cuidado contínuo e o melhor desempenho do resultado.",
+    "preco": "R$ 120,00",
+    "precoManut": null,
+    "nomeManutencao": "",
+    "duracao": "1-2h",
+    "durResult": "6 semanas",
+    "manutencao": "15 a 20 dias",
+    "fotos": [
+      "https://i.pinimg.com/736x/38/5a/42/385a42343089fd8c7887324897ef462d.jpg",
+      "https://i.pinimg.com/736x/87/b5/73/87b573d05906b75c794b8a0d67e4118e.jpg",
+      "https://i.pinimg.com/736x/6e/05/90/6e05908ac2c7da95835035bb454db94c.jpg",
+      "https://i.pinimg.com/736x/89/e3/2c/89e32c913beb72acc4a374e76bb798ab.jpg"
+    ],
+    "tags": [
+      "Penteado",
+      "Fixação",
+      "Volume"
+    ],
+    "ordem": 2.0
+  },
+  {
+    "id": 6,
+    "idOrigem": 9,
+    "ativo": true,
+    "destaque": true,
+    "categoria": "Cílios",
+    "emoji": "",
+    "nome": "Volume brasileiro",
+    "descricao": "Ideal para quem quer realçar o olhar com mais presença, mantendo a naturalidade e sofisticação no dia-a-dia.",
+    "descricaoCompleta": "Técnica que combina leveza e definição, criando cílios mais volumosos e alongados com um efeito elegante e natural no olhar. Alicação com mapping personalizado, respeitando o formato dos seus olhos e a diração dos fios para garantir equilíbrio, conforto e durabilidade.",
+    "preco": "R$ 110,00",
+    "precoManut": "R$ 90,00",
+    "nomeManutencao": "Manutenção",
+    "duracao": "2-3h",
+    "durResult": "3-4 sem",
+    "manutencao": "Retoque em 2 a 3 semanas",
+    "fotos": [
+      "https://i.pinimg.com/736x/f6/e1/f1/f6e1f1f046db9db9e553381dcbe5afa1.jpg",
+      "https://i.pinimg.com/736x/60/63/e7/6063e706bb023f3d86b990a9c0a5f5df.jpg",
+      "https://i.pinimg.com/736x/f7/51/3b/f7513b16559ebe81b3a0d02150dff031.jpg"
+    ],
+    "tags": [
+      "Volume",
+      "Natural",
+      "Vesátil"
+    ],
+    "ordem": 3.0
+  },
+  {
+    "id": 5,
+    "idOrigem": 2,
+    "ativo": true,
+    "destaque": false,
+    "categoria": "Cílios",
+    "emoji": "",
+    "nome": "Fio-a-fio",
+    "descricao": "Extensão fio a fio para um olhar sofisticado, natural e elegante.",
+    "descricaoCompleta": "Aplicação de extensões fio a fio em cílios naturais para efeito delicado e elegante. Ideal para o cotidiano e eventos especiais.",
+    "preco": "R$ 100,00",
+    "precoManut": "R$ 80,00",
+    "nomeManutencao": "Manutenção",
+    "duracao": "2-3h",
+    "durResult": "4 semanas",
+    "manutencao": "Retoque em 3 semanas",
+    "fotos": [
+      "https://i.pinimg.com/736x/60/50/f2/6050f2ec1ac984754db2eb2ebfe6e294.jpg",
+      "https://i.pinimg.com/736x/fd/60/1b/fd601ba364d2946d3a2ee9cd706573cd.jpg",
+      "https://i.pinimg.com/736x/1b/6b/9a/1b6b9a132523d6f3933964c1455902be.jpg"
+    ],
+    "tags": [
+      "Fio a fio",
+      "Leveza",
+      "Durabilidade"
+    ],
+    "ordem": 4.0
+  },
+  {
+    "id": 11,
+    "idOrigem": 8,
+    "ativo": true,
+    "destaque": true,
+    "categoria": "Combos",
+    "emoji": "",
+    "nome": "Lash Lifting+Brow Lamination",
+    "descricao": "Para quem deseja realçar o olhar completo com praticidade, elegância e resultado duradouro.",
+    "descricaoCompleta": "Combinação de técnicas que alinham as sobrancelhas e elevam os cílios naturais, criando um olhar mais aberto, definido e equilibrado.",
+    "preco": "R$ 190,00",
+    "precoManut": null,
+    "nomeManutencao": "",
+    "duracao": "3h",
+    "durResult": "6–8 sem",
+    "manutencao": "—",
+    "fotos": [
+      "https://i.pinimg.com/736x/76/f9/ad/76f9ad245a27e1fb61000d38ad9685bc.jpg",
+      "https://i.pinimg.com/736x/18/6e/22/186e2210952df0b335d6350daa4428c8.jpg",
+      "https://i.pinimg.com/736x/58/50/30/58503071d7aabafea9482d663cf8b3c0.jpg"
+    ],
+    "tags": [
+      "Harmonia",
+      "Natural",
+      "Perfeito"
+    ],
+    "ordem": 5.0
+  },
+  {
+    "id": 8,
+    "idOrigem": 4,
+    "ativo": true,
+    "destaque": false,
+    "categoria": "Sobrancelha",
+    "emoji": "",
+    "nome": "Design de Sobrancelha",
+    "descricao": "Mapeamento personalizado que valoriza o formato do seu rosto.",
+    "descricaoCompleta": "Design completo com mapeamento facial para criar a sobrancelha ideal para cada rosto. Inclui hialuronização e finalização com sérum.",
+    "preco": "R$ 40,00",
+    "precoManut": null,
+    "nomeManutencao": "",
+    "duracao": "45min",
+    "durResult": "3–4 sem",
+    "manutencao": "—",
+    "fotos": [
+      "https://i.pinimg.com/736x/13/f7/c5/13f7c53f5f10be0a847beb23cf29b9a4.jpg",
+      "https://i.pinimg.com/736x/fc/dc/dc/fcdcdc9c9761cb4586e9e6673cb35665.jpg",
+      "https://i.pinimg.com/736x/9a/2f/72/9a2f72f622f23ba4e1df87cba0ea1ce7.jpg"
+    ],
+    "tags": [
+      "Mapeamento",
+      "Personalizado",
+      "Natural"
+    ],
+    "ordem": 6.0
+  },
+  {
+    "id": 9,
+    "idOrigem": 6,
+    "ativo": true,
+    "destaque": true,
+    "categoria": "Sobrancelha",
+    "emoji": "",
+    "nome": "Desing+Henna/tintura",
+    "descricao": "Coloração natural para preencher falhas e uniformizar a cor das sobrancelhas.",
+    "descricaoCompleta": "Pigmentação à base de henna vegetal para preencher falhas e uniformizar a cor das sobrancelhas com resultado gradual e duradouro.",
+    "preco": "R$ 50,00",
+    "precoManut": null,
+    "nomeManutencao": "",
+    "duracao": "1h30",
+    "durResult": "3–4 sem",
+    "manutencao": "—",
+    "fotos": [
+      "https://i.pinimg.com/736x/09/0d/7f/090d7f318717856b6da853f1aeb452f7.jpg",
+      "https://i.pinimg.com/736x/97/5a/47/975a47ccd4ee888da22fc037c0becc59.jpg",
+      "https://i.pinimg.com/736x/ad/14/09/ad14094fa8bad2c5e269983a1c8d2def.jpg"
+    ],
+    "tags": [
+      "Natural",
+      "Preenchimento",
+      "Sem químicos"
+    ],
+    "ordem": 7.0
+  },
+  {
+    "id": 10,
+    "idOrigem": 7,
+    "ativo": true,
+    "destaque": false,
+    "categoria": "Depilação",
+    "emoji": "",
+    "nome": "Depilação de Buço",
+    "descricao": "Remoção suave dos pelos do buço sem irritação.",
+    "descricaoCompleta": "Remoção dos pelos do buço com linha ou cera específica para pele sensível. Rápido, higiênico e sem dor.",
+    "preco": "R$ 10,00",
+    "precoManut": null,
+    "nomeManutencao": "",
+    "duracao": "15min",
+    "durResult": "2–3 sem",
+    "manutencao": "—",
+    "fotos": [
+      "https://i.pinimg.com/736x/5f/3e/f2/5f3ef259cb6510b13771677570fb1f00.jpg",
+      "https://i.pinimg.com/736x/d4/61/25/d46125d7a9713712aaf5470b0d58739b.jpg",
+      "https://i.pinimg.com/736x/74/b3/77/74b3773242924b965439e450e3507f70.jpg"
+    ],
+    "tags": [
+      "Linha ou cera",
+      "Sem irritação",
+      "Rápido"
+    ],
+    "ordem": 8.0
+  },
+  {
+    "id": 7,
+    "idOrigem": 3,
+    "ativo": true,
+    "destaque": false,
+    "categoria": "Cílios",
+    "emoji": "",
+    "nome": "Volume Inglês",
+    "descricao": "Para quem deseja realçar o olhar com leveza, mantendo efeito discreto e sofisticado",
+    "descricaoCompleta": "Técnica que cria um efeito mais delicado e alongado, com os fios distribuídos de forma leve, proporcionando definição suave e um resultado elegante e natural do olhar.",
+    "preco": "R$ 130,00",
+    "precoManut": "R$ 90,00",
+    "nomeManutencao": "Manutenção",
+    "duracao": "2h30-3h30",
+    "durResult": "3-4 sem",
+    "manutencao": "Retoque em 3 semanas",
+    "fotos": [
+      "https://i.pinimg.com/736x/47/d4/ba/47d4ba96fd5a99b55508743b44f83948.jpg",
+      "https://i.pinimg.com/736x/c5/92/be/c592be21aaacc66615cd58dc463508be.jpg",
+      "https://i.pinimg.com/736x/51/9a/ea/519aea76bdccdd04820743505e143890.jpg"
+    ],
+    "tags": [
+      "Mega volume",
+      "Marcante",
+      "Equilibrado"
+    ],
+    "ordem": 9.0
+  },
+  {
+    "id": 12,
+    "idOrigem": 10,
+    "ativo": true,
+    "destaque": false,
+    "categoria": "Cílios",
+    "emoji": "",
+    "nome": "Volume europeu",
+    "descricao": "Para quem deseja volume e definição, com resultado sofisticaddo e hamonioso.",
+    "descricaoCompleta": "Técnica que cria um efeito volumoso e uniforme, com fios bem distribuídos que proporcionam densidade equilibrada e um olhar mais definido com acabamento elegante.",
+    "preco": "R$ 120,00",
+    "precoManut": "R$ 90,00",
+    "nomeManutencao": "Manutenção",
+    "duracao": "2-3h",
+    "durResult": "3-4 sem",
+    "manutencao": "Retoque em 3 semanas",
+    "fotos": [
+      "https://i.pinimg.com/736x/f6/6e/57/f66e57f1f4e0f2881c9eae660495089e.jpg",
+      "https://i.pinimg.com/736x/61/1f/56/611f56d01f428e96fa0676bfb541bd75.jpg",
+      "https://i.pinimg.com/736x/a6/8b/66/a68b663387a1fb85569db5ebd02d1b80.jpg"
+    ],
+    "tags": [
+      "Volume",
+      "Equilibrado",
+      "Marcante"
+    ],
+    "ordem": 10.0
+  },
+  {
+    "id": 14,
+    "idOrigem": 11,
+    "ativo": true,
+    "destaque": true,
+    "categoria": "Sobrancelha",
+    "emoji": "",
+    "nome": "Desing+Henna/tintura + nutrição",
+    "descricao": "Ideal par quem deseja sobrancelhas mais marcadas, definidas e com efeito preenchido sem procedimentos permanentes, e precisa recuperar a saúde dos fios.",
+    "descricaoCompleta": "Nutrição poderosa para recuperação da força, vitalidade e saúde dos fios além da aplicação do design personalizado respeitando o equilíbrio, harmonia, e acabamento suave.",
+    "preco": "R$ 60,00",
+    "precoManut": null,
+    "nomeManutencao": "",
+    "duracao": "1-2h",
+    "durResult": "4 sem",
+    "manutencao": "",
+    "fotos": [
+      "https://i.pinimg.com/736x/aa/67/f6/aa67f63d11ab00adb190ffe5cdb9871b.jpg",
+      "https://i.pinimg.com/736x/02/bf/a4/02bfa424b8332cbb097dc92d57fd415c.jpg",
+      "https://i.pinimg.com/736x/59/e0/0d/59e00dbe8855072e3400411c1ad983ca.jpg"
+    ],
+    "tags": [
+      "Nutirção",
+      "Equilibrado",
+      "Sem falhas"
+    ],
+    "ordem": 11.0
+  },
+  {
+    "id": 15,
+    "idOrigem": 12,
+    "ativo": true,
+    "destaque": false,
+    "categoria": "Lábios",
+    "emoji": "",
+    "nome": "Spa Labial",
+    "descricao": "Esfoliação e hidratação para lábios macios e saudáveis.",
+    "descricaoCompleta": "Tratamento labial com esfoliação suave seguida de máscara hidratante, deixando os lábios macios, nutridos e com aspecto saudável.",
+    "preco": "R$ 30,00",
+    "precoManut": null,
+    "nomeManutencao": "",
+    "duracao": "30min",
+    "durResult": "--",
+    "manutencao": "—",
+    "fotos": [
+      "https://i.pinimg.com/736x/6f/c8/f7/6fc8f786a0e61012351841a22eba7494.jpg",
+      "https://i.pinimg.com/1200x/79/e6/b1/79e6b15b7d53b428043e8275c69313e3.jpg",
+      "https://i.pinimg.com/736x/9f/cf/21/9fcf217628616c369e8e9a19b1c481c5.jpg"
+    ],
+    "tags": [
+      "Hidratação",
+      "Esfoliação",
+      "Cuidado labial"
+    ],
+    "ordem": 12.0
+  },
+  {
+    "id": 16,
+    "idOrigem": 13,
+    "ativo": true,
+    "destaque": false,
+    "categoria": "Sobrancelha",
+    "emoji": "",
+    "nome": "Henna",
+    "descricao": "Coloração natural para preencher falhas e uniformizar a cor das sobrancelhas.",
+    "descricaoCompleta": "Aplicação de henna vegetal para preencher falhas e uniformizar a cor das sobrancelhas, sem alterar o design. Resultado natural e duradouro.",
+    "preco": "R$ 20,00",
+    "precoManut": null,
+    "nomeManutencao": "",
+    "duracao": "30min",
+    "durResult": "5-7 dias",
+    "manutencao": "—",
+    "fotos": [
+      "https://i.pinimg.com/1200x/1f/55/7d/1f557d498c4409938b190d78db6d7862.jpg",
+      "https://i.pinimg.com/1200x/c8/95/ce/c895cef9c8cf3a954d9eb188da62015c.jpg",
+      "https://i.pinimg.com/1200x/dc/5c/b2/dc5cb2c1710607c17851c56a17b3831d.jpg"
+    ],
+    "tags": [
+      "Natural",
+      "Preenchimento",
+      "Rápido"
+    ],
+    "ordem": 13.0
+  },
+  {
+    "id": 17,
+    "idOrigem": 14,
+    "ativo": true,
+    "destaque": true,
+    "categoria": "Pele",
+    "emoji": "✨",
+    "nome": "Limpeza de Pele",
+    "descricao": "Sua pele merece protagonismo. Um cuidado para renovar a sensação de frescor e valorizar sua beleza natural.",
+    "descricaoCompleta": "Cravos e sensação de pele sobrecarregada? Dê o primeiro passo para uma rotina de autocuidado com atenção de verdade. A limpeza de pele é um cuidado profissional voltado à remoção de impurezas, com protocolo definido após avaliação das necessidades da sua pele. Um momento para cuidar de você e valorizar sua beleza natural, com orientação personalizada. Invista em você por R$ 150,00. Toque em WhatsApp e reserve seu horário. Imagem ilustrativa de referência; não representa resultado do procedimento.",
+    "preco": "R$ 150,00",
+    "precoManut": "R$ 1.021,00",
+    "nomeManutencao": "1021",
+    "duracao": "Sob avaliação",
+    "durResult": "Varia conforme a pele e a rotina de cuidados",
+    "manutencao": "Periodicidade definida após avaliação",
+    "fotos": [
+      "https://estetica.belezahd.com.br/imagens/preco-de-limpeza-profunda-facial.jpg",
+      "https://cdn.sanity.io/images/0vv8moc6/newbeauty/9c1ade382da281b975e2bf7b1093417afbe60d4e-1000x700.jpg",
+      "https://estetica.belezahd.com.br/imagens/limpeza-de-pele-profunda-com-extracao-preco.jpg"
+    ],
+    "tags": [
+      "Cuidado facial",
+      "Autocuidado",
+      "Personalizado"
+    ],
+    "ordem": 14.0
+  }
 ];
 
 /* ════════════════════════════════════════
@@ -735,31 +1082,17 @@ async function init() {
 
 /* ─── normaliza serviço vindo da planilha ─── */
 function normalizarServico(s) {
-  // fotos
-  const fotos = [s.fotoUrl, s.fotoUrl2, s.fotoUrl3].filter(Boolean);
-  if (!fotos.length) {
-    const cat = (s.categoria||'').toLowerCase();
-    if (cat.includes('cílio') || cat.includes('lash')) fotos.push(...IMGS.cilios);
-    else if (cat.includes('sobranc') || cat.includes('brow')) fotos.push(...IMGS.sobrancelha);
-    else if (cat.includes('depil')) fotos.push(...IMGS.depilacao);
-    else fotos.push(...IMGS.combo);
-  }
-  // precoManut: a planilha guarda em "manutencao" qualquer texto de retoque.
-  // Se o texto começar com "R$" tratamos como preço de manutenção; caso contrário
-  // deixamos null e o campo "manutencao" fica como info textual.
-  let precoManut = null;
-  const mTxt = String(s.manutencao || '').trim();
-  if (/^R\$/.test(mTxt)) {
-    precoManut = mTxt;
-  } else if (s.precoManut) {
-    precoManut = s.precoManut;
-  }
+  const fontes = [ ...(Array.isArray(s.fotos) ? s.fotos : []), s.fotoUrl, s.fotoUrl2, s.fotoUrl3 ];
+  const fotos = [...new Set(fontes.flatMap(v => String(v || '').split(/(?=https?:\/\/)/i).map(x => x.trim()))
+    .filter(x => /^https?:\/\//i.test(x)))];
+  const manutencao = String(s.manutencao || '').trim();
+  const precoManut = s.precoManut !== undefined && s.precoManut !== null && s.precoManut !== '' ? s.precoManut : null;
   return {
-    ...s, fotos, precoManut,
-    manutencao: /^R\$/.test(mTxt) ? '' : mTxt,
-    tags: Array.isArray(s.tags)
-      ? s.tags
-      : String(s.tags||'').split(',').map(t=>t.trim()).filter(Boolean)
+    ...s,
+    fotos,
+    precoManut,
+    manutencao,
+    tags: Array.isArray(s.tags) ? s.tags : String(s.tags || '').split(',').map(t=>t.trim()).filter(Boolean)
   };
 }
 
