@@ -459,6 +459,8 @@ body.menu-aberto{overflow:hidden;}
 .cal-modal-back.open{display:flex}.cal-modal{width:min(460px,100%);background:#111a38;border:1px solid var(--border);border-radius:18px;padding:20px;max-height:85vh;overflow:auto}
 .cal-modal h3{font:500 1.45rem 'Cormorant Garamond',serif;margin-bottom:10px}.cal-modal p{font-size:.7rem;line-height:1.7;color:var(--text-mid);margin:6px 0}
 .cal-modal button{margin-top:12px;background:rgba(201,116,138,.15);border:1px solid var(--border);border-radius:8px;color:var(--creme);padding:9px 14px;cursor:pointer}
+.cal-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.cal-edit-field{display:flex;flex-direction:column;gap:5px;min-width:0}.cal-edit-field.full{grid-column:1/-1}.cal-edit-field label{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim)}.cal-edit-field input,.cal-edit-field textarea{width:100%;min-width:0;background:rgba(27,42,107,.18);border:1px solid var(--border);border-radius:8px;padding:11px;color:var(--creme);font:400 .72rem Montserrat}.cal-edit-field textarea{min-height:70px;resize:vertical}.cal-edit-procs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:190px;overflow:auto;padding:8px;border:1px solid var(--border-dim);border-radius:9px;background:rgba(13,18,37,.45)}.cal-edit-procs label{display:flex;align-items:flex-start;gap:7px;padding:7px;background:rgba(27,42,107,.12);border:1px solid var(--border-dim);border-radius:7px;font-size:.59rem;line-height:1.4;color:var(--text-mid);overflow-wrap:anywhere}.cal-edit-procs input{accent-color:var(--rosa);margin-top:2px;flex:0 0 auto}.cal-modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.cal-modal-actions button{margin:0;flex:1}.cal-modal-actions .danger{border-color:rgba(248,113,113,.35);color:#ff9aa4;background:rgba(248,113,113,.1)}.cal-edit-hint{font-size:.56rem;line-height:1.5;color:var(--text-dim);margin-top:6px}
+@media(max-width:520px){.cal-edit-grid{grid-template-columns:1fr 1fr}.cal-edit-procs{grid-template-columns:1fr}.cal-modal{padding:16px;max-height:90vh}}
 @media(min-width:900px){.calendar-panel{padding:20px}.cal-grid{gap:5px}.cal-day{min-height:108px;padding:7px}.cal-event{font-size:.54rem;padding:4px 5px}.cal-day-detail{padding:18px}}
 @media(max-width:700px){.cal-detail-list{grid-template-columns:1fr}}
 @media(max-width:520px){.calendar-panel{padding:10px}.cal-head{align-items:flex-start}.cal-month{font-size:1.15rem}.cal-nav{gap:4px}.cal-nav button,.cal-today{padding:7px 8px}.cal-grid{gap:2px}.cal-weekday{font-size:.47rem;padding:5px 0}.cal-day{min-height:61px;padding:3px;border-radius:6px}.cal-day-num{font-size:.59rem;margin-bottom:2px}.cal-event{font-size:.39rem;padding:2px 3px;margin:1px 0}.cal-day-markers{gap:2px;margin-top:4px}.cal-day-markers i{width:4px;height:4px}.cal-filters select,.cal-filters input{flex:1;min-width:0;font-size:.58rem}.cal-day-detail{padding:11px;margin-top:12px}.cal-detail-date{font-size:1rem}.cal-detail-item{padding:11px}}
@@ -873,15 +875,19 @@ function initDash() {
   carregarTudo();
 }
 
+let procedimentosDisponiveis = [];
+
 async function carregarTudo() {
   // carrega agendamentos + clientes em paralelo
-  const [dadosAgend, dadosClientes] = await Promise.all([
+  const [dadosAgend, dadosClientes, dadosProcedimentos] = await Promise.all([
     apiFetch({action:'listarAgendamentos'}),
-    apiFetch({action:'listarClientes'})
+    apiFetch({action:'listarClientes'}),
+    apiFetch({action:'getProcedimentos'})
   ]);
 
   const agendamentos = (dadosAgend.ok && dadosAgend.agendamentos) ? dadosAgend.agendamentos : [];
   const clientes     = (dadosClientes.ok && dadosClientes.clientes) ? dadosClientes.clientes : [];
+  procedimentosDisponiveis = (dadosProcedimentos.ok && Array.isArray(dadosProcedimentos.procedimentos)) ? dadosProcedimentos.procedimentos : [];
 
   // ── DEBUG: inspecionar CPFs para diagnosticar ranqueamento ──
   console.log('=== DEBUG AGENDAMENTOS ===', agendamentos.length, 'agendamentos');
@@ -909,7 +915,7 @@ function calISO(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,
 function calDate(v){if(!v)return null;let s=String(v);let m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);let br=s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);if(br)return new Date(+br[3],+br[2]-1,+br[1]);let d=new Date(s);return isNaN(d)?null:new Date(d.getFullYear(),d.getMonth(),d.getDate())}
 function montarEventosCalendario(agendamentos,clientes){
   const hoje=calISO(new Date()), ev=[];
-  (agendamentos||[]).forEach(a=>{const d=calDate(a.data);if(!d)return;const iso=calISO(d),past=iso<hoje;ev.push({date:iso,type:past?'overdue':'appointment',title:(a.hora||'')+' '+(a.nome||'Cliente'),name:a.nome,detail:'Procedimentos: '+(a.procedimentos||'—')+' | Horário: '+(a.hora||'—'),phone:a.telefone,obs:a.obs});if(iso===calISO(new Date(Date.now()+86400000)))ev.push({date:iso,type:'reminder',title:'Lembrar: '+(a.nome||'Cliente'),name:a.nome,detail:'Confirmar presença • '+(a.procedimentos||'')+' • '+(a.hora||'')})});
+  (agendamentos||[]).forEach(a=>{const d=calDate(a.data);if(!d)return;const iso=calISO(d),past=iso<hoje;ev.push({date:iso,type:past?'overdue':'appointment',rowNum:a.rowNum,title:(a.hora||'')+' '+(a.nome||'Cliente'),name:a.nome,detail:'Procedimentos: '+(a.procedimentos||'—')+' | Horário: '+(a.hora||'—'),phone:a.telefone,obs:a.obs,procedimentos:a.procedimentos,hora:a.hora});if(iso===calISO(new Date(Date.now()+86400000)))ev.push({date:iso,type:'reminder',rowNum:a.rowNum,title:'Lembrar: '+(a.nome||'Cliente'),name:a.nome,detail:'Confirmar presença • '+(a.procedimentos||'')+' • '+(a.hora||''),phone:a.telefone,obs:a.obs,procedimentos:a.procedimentos,hora:a.hora})});
   (clientes||[]).forEach(c=>{if(!c.nascimento)return;const b=calDate(c.nascimento);if(!b)return;let d=new Date(new Date().getFullYear(),b.getMonth(),b.getDate());if(calISO(d)<hoje)d.setFullYear(d.getFullYear()+1);ev.push({date:calISO(d),type:'birthday',title:'🎂 '+(c.nome||'Cliente'),name:c.nome,detail:'Aniversário da cliente',phone:c.telefone})});
   dashCalendarEvents=ev;renderDashCalendar();
 }
@@ -938,7 +944,35 @@ function renderDashDayDetail(){
  items.sort((a,b)=>(a.title||'').localeCompare(b.title||'','pt-BR',{numeric:true}));
  el.innerHTML=`<div class="cal-detail-head"><div class="cal-detail-date">${dateLabel}</div><div class="cal-detail-count">${items.length} ${items.length===1?'evento':'eventos'}</div></div>${items.length?`<div class="cal-detail-list">${items.map(e=>`<button type="button" class="cal-detail-item" onclick="abrirDashEvento(${e.index})"><i class="cal-detail-dot" style="background:${e.type==='appointment'?'#a84e72':e.type==='birthday'?'#92721e':e.type==='reminder'?'#9b6425':'#963f49'}"></i><span class="cal-detail-main"><span class="cal-detail-name">${escapeHtmlCal(e.name||e.title||'Evento')}</span><span class="cal-detail-sub">${labels[e.type]||'Evento'} · ${escapeHtmlCal(e.detail||e.title||'')}</span></span></button>`).join('')}</div>`:`<div class="cal-day-empty">Nenhum evento registrado para este dia com o filtro selecionado.</div>`}`;
 }
-function abrirDashEvento(i){const e=dashCalendarEvents[i];if(!e)return;document.getElementById('dash-cal-modal-content').innerHTML=`<h3>${escapeHtmlCal(e.name||e.title)}</h3><p><b>${e.type==='birthday'?'Aniversário':e.type==='reminder'?'Lembrete':e.type==='overdue'?'Data passada':'Agendamento'}</b></p><p>Data: ${e.date.split('-').reverse().join('/')}</p><p>${escapeHtmlCal(e.detail||'')}</p>${e.obs?`<p>Observações: ${escapeHtmlCal(e.obs)}</p>`:''}${e.phone?`<p>Telefone: ${escapeHtmlCal(e.phone)}</p>`:''}`;document.getElementById('dash-cal-modal').classList.add('open')}
+function abrirDashEvento(i){
+ const e=dashCalendarEvents[i];if(!e)return;
+ const content=document.getElementById('dash-cal-modal-content');
+ const isAppt=!!e.rowNum&&(e.type==='appointment'||e.type==='overdue'||e.type==='reminder');
+ if(!isAppt){content.innerHTML=`<h3>${escapeHtmlCal(e.name||e.title)}</h3><p><b>${e.type==='birthday'?'Aniversário':e.type==='reminder'?'Lembrete':e.type==='overdue'?'Data passada':'Evento'}</b></p><p>Data: ${e.date.split('-').reverse().join('/')}</p><p>${escapeHtmlCal(e.detail||'')}</p>${e.obs?`<p>Observações: ${escapeHtmlCal(e.obs)}</p>`:''}${e.phone?`<p>Telefone: ${escapeHtmlCal(e.phone)}</p>`:''}`;document.getElementById('dash-cal-modal').classList.add('open');return;}
+ const selected=String(e.procedimentos||'').split(',').map(x=>x.trim()).filter(Boolean);
+ const procs=[...new Set([...procedimentosDisponiveis,...selected])];
+ const checks=procs.map((p,j)=>`<label><input type="checkbox" class="dash-edit-proc" value="${escapeHtmlCal(p)}" ${selected.some(x=>x.toLowerCase()===p.toLowerCase())?'checked':''}><span>${escapeHtmlCal(p)}</span></label>`).join('');
+ content.innerHTML=`<h3>Editar marcação</h3><p><b>Cliente:</b> ${escapeHtmlCal(e.name||'Cliente')}</p><p><b>Telefone:</b> ${escapeHtmlCal(e.phone||'—')}</p>
+ <div class="cal-edit-grid"><div class="cal-edit-field"><label for="dash-edit-date">Data</label><input id="dash-edit-date" type="date" value="${escapeHtmlCal(e.date)}"></div><div class="cal-edit-field"><label for="dash-edit-time">Horário</label><input id="dash-edit-time" type="time" value="${escapeHtmlCal(e.hora||'')}"></div>
+ <div class="cal-edit-field full"><label>Procedimentos (marque todos os desejados)</label><div class="cal-edit-procs">${checks||'<span>Nenhum procedimento cadastrado.</span>'}</div><div class="cal-edit-hint">Marque para acrescentar ou desmarque para retirar procedimentos.</div></div>
+ <div class="cal-edit-field full"><label for="dash-edit-obs">Observações</label><textarea id="dash-edit-obs">${escapeHtmlCal(e.obs||'')}</textarea></div></div>
+ <div class="cal-modal-actions"><button onclick="salvarEdicaoDashAgendamento(${Number(e.rowNum)})">Salvar alterações</button><button class="danger" onclick="excluirDashAgendamento(${Number(e.rowNum)})">Excluir marcação</button></div>`;
+ document.getElementById('dash-cal-modal').classList.add('open');
+}
+async function salvarEdicaoDashAgendamento(rowNum){
+ const data=document.getElementById('dash-edit-date')?.value||'',hora=document.getElementById('dash-edit-time')?.value||'',obs=document.getElementById('dash-edit-obs')?.value||'';
+ const procs=[...document.querySelectorAll('.dash-edit-proc:checked')].map(x=>x.value);
+ if(!data||!hora||!procs.length){showToast('Informe data, horário e ao menos um procedimento.');return}
+ const r=await apiFetch({action:'atualizarAgendamento',rowNum,data,hora,procedimentos:procs.join(', '),obs});
+ if(!r.ok){showToast('Não foi possível atualizar: '+(r.error||'erro'));return}
+ fecharDashEvento();await carregarTudo();showToast('Agendamento atualizado na planilha.');
+}
+async function excluirDashAgendamento(rowNum){
+ if(!confirm('Tem certeza de que deseja excluir esta marcação?'))return;
+ const r=await apiFetch({action:'excluirAgendamento',rowNum});
+ if(!r.ok){showToast('Não foi possível excluir: '+(r.error||'erro'));return}
+ fecharDashEvento();await carregarTudo();showToast('Marcação excluída da planilha.');
+}
 function fecharDashEvento(){document.getElementById('dash-cal-modal').classList.remove('open')}
 function escapeHtmlCal(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
