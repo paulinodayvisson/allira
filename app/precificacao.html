@@ -10,7 +10,7 @@
 <style>
 :root{--azul:#1B2A6B;--rosa:#C9748A;--creme:#F5F0EB;--dark:#0D1225;--card:#111827;--border:rgba(201,116,138,.18);--dim:rgba(245,240,235,.45);--mid:rgba(245,240,235,.7);--ok:#4ade80;--nok:#f87171;--inp:rgba(27,42,107,.18);--gold:#D4AF37}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--dark);color:var(--creme);font-family:'Montserrat',sans-serif;font-weight:300;min-height:100dvh;padding:18px 16px 60px;max-width:1040px;margin:0 auto}
+body{background:var(--dark);color:var(--creme);font-family:'Montserrat',sans-serif;font-weight:300;min-height:100dvh;padding:18px 16px 60px;max-width:640px;margin:0 auto}
 a.back{color:var(--rosa);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none}
 h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:2rem;margin:10px 0 4px}h1 em{color:var(--rosa)}
 .sub{font-size:.7rem;color:var(--dim);margin-bottom:18px;line-height:1.5}
@@ -41,14 +41,46 @@ select option{background:var(--dark)}
 .ins b{color:var(--creme);font-weight:500}.ins h3{font-size:.78rem;font-weight:500;color:var(--creme);margin-bottom:4px}
 .ins.ok{border-color:var(--ok)}.ins.warn{border-color:var(--gold)}.ins.bad{border-color:var(--nok)}
 .btn{background:var(--rosa);border:none;color:#fff;border-radius:10px;padding:12px;width:100%;font:inherit;font-size:.75rem;letter-spacing:.1em;cursor:pointer}
-textarea{background:var(--inp);border:1px solid var(--border);border-radius:8px;color:var(--creme);padding:10px;font:inherit;font-size:.78rem;width:100%;min-width:0;min-height:78px;resize:vertical}textarea:focus{outline:none;border-color:var(--rosa)}.cat-line{display:flex;gap:8px;margin-top:8px}.cat-line input{flex:1}.cat-line button{width:auto;min-width:110px}.cat-note{font-size:.62rem;line-height:1.55;color:var(--dim);margin-top:7px}.status-pill{display:inline-block;border:1px solid var(--border);border-radius:20px;padding:4px 8px;font-size:.57rem;color:var(--mid)}.status-pill.off{border-color:rgba(248,113,113,.35);color:#fca5a5}.field-block{margin:10px 0}.field-block .lbl{margin-bottom:5px}.catalog-sync{margin-top:12px;border:1px solid var(--border);border-radius:10px;padding:12px;background:rgba(27,42,107,.1)}.catalog-sync .btn{margin-top:8px}.btn.secondary{background:transparent;border:1px solid var(--border);color:var(--rosa-light)}@media(min-width:760px){body{padding:28px 24px 70px}.card{padding:20px}.row{gap:10px}.editor-main-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.g2{grid-template-columns:1fr}.cat-line{flex-direction:column}.cat-line button{width:100%}}
+
+/* PORTFÓLIO — PREÇOS VIGENTES */
+.portfolio-toolbar{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.portfolio-status{font-size:.66rem;color:var(--dim);line-height:1.5}
+.portfolio-link{display:inline-flex;align-items:center;justify-content:center;background:rgba(201,116,138,.14);border:1px solid var(--rosa);color:var(--creme);text-decoration:none;border-radius:9px;padding:10px 13px;font-size:.65rem;letter-spacing:.06em}
+.portfolio-list{display:grid;grid-template-columns:1fr;gap:10px}
+.portfolio-service{display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;padding:12px;border:1px solid var(--border);border-radius:11px;background:rgba(13,18,37,.45);min-width:0}
+.portfolio-photos{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;min-height:112px}
+.portfolio-photos img{width:100%;height:54px;object-fit:cover;border-radius:6px;background:#0D1225}
+.portfolio-photos img:first-child{grid-row:1/3;height:112px}
+.portfolio-service-main{min-width:0}
+.portfolio-service-title{font:500 1rem 'Cormorant Garamond',serif;color:var(--creme);margin-bottom:3px}
+.portfolio-service-meta{font-size:.56rem;color:var(--rosa-light);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.portfolio-service-desc{font-size:.62rem;line-height:1.55;color:var(--mid);margin-bottom:8px}
+.portfolio-service-tags{font-size:.55rem;line-height:1.5;color:var(--dim);margin-bottom:9px}.portfolio-extra{font-size:.55rem;line-height:1.55;color:var(--dim);margin:5px 0 8px}.portfolio-full-desc{font-size:.57rem;line-height:1.55;color:var(--mid);margin:5px 0 8px}.portfolio-full-desc summary{color:var(--rose);cursor:pointer;margin-bottom:4px}
+.portfolio-prices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.portfolio-prices label{font-size:.55rem;color:var(--dim);display:block;margin-bottom:4px}
+.portfolio-prices input{font-size:.72rem}
+.portfolio-save{margin-top:12px}
+.portfolio-empty{font-size:.7rem;color:var(--dim);padding:14px;border:1px dashed var(--border);border-radius:9px}
+@media(max-width:460px){.portfolio-service{grid-template-columns:82px minmax(0,1fr);gap:9px;padding:9px}.portfolio-photos{min-height:94px}.portfolio-photos img{height:45px}.portfolio-photos img:first-child{height:94px}.portfolio-prices{grid-template-columns:1fr}.portfolio-link{width:100%}}
 
 </style>
 </head>
 <body>
-<a class="back" href="homeadm-16-1.html">‹ Painel</a>
+<a class="back" href="homeadm.html">‹ Painel</a>
 <h1>Precificação <em>Állira</em></h1><div id="st" class="sub" style="margin:0 0 8px">Carregando da planilha…</div>
 <p class="sub">Cadastre seus gastos, escolha o procedimento ou produto e veja o preço ideal para atingir a margem desejada.</p>
+
+
+<div class="card" id="portfolioPricesCard">
+  <h2>Portfólio · preços vigentes</h2>
+  <div class="portfolio-toolbar">
+    <div id="portfolioPriceStatus" class="portfolio-status">Carregando os procedimentos publicados...</div>
+    <a class="portfolio-link" href="portfolio-admin.html">Editar portfólio completo ↗</a>
+  </div>
+  <div id="portfolioPriceList" class="portfolio-list"><div class="portfolio-empty">Carregando catálogo central...</div></div>
+  <button class="btn portfolio-save" type="button" id="savePortfolioPrices" onclick="savePortfolioPrices()">Salvar preços do portfólio</button>
+  <p class="portfolio-status" style="margin-top:9px">Somente os serviços publicados no portfólio aparecem aqui. A edição de títulos, descrições, categorias e imagens fica no editor completo.</p>
+</div>
 
 <div class="card"><h2>1 · Gastos fixos mensais</h2>
   <div id="fixos"></div>
@@ -69,13 +101,10 @@ textarea{background:var(--inp);border:1px solid var(--border);border-radius:8px;
 </div>
 
 <div class="card"><h2>3 · Procedimento ou produto</h2>
-  <p class="sub">Edite título, categoria, descrição e preço vigente. Os dados publicados são sincronizados com o catálogo central, a planilha e a lista de agendamentos.</p>
   <div class="chips" id="chips"></div>
   <div id="editor"></div>
-  <div class="row" style="margin-top:14px"><input id="novoNome" placeholder="Nome do novo procedimento"><select id="novoTipo" style="width:130px;flex:none"><option value="s">Procedimento</option><option value="p">Produto</option></select></div>
-  <div class="row"><input id="novaCategoriaItem" placeholder="Categoria do novo item (ex.: Cílios)"></div>
+  <div class="row" style="margin-top:14px"><input id="novoNome" placeholder="Nome do novo item"><select id="novoTipo" style="width:130px;flex:none"><option value="s">Procedimento</option><option value="p">Produto</option></select></div>
   <button class="add" onclick="addItem()">+ Adicionar procedimento / produto</button>
-  <div class="catalog-sync"><div class="lbl">Sincronização do catálogo</div><div class="cat-note">O preço vigente é a referência para o portfólio e para o valor registrado em novos agendamentos. O preço sugerido continua sendo calculado separadamente pela estrutura de custos.</div><button class="btn secondary" onclick="push()">Salvar alterações no catálogo e na planilha agora</button></div>
 </div>
 
 <datalist id="vars"></datalist>
@@ -89,6 +118,44 @@ textarea{background:var(--inp);border:1px solid var(--border);border-radius:8px;
 <script>
 const KEY='allira_precificacao_v1';
 const API='https://script.google.com/macros/s/AKfycbyVdcUAiI2IXAaEnBA_A3aBTmGd9QnxzO7_Tv-HAjO6ZjdD41n36yqB1dGHwKeP53Js/exec';
+
+let portfolioCatalog = [];
+let portfolioCategories = [];
+const portfolioToken = localStorage.getItem('allira_admin_token') || '';
+const portfolioEscape = v => String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const portfolioCurrency = v => Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+async function loadPortfolioPrices(){
+ const status=document.getElementById('portfolioPriceStatus'),list=document.getElementById('portfolioPriceList');
+ try{
+  if(!portfolioToken)throw new Error('Faça login no painel administrativo para carregar os valores editáveis.');
+  const r=await fetch(API+'?'+new URLSearchParams({action:'getCatalogoAdmin',token:portfolioToken}));
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Não foi possível carregar o portfólio.');
+  portfolioCatalog=Array.isArray(j.catalogo)?j.catalogo:[];portfolioCategories=Array.isArray(j.categorias)?j.categorias:[];
+  renderPortfolioPrices();status.textContent=portfolioCatalog.filter(x=>x.ativo!==false).length+' serviços carregados do catálogo central.';
+ }catch(e){status.textContent=e.message;list.innerHTML='<div class="portfolio-empty">'+portfolioEscape(e.message)+'</div>';document.getElementById('savePortfolioPrices').disabled=true;}
+}
+function renderPortfolioPrices(){
+ const list=document.getElementById('portfolioPriceList');const active=portfolioCatalog.filter(x=>x.ativo!==false);
+ if(!active.length){list.innerHTML='<div class="portfolio-empty">Nenhum procedimento ativo no portfólio.</div>';return;}
+ list.innerHTML=active.map(p=>{
+  const imgs=[p.fotoUrl,p.fotoUrl2,p.fotoUrl3].filter(Boolean);
+  const images=imgs.length?imgs.map((src,i)=>`<img src="${portfolioEscape(src)}" alt="${portfolioEscape(p.nome)} ${i+1}" loading="lazy">`).join(''):'<div class="portfolio-empty">Sem imagens</div>';
+  return `<article class="portfolio-service" data-portfolio-id="${portfolioEscape(p.id)}"><div class="portfolio-photos">${images}</div><div class="portfolio-service-main"><div class="portfolio-service-title">${portfolioEscape(p.nome)}</div><div class="portfolio-service-meta">${portfolioEscape(p.categoria||'Sem categoria')} · ${portfolioEscape(p.duracao||'')} min</div><div class="portfolio-service-desc">${portfolioEscape(p.descricao||p.descricaoCompleta||'Sem descrição cadastrada.')}</div>${p.descricaoCompleta?`<details class="portfolio-full-desc"><summary>Ver descrição completa</summary>${portfolioEscape(p.descricaoCompleta)}</details>`:''}<div class="portfolio-extra">${p.durResult?'Resultado: '+portfolioEscape(p.durResult)+' · ':''}${p.manutencao&&p.manutencao!=='—'?'Manutenção: '+portfolioEscape(p.manutencao):''}${p.destaque?' · ⭐ Destaque':''}</div><div class="portfolio-service-tags">${portfolioEscape(Array.isArray(p.tags)?p.tags.join(' · '):p.tags||'')}</div><div class="portfolio-prices"><div><label>Preço vigente (R$)</label><input type="number" step="0.01" min="0" inputmode="decimal" value="${Number(p.preco)||0}" data-price-id="${portfolioEscape(p.id)}" data-price-field="preco" oninput="updatePortfolioPrice(this)"></div>${p.precoManut?`<div><label>Preço de manutenção (R$)</label><input type="number" step="0.01" min="0" inputmode="decimal" value="${Number(p.precoManut)||0}" data-price-id="${portfolioEscape(p.id)}" data-price-field="precoManut" oninput="updatePortfolioPrice(this)"></div>`:''}</div></div></article>`;
+ }).join('');
+}
+function updatePortfolioPrice(input){const item=portfolioCatalog.find(p=>String(p.id)===String(input.dataset.priceId));if(item)item[input.dataset.priceField]=Math.max(0,Number(input.value)||0);document.getElementById('portfolioPriceStatus').textContent='Há alterações de preço ainda não salvas.';}
+async function savePortfolioPrices(){
+ const button=document.getElementById('savePortfolioPrices'),status=document.getElementById('portfolioPriceStatus');
+ if(!portfolioToken){status.textContent='Sessão administrativa não encontrada. Entre novamente no painel.';return;}
+ button.disabled=true;button.textContent='Salvando...';
+ try{
+  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'salvarCatalogoProcedimentos',token:portfolioToken,catalogo:portfolioCatalog,categorias:portfolioCategories})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Falha ao salvar.');
+  status.textContent='Preços atualizados no catálogo central. O portfólio público e os novos agendamentos passam a usar os valores salvos.';
+ }catch(e){status.textContent='Erro ao salvar: '+e.message;}
+ finally{button.disabled=false;button.textContent='Salvar preços do portfólio';}
+}
+
 const mat=(n,c)=>({n,c});
 let D={
  fixos:[{n:'Aluguel / espaço',v:0},{n:'Energia e água',v:0},{n:'Internet e telefone',v:0},{n:'Marketing',v:0},{n:'Pró-labore / salário',v:0}],
@@ -101,10 +168,6 @@ let D={
   {n:'Lash lifting',t:'s',min:60,mats:[mat('Kit lifting',0),mat('Descartáveis',0)]}
  ]};
 try{const s=localStorage.getItem(KEY);if(s)D=JSON.parse(s)}catch(e){}
-D.categorias=Array.isArray(D.categorias)?D.categorias:[];
-D.itens=Array.isArray(D.itens)?D.itens:[];
-function categoriaSugeridaFront(nome){const n=String(nome||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();if(/pele|facial/.test(n))return 'Pele';if(/cilios|lash|fio a fio|volume/.test(n))return 'Cílios';if(/brow|sobrancelha|henna/.test(n))return 'Sobrancelhas';if(/labial|labio/.test(n))return 'Lábios';if(/buco|depil/.test(n))return 'Depilação';return 'Outros'}
-D.itens.forEach(it=>{if(!it.categoria)it.categoria=categoriaSugeridaFront(it.n);if(it.descricao==null)it.descricao='';if(it.ativo==null)it.ativo=true;if(!D.categorias.includes(it.categoria))D.categorias.push(it.categoria)});
 const R=v=>(isFinite(v)?v:0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const N=id=>parseFloat(document.getElementById(id).value)||0;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -112,36 +175,27 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify({...D,cfg:cfgNow()})
 function rFixos(){document.getElementById('fixos').innerHTML=D.fixos.map((f,i)=>`<div class="row"><input value="${esc(f.n)}" oninput="D.fixos[${i}].n=this.value;save()"><input class="num" type="number" inputmode="decimal" placeholder="R$" value="${f.v||''}" oninput="D.fixos[${i}].v=parseFloat(this.value)||0;calc()"><button class="x" onclick="D.fixos.splice(${i},1);rFixos();calc()">×</button></div>`).join('')}
 function addFixo(){D.fixos.push({n:'Novo gasto',v:0});rFixos()}
 function rItens(){
- document.getElementById('chips').innerHTML=D.itens.map((it,i)=>`<button class="chip ${i==D.sel?'on':''}" onclick="D.sel=${i};rItens();calc()">${it.t=='p'?'🛍 ':''}${esc(it.n)}${it.ativo===false?' · inativo':''}</button>`).join('');
+ document.getElementById('chips').innerHTML=D.itens.map((it,i)=>`<button class="chip ${i==D.sel?'on':''}" onclick="D.sel=${i};rItens();calc()">${it.t=='p'?'🛍 ':''}${esc(it.n)}</button>`).join('');
  const it=D.itens[D.sel];const e=document.getElementById('editor');
  if(!it){e.innerHTML='<p class="sub">Adicione um item abaixo.</p>';return}
- const cats=[...new Set([...(D.categorias||[]),it.categoria||'Outros'])];
- const catOptions=cats.map(c=>`<option value="${esc(c)}" ${c===(it.categoria||'Outros')?'selected':''}>${esc(c)}</option>`).join('');
- const publicPrice=it.precoVitrine!=null?it.precoVitrine:(it.cobrado||'');
- e.innerHTML=`<div class="g2 editor-main-grid" style="margin-bottom:12px"><div><span class="lbl">Título / nome do item</span><input value="${esc(it.n)}" oninput="D.itens[D.sel].n=this.value;save()" onchange="rItens()"></div>
+ e.innerHTML=`<div class="g2" style="margin-bottom:12px"><div><span class="lbl">Nome</span><input value="${esc(it.n)}" oninput="D.itens[D.sel].n=this.value;save()" onchange="rItens()"></div>
  ${it.t=='s'?`<div><span class="lbl">Duração (minutos)</span><input type="number" inputmode="numeric" value="${it.min||''}" oninput="D.itens[D.sel].min=parseFloat(this.value)||0;calc()"></div>`:''}
- <div><span class="lbl">Categoria</span><select id="itemCategoria" onchange="D.itens[D.sel].categoria=this.value;if(!D.categorias.includes(this.value))D.categorias.push(this.value);save()">${catOptions}</select><div class="cat-line"><input id="novaCategoriaNome" placeholder="Criar nova categoria"><button class="add" type="button" onclick="addCategoria()">+ Categoria</button></div></div>
- <div><span class="lbl" style="color:var(--rosa)">Preço vigente no portfólio (R$)</span><input type="number" step="0.01" min="0" inputmode="decimal" placeholder="Valor divulgado" value="${publicPrice}" oninput="D.itens[D.sel].precoVitrine=parseFloat(this.value)||0;D.itens[D.sel].cobrado=parseFloat(this.value)||0;calc()"><div class="cat-note">Este valor será usado no catálogo e nas novas marcações. Não substitui o preço sugerido calculado abaixo.</div></div>
- <div style="grid-column:1/-1"><span class="lbl">Descrição do procedimento / produto (portfólio)</span><textarea oninput="D.itens[D.sel].descricao=this.value;save()" placeholder="Descreva o procedimento, benefícios, técnica ou informações exibidas para a cliente">${esc(it.descricao||'')}</textarea></div>
- <div style="grid-column:1/-1"><label class="status-pill ${it.ativo===false?'off':''}"><input type="checkbox" ${it.ativo===false?'':'checked'} onchange="D.itens[D.sel].ativo=this.checked;rItens();save()" style="accent-color:var(--rosa);width:auto;margin-right:6px">Disponível no portfólio e nos agendamentos</label></div>
  </div>
  <div style="background:rgba(201,116,138,.08);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px"><div class="g2">
  <div><span class="lbl" style="color:var(--rosa)">% da dona do espaço sobre o valor cobrado</span><input type="number" inputmode="decimal" value="${it.rep??N('repPad')}" oninput="D.itens[D.sel].rep=parseFloat(this.value)||0;calc()"></div>
- <div><span class="lbl" style="color:var(--rosa)">Margem de lucro desejada (%) deste item</span><input type="number" inputmode="decimal" value="${it.mg??N('margem')}" oninput="D.itens[D.sel].mg=parseFloat(this.value)||0;calc()"></div></div><div class="g2" style="margin-top:8px"><div><span class="lbl">Preço que você cobra hoje (R$)</span><input type="number" inputmode="decimal" placeholder="opcional" value="${it.cobrado||''}" oninput="D.itens[D.sel].cobrado=parseFloat(this.value)||0;D.itens[D.sel].precoVitrine=parseFloat(this.value)||0;calc()"></div></div>
+ <div><span class="lbl" style="color:var(--rosa)">Margem de lucro desejada (%) deste item</span><input type="number" inputmode="decimal" value="${it.mg??N('margem')}" oninput="D.itens[D.sel].mg=parseFloat(this.value)||0;calc()"></div></div><div class="g2" style="margin-top:8px"><div><span class="lbl">Preço que você cobra hoje (R$)</span><input type="number" inputmode="decimal" placeholder="opcional" value="${it.cobrado||''}" oninput="D.itens[D.sel].cobrado=parseFloat(this.value)||0;calc()"></div></div>
  <span class="lbl" style="margin:8px 0 0">Margem e repasse são por item. Ex.: cobrou R$ 40 e repassa 50% → R$ 20 para a dona.</span></div>
  <span class="lbl">${it.t=='s'?'Custos variáveis (materiais, descartáveis, comissão...)':'Custos do produto (compra, frete, embalagem...)'}</span>
  ${it.mats.map((m,j)=>`<div class="row"><input list="vars" autocomplete="off" value="${esc(m.n)}" oninput="matName(${j},this)" onchange="rVars()"><input class="num" type="number" inputmode="decimal" placeholder="R$" value="${m.c||''}" oninput="D.itens[D.sel].mats[${j}].c=parseFloat(this.value)||0;calc()"><button class="x" onclick="D.itens[D.sel].mats.splice(${j},1);rItens();calc()">×</button></div>`).join('')}
  <button class="add" onclick="D.itens[D.sel].mats.push({n:'Novo custo',c:0});rItens()">+ Adicionar custo variável</button>
- <div style="display:flex;gap:18px;flex-wrap:wrap"><button class="del" style="color:var(--rosa)" onclick="dupItem()">⧉ Duplicar item</button>
- <button class="del" onclick="if(confirm('Remover este item do catálogo e da precificação?')){D.itens.splice(D.sel,1);D.sel=Math.max(0,D.sel-1);rItens();calc()}">Remover item</button></div>`;rVars()}
-function addCategoria(){const input=document.getElementById('novaCategoriaNome');const value=(input?.value||'').trim();if(!value)return;if(!D.categorias.includes(value))D.categorias.push(value);if(D.itens[D.sel])D.itens[D.sel].categoria=value;save();rItens()}
-
+ <div style="display:flex;gap:18px"><button class="del" style="color:var(--rosa)" onclick="dupItem()">⧉ Duplicar item</button>
+ <button class="del" onclick="if(confirm('Remover este item?')){D.itens.splice(D.sel,1);D.sel=0;rItens();calc()}">Remover item</button></div>`;rVars()}
 function varMap(){const m={};D.itens.forEach(it=>it.mats.forEach(x=>{const k=x.n.trim().toLowerCase();if(k&&(!m[k]||(x.c&&!m[k].c)))m[k]={n:x.n.trim(),c:x.c}}));return m}
 function rVars(){document.getElementById('vars').innerHTML=Object.values(varMap()).map(v=>`<option value="${esc(v.n)}">${v.c?R(v.c):''}</option>`).join('')}
 function matName(j,inp){const m=D.itens[D.sel].mats[j];m.n=inp.value;const v=varMap()[inp.value.trim().toLowerCase()];
  if(v&&v.c&&!m.c){m.c=v.c;inp.closest('.row').querySelector('.num').value=v.c;calc()}else save()}
 function dupItem(){const it=D.itens[D.sel];if(!it)return;const c=JSON.parse(JSON.stringify(it));c.n=it.n+' (cópia)';D.itens.splice(D.sel+1,0,c);D.sel++;rItens();calc()}
-function addItem(){const n=document.getElementById('novoNome').value.trim();if(!n)return;const categoria=(document.getElementById('novaCategoriaItem').value||'').trim()||'Outros';if(!D.categorias.includes(categoria))D.categorias.push(categoria);D.itens.push({n,mg:N('margem'),t:document.getElementById('novoTipo').value,min:0,categoria,descricao:'',ativo:true,mats:[mat('Material',0)]});D.sel=D.itens.length-1;document.getElementById('novoNome').value='';document.getElementById('novaCategoriaItem').value='';rItens();calc()}
+function addItem(){const n=document.getElementById('novoNome').value.trim();if(!n)return;D.itens.push({n,mg:N('margem'),t:document.getElementById('novoTipo').value,min:0,mats:[mat('Material',0)]});D.sel=D.itens.length-1;document.getElementById('novoNome').value='';rItens();calc()}
 function itemCalc(it,ch){
  const mg=it.mg??N('margem'),tx=N('taxa'),rp=it.rep??N('repPad'),cob=it.cobrado||0,div=1-(mg+tx+rp)/100;
  const rateio=it.t=='s'?ch*((it.min||0)/60):0,vari=it.mats.reduce((a,m)=>a+m.c,0),custo=rateio+vari;
@@ -215,14 +269,14 @@ async function push(){
  const ch=window._ch||0;
  const linhas=D.itens.map(it=>{const c=itemCalc(it,ch);return[it.n,it.t=='p'?'Produto':'Procedimento',it.t=='s'?(it.min||0):'',c.vari,c.rateio,c.custo,c.rp,c.mg,c.tx,c.preco,c.repR,c.taxas,c.lucro,c.cob||'',c.cob?c.cobRep:'',c.cob?c.cobLucro:'',c.gh==null?'':c.gh]});
  try{
-  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'salvarPrecificacao',data:{state:{fixos:D.fixos,sel:D.sel,itens:D.itens,categorias:D.categorias||[],cfg:cfgNow(),hist:D.hist||[]},linhas,custoHora:ch}})});
+  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'salvarPrecificacao',data:{state:{fixos:D.fixos,sel:D.sel,itens:D.itens,cfg:cfgNow(),hist:D.hist||[]},linhas,custoHora:ch}})});
   const j=await r.json();
   setSt(j.ok?'✓ Salvo na planilha às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'Erro ao salvar na planilha: '+(j.error||''));
  }catch(e){setSt('Sem conexão com a planilha — salvo apenas neste aparelho.')}}
 async function carregar(){
  try{
   const j=await (await fetch(API+'?action=getPrecificacao')).json();
-  if(j.ok&&j.data){const s=j.data;D={fixos:s.fixos||[],sel:s.sel||0,itens:s.itens||[],categorias:s.categorias||j.categorias||[],hist:s.hist||[]};const catMap={};(j.catalogo||[]).forEach(p=>catMap[String(p.nome||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim()]=p);D.itens.forEach(i=>{const k=String(i.n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim(),p=catMap[k];if(p){i.categoria=p.categoria;i.descricao=p.descricao;i.precoVitrine=p.preco;i.ativo=p.ativo;i.catalogoId=p.id;if(p.preco>0)i.cobrado=p.preco}if(i.mg==null)i.mg=N('margem');if(!i.categoria)i.categoria=categoriaSugeridaFront(i.n);if(!D.categorias.includes(i.categoria))D.categorias.push(i.categoria)});if(D.sel>=D.itens.length)D.sel=0;for(const k in s.cfg||{})if(document.getElementById(k))document.getElementById(k).value=s.cfg[k];rFixos();rItens();calc();setSt('✓ Dados carregados da planilha e catálogo central');return}
+  if(j.ok&&j.data){const s=j.data;D={fixos:s.fixos,sel:s.sel||0,itens:s.itens,hist:s.hist||[]};for(const k in s.cfg)document.getElementById(k).value=s.cfg[k];D.itens.forEach(i=>{if(i.mg==null)i.mg=N('margem')});rFixos();rItens();calc();setSt('✓ Dados carregados da planilha');return}
   setSt('Planilha ainda sem dados — preencha e salve automaticamente.');
  }catch(e){setSt('Sem conexão com a planilha — usando dados deste aparelho.')}}
 try{const c=JSON.parse(localStorage.getItem(KEY)).cfg;for(const k in c)document.getElementById(k).value=c[k]}catch(e){}
@@ -230,6 +284,7 @@ if(D.sel>=D.itens.length)D.sel=0;
 D.itens.forEach(i=>{if(i.mg==null)i.mg=N('margem')});
 rFixos();rItens();calc();
 carregar().then(()=>{window._ready=true});
+loadPortfolioPrices();
 </script>
 </body>
 </html>
