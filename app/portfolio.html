@@ -713,6 +713,10 @@ let cardIdxMap     = {};
    INIT
 ════════════════════════════════════════ */
 async function init() {
+  // Exibe imediatamente os serviços já cadastrados no HTML, com imagens e informações.
+  // Em seguida, atualiza os dados com o catálogo mestre da planilha quando a API responder.
+  todosServicos = SERVICOS_FALLBACK.map(normalizarServico);
+  renderTudo();
   try {
     if (!APPS_SCRIPT_URL.includes('SEU_APPS_SCRIPT_ID')) {
       const r = await fetch(APPS_SCRIPT_URL + '?action=getPortfolio');
