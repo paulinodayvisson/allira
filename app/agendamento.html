@@ -444,6 +444,8 @@ main { padding-top:72px;min-height:100dvh;position:relative;z-index:1; }
 .agcal-modal h3{font:500 1.5rem 'Cormorant Garamond',serif;margin-bottom:12px}
 .agcal-modal p{font-size:.7rem;color:var(--text-mid);line-height:1.7;margin:7px 0}
 .agcal-modal button,.agcal-modal a{display:inline-block;margin:12px 7px 0 0;background:rgba(201,116,138,.14);border:1px solid var(--border);border-radius:8px;color:var(--creme);padding:9px 13px;text-decoration:none;font: .62rem Montserrat;cursor:pointer}
+.agcal-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.agcal-edit-field{display:flex;flex-direction:column;gap:5px;min-width:0}.agcal-edit-field.full{grid-column:1/-1}.agcal-edit-field label{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim)}.agcal-edit-field input,.agcal-edit-field textarea{width:100%;min-width:0;background:rgba(27,42,107,.18);border:1px solid var(--border);border-radius:8px;padding:11px;color:var(--creme);font:400 .72rem Montserrat}.agcal-edit-field textarea{min-height:76px;resize:vertical}.agcal-edit-procs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:190px;overflow:auto;padding:8px;border:1px solid var(--border-dim);border-radius:9px;background:rgba(13,18,37,.45)}.agcal-edit-procs label{display:flex;align-items:flex-start;gap:7px;padding:7px;background:rgba(27,42,107,.12);border:1px solid var(--border-dim);border-radius:7px;font-size:.59rem;line-height:1.4;color:var(--text-mid);overflow-wrap:anywhere}.agcal-edit-procs input{accent-color:var(--rosa);margin-top:2px;flex:0 0 auto}.agcal-modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.agcal-modal-actions button{margin:0;flex:1}.agcal-modal-actions .danger{border-color:rgba(248,113,113,.35);color:#ff9aa4;background:rgba(248,113,113,.1)}.agcal-edit-hint{font-size:.56rem;line-height:1.5;color:var(--text-dim);margin-top:6px}
+@media(max-width:620px){.agcal-edit-procs{grid-template-columns:1fr}.agcal-modal{padding:16px;max-height:92vh}}
 @media(max-width:700px){.agcal-detail-list{grid-template-columns:1fr}}
 @media(max-width:620px){.agcal-toolbar{align-items:flex-start}.agcal-actions{width:100%;justify-content:space-between}.agcal-actions button{padding:8px 9px}.agcal-filters select,.agcal-filters input{flex:1;min-width:0}.agcal-grid{gap:2px}.agcal-day{min-height:72px;padding:3px;border-radius:6px}.agcal-week{font-size:.48rem;padding:6px 0}.agcal-num{font-size:.58rem;margin-bottom:3px}.agcal-event{font-size:.39rem;padding:2px 3px;margin:2px 0}.agcal-day-markers{gap:2px;margin-top:4px}.agcal-day-markers i{width:4px;height:4px}.agcal-day-detail{padding:11px;margin-top:12px}.agcal-detail-date{font-size:1.05rem}.agcal-detail-item{padding:11px}.agcal-detail-time{flex-basis:48px;font-size:.66rem}.agcal-detail-name{font-size:.67rem}}
 @media(max-width:370px){.agcal-event{display:none}.agcal-day{min-height:58px}.agcal-num{font-size:.54rem}.agcal-week{font-size:.42rem}}
@@ -1230,9 +1232,42 @@ function renderAgCalDayDetail(){
 }
 function calAgISO(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function abrirAgCalEvento(index){
- const a=todosAgendamentos[index];if(!a)return;const tel=limparNumero(a.telefone||''),msg=encodeURIComponent(`Olá, ${(a.nome||'').split(' ')[0]}! 🌸 Lembrete do seu agendamento na Állira: ${formatDataBR(a.data)} às ${formatHoraBR(a.hora)}. Procedimento: ${a.procedimentos||''}.`);
- $('agcal-modal-body').innerHTML=`<h3>${escapeTxt(a.nome||'Cliente')}</h3><p><b>Data:</b> ${formatDataBR(a.data)} às ${formatHoraBR(a.hora)}</p><p><b>Procedimentos:</b> ${escapeTxt(a.procedimentos||'—')}</p><p><b>Telefone:</b> ${escapeTxt(a.telefone||'—')}</p>${a.obs?`<p><b>Observações:</b> ${escapeTxt(a.obs)}</p>`:''}${tel?`<a target="_blank" rel="noopener" href="https://wa.me/${tel}?text=${msg}">Conversar no WhatsApp</a>`:''}<button onclick="fecharAgCal()">Fechar</button>`;
+ const a=todosAgendamentos[index];if(!a)return;
+ const tel=limparNumero(a.telefone||''),msg=encodeURIComponent(`Olá, ${(a.nome||'').split(' ')[0]}! 🌸 Lembrete do seu agendamento na Állira: ${formatDataBR(a.data)} às ${formatHoraBR(a.hora)}. Procedimento: ${a.procedimentos||''}.`);
+ const selected=String(a.procedimentos||'').split(',').map(x=>x.trim()).filter(Boolean);
+ const procs=[...new Set([...todosProcedimentos,...selected])];
+ const checks=procs.map(p=>`<label><input type="checkbox" class="agcal-edit-proc" value="${escapeTxt(p)}" ${selected.some(x=>x.toLowerCase()===p.toLowerCase())?'checked':''}><span>${escapeTxt(p)}</span></label>`).join('');
+ $('agcal-modal-body').innerHTML=`<h3>Editar marcação</h3><p><b>Cliente:</b> ${escapeTxt(a.nome||'Cliente')}</p><p><b>Telefone:</b> ${escapeTxt(a.telefone||'—')}</p>
+ <div class="agcal-edit-grid"><div class="agcal-edit-field"><label for="agcal-edit-date">Data</label><input id="agcal-edit-date" type="date" value="${escapeTxt(dataParaISO(a.data))}"></div><div class="agcal-edit-field"><label for="agcal-edit-time">Horário</label><input id="agcal-edit-time" type="time" value="${escapeTxt(formatHoraBR(a.hora||''))}"></div>
+ <div class="agcal-edit-field full"><label>Procedimentos (selecione todos)</label><div class="agcal-edit-procs">${checks||'<span>Nenhum procedimento cadastrado.</span>'}</div><div class="agcal-edit-hint">Marque para acrescentar ou desmarque para retirar procedimentos.</div></div>
+ <div class="agcal-edit-field full"><label for="agcal-edit-obs">Observações</label><textarea id="agcal-edit-obs">${escapeTxt(a.obs||'')}</textarea></div></div>
+ <div class="agcal-modal-actions"><button onclick="salvarEdicaoAgCal(${index})">Salvar alterações</button><button class="danger" onclick="excluirAgCalEvento(${index})">Excluir marcação</button></div>
+ ${tel?`<a target="_blank" rel="noopener" href="https://wa.me/${tel}?text=${msg}">Conversar no WhatsApp</a>`:''}<button onclick="fecharAgCal()">Fechar</button>`;
  $('agcal-modal').classList.add('open');
+}
+async function atualizarAgendaDepoisDaEdicao(){
+ const data=await scriptGet({action:'listarAgendamentos'});
+ todosAgendamentos=(data&&data.agendamentos)?data.agendamentos:[];
+ renderLista('todos');
+}
+async function salvarEdicaoAgCal(index){
+ const a=todosAgendamentos[index];if(!a)return;
+ const data=$('agcal-edit-date').value,hora=$('agcal-edit-time').value,obs=$('agcal-edit-obs').value;
+ const procs=[...document.querySelectorAll('.agcal-edit-proc:checked')].map(x=>x.value);
+ if(!data||!hora||!procs.length){toastMsg('Informe data, horário e ao menos um procedimento.','err');return}
+ try{
+  const resp=await scriptGet({action:'atualizarAgendamento',rowNum:a.rowNum,data,hora,procedimentos:procs.join(', '),obs});
+  if(!(resp&&(resp.ok||resp.success))){toastMsg('Erro ao atualizar: '+(resp?.error||'tente novamente'),'err');return}
+  await atualizarAgendaDepoisDaEdicao();fecharAgCal();selecionarDiaAgCal(data);toastMsg('Agendamento atualizado na planilha ✓','ok');
+ }catch(e){toastMsg('Erro de conexão ao atualizar.','err',4000)}
+}
+async function excluirAgCalEvento(index){
+ const a=todosAgendamentos[index];if(!a)return;if(!confirm('Tem certeza de que deseja excluir esta marcação?'))return;
+ try{
+  const resp=await scriptGet({action:'excluirAgendamento',rowNum:a.rowNum});
+  if(!(resp&&resp.ok)){toastMsg('Erro ao excluir: '+(resp?.error||'tente novamente'),'err');return}
+  await atualizarAgendaDepoisDaEdicao();fecharAgCal();toastMsg('Marcação excluída da planilha ✓','ok');
+ }catch(e){toastMsg('Erro de conexão ao excluir.','err',4000)}
 }
 function fecharAgCal(){$('agcal-modal').classList.remove('open')}
 
